@@ -39,8 +39,6 @@ static t_matrix matrix_sum_rows(t_matrix m);
 static t_matrix matrix_sum_cols(t_matrix m);
 static int matrix_equals(t_matrix m1, t_matrix m2);
 static t_matrix matrix_range(int range, int sizey, int sizex);
-static t_matrix * matrix_create_3d(int sizey, int sizex, int sizez);
-
 
 /* ========================== API ============================ */
 
@@ -53,7 +51,6 @@ t_LinAlg LinAlg_Init()
     t_LinAlg la;
     la.matrixd = matrix_create_d;
     la.matrix = matrix_create;
-    la.matrix3d = matrix_create_3d;
     la.dot = matrix_dot;
     la.frees = matrix_frees;
     la.free = matrix_free;
@@ -77,16 +74,6 @@ t_LinAlg LinAlg_Init()
 
 
 /* ========================== STATIC FUNCTIONS ============================ */
-
-static t_matrix * matrix_create_3d(int sizey, int sizex, int sizez)
-{
-    t_matrix *m = malloc(sizeof(t_matrix) * sizez) ;
-
-    for(int i = 0; i < sizez; i++)
-        m[i] = matrix_create(sizey, sizex);
-
-    return m;
-}
 
 static t_matrix matrix_rand(int sizey, int sizex, int lower, int upper)
 {

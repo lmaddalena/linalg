@@ -3,25 +3,37 @@
 #include "../include/logger.h"
 #include <time.h>
 
-DEFINE_TEST(matrix3d_test)
+
+DEFINE_TEST(multi_dimension_matix_test)
 {
-    logger_log_info("executing matrix3d test");
+    logger_log_info("multi_dimension_matix_test");
+
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix *m3d = la.matrix3d(10,10,3);
+    // mm is (50, 12288)
+    t_matrix mm = la.range(614400, 50, 12288);
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < mm.shape.y; i++)
     {
-        test_assert(m3d[i].data != NULL, "matrix creation faild");
-        test_assert(m3d[i].size == 100, "invalid size");
-        test_assert(m3d[i].shape.x == 10, "invalid shape x");
-        test_assert(m3d[i].shape.y == 10, "invalid shape y");
+        // row is (1, 12228)
+        t_matrix row = la.slice_rows(mm, i, i + 1);
+
+        // r, g, b are (1, 4096)
+        t_matrix r = la.slice_cols(row, 0, 4096);
+        t_matrix g = la.slice_cols(row, 4096, 8192);
+        t_matrix b = la.slice_cols(row, 8192, 12288);
+
+        // rr is (64, 64)
+        t_matrix rr = la.matrixd(r.data, 64, 64);
+
+        la.free(row);
+
+        la.frees(3, r, g, b, rr);
+
+        return NULL;
     }
 
-    for(int i = 0; i < 3; i++)
-    {
-        la.free(m3d[i]);
-    }
+    la.free(mm);
 
     return NULL;
 }
@@ -326,7 +338,7 @@ DEFINE_TEST(sum_cols_test)
 
 DEFINE_TEST(all_tests)
 {
-    test_run(matrix3d_test);
+    test_run(multi_dimension_matix_test);
     test_run(matrix_test);
     test_run(matrixd_test);
     test_run(equals_test);
