@@ -1,0 +1,7 @@
+bin
+build
+*.o
+*.obj
+*.pdb
+*.log
+tests/*_tests
