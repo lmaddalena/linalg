@@ -454,6 +454,26 @@ t_matrix (*range)(int range, int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
+## 🔹 t_matrix (*reshape)(t_matrix m, int sizey, int sizex)
+
+
+#### resha the matrix with the new sizes.
+
+
+```cpp
+t_matrix (*reshape)(t_matrix m, int sizey, int sizex)
+```
+
+**Params:**
+
+- `m` - old matrix
+- `sizey` - new y dimension
+- `sizex` - new x dimension
+
+**Returns:**
+
+- new matrix of (sizey, sizex) dimensions
+
 ## 🔧 typedef struct LinAlg t_LinAlg
 
 t_LinAlg

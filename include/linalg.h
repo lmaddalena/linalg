@@ -274,6 +274,18 @@ struct LinAlg
     */        
     t_matrix (*range)(int range, int sizey, int sizex);
 
+
+    /** reshape
+    *
+    * ## resha the matrix with the new sizes.
+    *
+    * @param m old matrix
+    * @param sizey new y dimension
+    * @param sizex new x dimension
+    * @return new matrix of (sizey, sizex) dimensions
+    */        
+    t_matrix (*reshape)(t_matrix m, int sizey, int sizex);
+
 };
 
 /**

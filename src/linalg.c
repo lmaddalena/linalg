@@ -39,6 +39,7 @@ static t_matrix matrix_sum_rows(t_matrix m);
 static t_matrix matrix_sum_cols(t_matrix m);
 static int matrix_equals(t_matrix m1, t_matrix m2);
 static t_matrix matrix_range(int range, int sizey, int sizex);
+static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex);
 
 /* ========================== API ============================ */
 
@@ -68,6 +69,7 @@ t_LinAlg LinAlg_Init()
     la.sum_cols = matrix_sum_cols;
     la.equals = matrix_equals;
     la.range = matrix_range;
+    la.reshape = matrix_reshape;
 
     return la;
 }
@@ -411,3 +413,28 @@ t_matrix matrix_range(int range, int sizey, int sizex)
 
     return m;
 }
+
+static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex)
+{
+    ASSERT(sizex > 0, "x must be upper than 0");
+    ASSERT(sizey > 0, "y must be upper than 0");
+
+    t_matrix res;
+
+    res.shape.x = sizex;
+    res.shape.y = sizey;
+    res.size = sizex * sizey;
+
+    ASSERT(m.size == res.size, "invalid size. New size must be equals to m size");
+
+    res.data = (double *)calloc(m.size, sizeof(double));
+
+
+    ASSERT(res.data != NULL, "out of memory");
+    
+    for(int i = 0; i < m.size; i++)
+        res.data[i] = m.data[i];
+
+    return res;    
+}
+

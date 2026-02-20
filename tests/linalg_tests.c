@@ -336,6 +336,29 @@ DEFINE_TEST(sum_cols_test)
     return NULL;
 }
 
+DEFINE_TEST(reshape_test)
+{
+    logger_log_info("executing reshape test");
+    t_LinAlg la = LinAlg_Init();
+
+    double data[6] = {1, 2, 3, 4, 5, 6};
+
+    t_matrix m = la.matrixd(data, 3, 2);
+
+    t_matrix actual = la.reshape(m, 2, 3);
+    
+    t_matrix expected = la.matrixd(data, 2, 3);
+    
+    test_assert(actual.data != NULL, "matrix creation faild");
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
+
+    return NULL;
+}
+
+
+
 DEFINE_TEST(all_tests)
 {
     test_run(multi_dimension_matix_test);
@@ -354,6 +377,7 @@ DEFINE_TEST(all_tests)
     test_run(identity_test);
     test_run(sum_rows_test);
     test_run(sum_cols_test);
+    test_run(reshape_test);
 
     return NULL;
 }
