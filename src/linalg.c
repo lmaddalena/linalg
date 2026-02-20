@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
+#include <string.h>
 
 /* ========================== MACROS ============================ */
 #define ASSERT(exp, msg) \
@@ -324,12 +325,24 @@ static t_matrix matrix_slice_rows(t_matrix m, int start, int end)
     assert_index(m, start, 0);    
     assert_index(m, end - 1, 0);    
 
+    int n = (end - start) * m.shape.x;
+    double *d = malloc(n * sizeof(double));
+
+    memcpy(d, &m.data[start * m.shape.x], n * sizeof(double));
+
+    t_matrix res;
+    res.shape.y = end - start;
+    res.shape.x = m.shape.x;
+    res.size = res.shape.y *  res.shape.x;
+    res.data = d;
+
+    /*
     t_matrix res = matrix_create(end - start, m.shape.x);
 
     for(int y = start; y < end; y++)
         for(int x = 0; x < m.shape.x; x++)
             matrix_setval(res, y - start, x, matrix_getval(m, y, x));
-
+    */
     return res;
 }
 
