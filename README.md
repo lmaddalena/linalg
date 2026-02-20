@@ -247,7 +247,7 @@ void (*setval)(t_matrix m, int y, int x, double val)
 ## 🔹 void (*print)(t_matrix m)
 
 
-####Print the matrix
+#### Print the matrix
 
 
 ```cpp

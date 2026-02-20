@@ -165,7 +165,7 @@ struct LinAlg
 
    /** print
     * 
-    * ##Print the matrix
+    * ## Print the matrix
     *
     * @param m matrix
     * @return nothing
