@@ -1,25 +1,85 @@
 #ifndef LINALG_H
 #define LINALG_H
 
-/* ========================== STRUCTURES AND TYPES ============================ */
+/**
+ * # Description
+ * 
+ * Library for Linear Algebra operations
+ *
+ * ## Example
+ *
+ * Create a (2,3) matrix of numbers from 0 to 5
+ *
+ * ```c
+ * #include "linalg.h"
+ *
+ *
+ * void main() {
+ * 
+ *    t_LinAlg la = LinAlg_Init();
+ *    t_matrix m = la.range(6, 2, 3);
+ *    la.print(m);
+ * }
+ *
+ * output:
+ * 
+ * [[0.000, 1.000, 2.000]
+ * [3.000, 4.000, 5.000]] shape=(2,3)
+ * 
+ * ```
+ *
+ */
 
-typedef struct shape
+/** 
+ * 
+ * # Types definitions
+ * 
+ */
+
+ /** shape
+  * 
+  * ## shape of the matrix
+  * 
+  * @param x x dimension
+  * @param y y dimension
+  */
+struct shape
 {
     int x;
     int y;
-} t_shape;
+};
 
+/**
+ * t_shape
+ */
+typedef struct shape t_shape;
 
-typedef struct matrix
+/** matrix
+ * 
+ * ## the matrix
+ * 
+ * @param size size of the matrix
+ * @param shape shape of the matrix
+ * @param data pointer of *double to the matrix data
+ */
+struct matrix
 {
     int size;
     t_shape shape;      
     double * data;        
-} t_matrix;
+};
 
-/* =================================== API ======================================= */
+/**
+ * t_matrix
+ */
+typedef struct matrix t_matrix;
 
-typedef struct LinAlg
+
+/** LinAlg
+ * 
+ * ## Linear Algebra Api's
+*/
+struct LinAlg
 {
     /** matrix
     *
@@ -214,17 +274,23 @@ typedef struct LinAlg
     */        
     t_matrix (*range)(int range, int sizey, int sizex);
 
-} t_LinAlg;
+};
 
+/**
+ * t_LinAlg
+ */
+typedef struct LinAlg t_LinAlg;
 
-/* ========================== PROTOTYPES ============================ */
+/**
+ * # Functions
+ */
 
-    /** LinAlg_Init()
-    *
-    * ## Initialize LinAlg
-    * 
-    * @return t_LinAlg structure
-    */        
+/** LinAlg_Init()
+*
+* ## Initialize LinAlg
+* 
+* @return t_LinAlg type
+*/        
 t_LinAlg LinAlg_Init();
 
     

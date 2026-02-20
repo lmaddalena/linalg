@@ -1,7 +1,99 @@
-# 🔹 t_matrix (*matrix)(int sizey, int sizex)
+# Description
+
+Library for Linear Algebra operations
+
+## Example
+    
+    Create a (2,3) matrix of numbers from 0 to 5
+    
+```c
+#include "linalg.h"
 
 
-### Create a matrix of (y, x) dimensions.
+void main() {
+
+   t_LinAlg la = LinAlg_Init();
+   t_matrix m = la.range(6, 2, 3);
+   la.print(m);
+}
+
+output:
+
+[[0.000, 1.000, 2.000]
+[3.000, 4.000, 5.000]] shape=(2,3)
+
+```
+    
+
+    
+# Types definitions
+
+
+## 🔧 struct shape
+
+
+#### shape of the matrix
+
+
+```cpp
+struct shape
+```
+
+**Params:**
+
+- `x` - x dimension
+- `y` - y dimension
+
+
+## 🔧 typedef struct shape t_shape
+
+t_shape
+
+```cpp
+typedef struct shape t_shape
+```
+
+
+## 🔧 struct matrix
+
+
+#### the matrix
+
+
+```cpp
+struct matrix
+```
+
+**Params:**
+
+- `size` - size of the matrix
+- `shape` - shape of the matrix
+- `data` - pointer of *double to the matrix data
+
+
+## 🔧 typedef struct matrix t_matrix
+
+t_matrix
+
+```cpp
+typedef struct matrix t_matrix
+```
+
+
+## 🔧 struct LinAlg
+
+
+#### Linear Algebra Api's
+
+```cpp
+struct LinAlg
+```
+
+
+## 🔹 t_matrix (*matrix)(int sizey, int sizex)
+
+
+#### Create a matrix of (y, x) dimensions.
 
 
 ```cpp
@@ -17,10 +109,10 @@ t_matrix (*matrix)(int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-# 🔹 t_matrix (*matrixd)(double *data, int sizey, int sizex)
+## 🔹 t_matrix (*matrixd)(double *data, int sizey, int sizex)
 
 
-### Create a matrix of (y, x) dimensions.
+#### Create a matrix of (y, x) dimensions.
 
 
 ```cpp
@@ -37,10 +129,10 @@ t_matrix (*matrixd)(double *data, int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-# 🔹 t_matrix (*dot)(t_matrix m1, t_matrix m2)
+## 🔹 t_matrix (*dot)(t_matrix m1, t_matrix m2)
 
 
-### Execute the dot product between matrix m1 and m2
+#### Execute the dot product between matrix m1 and m2
 
 
 ```cpp
@@ -56,10 +148,10 @@ t_matrix (*dot)(t_matrix m1, t_matrix m2)
 
 - new matrix with dot product between matrix m1 and m2
 
-# 🔹 t_matrix (*T)(t_matrix m)
+## 🔹 t_matrix (*T)(t_matrix m)
 
 
-### Transpose the matrix
+#### Transpose the matrix
 
 
 ```cpp
@@ -74,10 +166,10 @@ t_matrix (*T)(t_matrix m)
 
 - new matrix with transposition of matrix m
 
-# 🔹 void (*frees)(int count, ...)
+## 🔹 void (*frees)(int count, ...)
 
 
-### Destroy n matrices
+#### Destroy n matrices
 
 
 ```cpp
@@ -93,10 +185,10 @@ void (*frees)(int count, ...)
 
 - nothing
 
-# 🔹 void (*free)(t_matrix m)
+## 🔹 void (*free)(t_matrix m)
 
 
-### Destroy the matrix
+#### Destroy the matrix
 
 
 ```cpp
@@ -111,10 +203,10 @@ void (*free)(t_matrix m)
 
 - nothing
 
-# 🔹 double (*getval)(t_matrix m, int y, int x)
+## 🔹 double (*getval)(t_matrix m, int y, int x)
 
 
-### Get the value at x,y position
+#### Get the value at x,y position
 
 
 ```cpp
@@ -131,10 +223,10 @@ double (*getval)(t_matrix m, int y, int x)
 
 - cell value
 
-# 🔹 void (*setval)(t_matrix m, int y, int x, double val)
+## 🔹 void (*setval)(t_matrix m, int y, int x, double val)
 
 
-### Set the value at x,y position
+#### Set the value at x,y position
 
 
 ```cpp
@@ -152,10 +244,10 @@ void (*setval)(t_matrix m, int y, int x, double val)
 
 - nothing
 
-# 🔹 void (*print)(t_matrix m)
+## 🔹 void (*print)(t_matrix m)
 
 
-###Print the matrix
+####Print the matrix
 
 
 ```cpp
@@ -170,10 +262,10 @@ void (*print)(t_matrix m)
 
 - nothing
 
-# 🔹 t_matrix (*slice_rows)(t_matrix m, int start, int end)
+## 🔹 t_matrix (*slice_rows)(t_matrix m, int start, int end)
 
 
-### Slice matrix rows
+#### Slice matrix rows
 
 
 ```cpp
@@ -190,10 +282,10 @@ t_matrix (*slice_rows)(t_matrix m, int start, int end)
 
 - slices of the matrix
 
-# 🔹 t_matrix (*slice_cols)(t_matrix m, int start, int end)
+## 🔹 t_matrix (*slice_cols)(t_matrix m, int start, int end)
 
 
-### Slice matrix rows
+#### Slice matrix rows
 
 
 ```cpp
@@ -210,10 +302,10 @@ t_matrix (*slice_cols)(t_matrix m, int start, int end)
 
 - slices of the matrix
 
-# 🔹 void (*apply)(t_matrix m, double (*fnc)(double d))
+## 🔹 void (*apply)(t_matrix m, double (*fnc)(double d))
 
 
-### Apply the function to each cell
+#### Apply the function to each cell
 
 
 ```cpp
@@ -229,10 +321,10 @@ void (*apply)(t_matrix m, double (*fnc)(double d))
 
 - nothing
 
-# 🔹 t_matrix (*identity)(int n)
+## 🔹 t_matrix (*identity)(int n)
 
 
-### Create a square matrix with ones on the main diagonal
+#### Create a square matrix with ones on the main diagonal
 
 
 ```cpp
@@ -247,10 +339,10 @@ t_matrix (*identity)(int n)
 
 - identity matrix
 
-# 🔹 t_matrix (*ones)(int sizex, int sizey)
+## 🔹 t_matrix (*ones)(int sizex, int sizey)
 
 
-### Create a matrix of ones
+#### Create a matrix of ones
 
 
 ```cpp
@@ -266,10 +358,10 @@ t_matrix (*ones)(int sizex, int sizey)
 
 - matrix of (sizey, sizex) dimensions filled with 1
 
-# 🔹 t_matrix (*rand)(int sizex, int sizey, int lower, int upper)
+## 🔹 t_matrix (*rand)(int sizex, int sizey, int lower, int upper)
 
 
-### Create a matrix of random integer between lower and upper bound
+#### Create a matrix of random integer between lower and upper bound
 
 
 ```cpp
@@ -287,10 +379,10 @@ t_matrix (*rand)(int sizex, int sizey, int lower, int upper)
 
 - matrix of (sizey, sizex) dimensions filled with 1
 
-# 🔹 t_matrix (*sum_rows)(t_matrix m)
+## 🔹 t_matrix (*sum_rows)(t_matrix m)
 
 
-### Sum matrix rows
+#### Sum matrix rows
 
 
 ```cpp
@@ -305,10 +397,10 @@ t_matrix (*sum_rows)(t_matrix m)
 
 - matrix of (sizey, 1) dimensions with rows sum
 
-# 🔹 t_matrix (*sum_cols)(t_matrix m)
+## 🔹 t_matrix (*sum_cols)(t_matrix m)
 
 
-### Sum matrix columns
+#### Sum matrix columns
 
 
 ```cpp
@@ -323,10 +415,10 @@ t_matrix (*sum_cols)(t_matrix m)
 
 - matrix of (1, sizex) dimensions with columns sum
 
-# 🔹 int (*equals)(t_matrix m1, t_matrix m2)
+## 🔹 int (*equals)(t_matrix m1, t_matrix m2)
 
 
-### Compare two matrices
+#### Compare two matrices
 
 
 ```cpp
@@ -342,10 +434,10 @@ int (*equals)(t_matrix m1, t_matrix m2)
 
 - return 1 if m1 equals m2, 0 otherwise
 
-# 🔹 t_matrix (*range)(int range, int sizey, int sizex)
+## 🔹 t_matrix (*range)(int range, int sizey, int sizex)
 
 
-### Create a matrix filled with numbers in range
+#### Create a matrix filled with numbers in range
 
 
 ```cpp
@@ -362,10 +454,21 @@ t_matrix (*range)(int range, int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-# 🔹 t_LinAlg LinAlg_Init()
+## 🔧 typedef struct LinAlg t_LinAlg
+
+t_LinAlg
+
+```cpp
+typedef struct LinAlg t_LinAlg
+```
 
 
-### Initialize LinAlg
+# Functions
+
+## 🔹 t_LinAlg LinAlg_Init()
+
+
+#### Initialize LinAlg
 
 
 ```cpp
@@ -374,4 +477,4 @@ t_LinAlg LinAlg_Init()
 
 **Returns:**
 
-- t_LinAlg structure
+- t_LinAlg type
