@@ -109,6 +109,26 @@ t_matrix (*matrix)(int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
+## 🔹 t_matrix * (*matrix3d)(int sizey, int sizex, int sizez)
+
+
+#### Create a matrix of (y, x, z) dimensions.
+
+
+```cpp
+t_matrix * (*matrix3d)(int sizey, int sizex, int sizez)
+```
+
+**Params:**
+
+- `sizey` - y dimension
+- `sizex` - x dimension
+- `sizez` - z dimension
+
+**Returns:**
+
+- matrix of (sizey, sizex, sizez) dimensions
+
 ## 🔹 t_matrix (*matrixd)(double *data, int sizey, int sizex)
 
 

@@ -3,6 +3,29 @@
 #include "../include/logger.h"
 #include <time.h>
 
+DEFINE_TEST(matrix3d_test)
+{
+    logger_log_info("executing matrix3d test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix *m3d = la.matrix3d(10,10,3);
+
+    for(int i = 0; i < 3; i++)
+    {
+        test_assert(m3d[i].data != NULL, "matrix creation faild");
+        test_assert(m3d[i].size == 100, "invalid size");
+        test_assert(m3d[i].shape.x == 10, "invalid shape x");
+        test_assert(m3d[i].shape.y == 10, "invalid shape y");
+    }
+
+    for(int i = 0; i < 3; i++)
+    {
+        la.free(m3d[i]);
+    }
+
+    return NULL;
+}
+
 DEFINE_TEST(matrix_test)
 {
     logger_log_info("executing matrix test");
@@ -303,6 +326,7 @@ DEFINE_TEST(sum_cols_test)
 
 DEFINE_TEST(all_tests)
 {
+    test_run(matrix3d_test);
     test_run(matrix_test);
     test_run(matrixd_test);
     test_run(equals_test);

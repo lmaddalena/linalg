@@ -91,7 +91,18 @@ struct LinAlg
     */        
     t_matrix (*matrix)(int sizey, int sizex);
 
-    /** matrixd
+    /** matrix
+    *
+    * ## Create a matrix of (y, x, z) dimensions.
+    *
+    * @param sizey y dimension
+    * @param sizex x dimension
+    * @param sizez z dimension
+    * @return matrix of (sizey, sizex, sizez) dimensions
+    */        
+    t_matrix * (*matrix3d)(int sizey, int sizex, int sizez);
+
+    /** matrix3d
     *
     * ## Create a matrix of (y, x) dimensions.
     *
@@ -140,7 +151,7 @@ struct LinAlg
     */        
     void (*free)(t_matrix m);
 
-   /** getval
+    /** getval
     *
     * ## Get the value at x,y position
     *
