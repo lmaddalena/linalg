@@ -377,6 +377,95 @@ DEFINE_TEST(fn_sigmoid_test)
 
 }
 
+DEFINE_TEST(sumf_test)
+{
+    logger_log_info("sumf_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m = la.range(10, 2, 5);
+    t_matrix actual = la.sumf(m, 1);
+
+    double d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    t_matrix expected = la.matrixd(d, 2, 5);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
+
+DEFINE_TEST(subf_test)
+{
+    logger_log_info("subf_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m = la.range(10, 2, 5);
+    t_matrix actual = la.subf(m, 1);
+
+    double d[10] = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
+    t_matrix expected = la.matrixd(d, 2, 5);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
+
+DEFINE_TEST(fsub_test)
+{
+    logger_log_info("fsub_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m = la.range(10, 2, 5);
+    t_matrix actual = la.fsub(1, m);
+
+    double d[10] = { 1, 0, -1, -2, -3, -4, -5, -6, -7, -8};
+    t_matrix expected = la.matrixd(d, 2, 5);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
+
+DEFINE_TEST(sum_test)
+{
+    logger_log_info("sum_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m1 = la.range(3, 1, 3);
+    t_matrix m2 = la.range(3, 1, 3);
+    
+    t_matrix actual = la.sum(m1, m2);
+
+    double d[3] = { 0, 2, 4};
+    t_matrix expected = la.matrixd(d, 1, 3);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
+
+DEFINE_TEST(sub_test)
+{
+    logger_log_info("sub_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m1 = la.matrix(1, 3);
+    t_matrix m2 = la.range(3, 1, 3);
+    
+    t_matrix actual = la.sub(m1, m2);
+
+    double d[3] = { 0, -1, -2};
+    t_matrix expected = la.matrixd(d, 1, 3);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
+
 DEFINE_TEST(all_tests)
 {
     test_run(multi_dimension_matix_test);
@@ -397,6 +486,11 @@ DEFINE_TEST(all_tests)
     test_run(sum_cols_test);
     test_run(reshape_test);
     test_run(fn_sigmoid_test);
+    test_run(sumf_test);
+    test_run(subf_test);
+    test_run(fsub_test);
+    test_run(sum_test);
+    test_run(sub_test);
 
     return NULL;
 }

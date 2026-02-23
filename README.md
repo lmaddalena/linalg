@@ -528,6 +528,101 @@ double (*fn_negative)(double x)
 
 - -x
 
+## 🔹 t_matrix (*sumf)(t_matrix m, double f)
+
+
+#### sum float to the matrix
+
+
+```cpp
+t_matrix (*sumf)(t_matrix m, double f)
+```
+
+**Params:**
+
+- `f` - float
+- `m` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*subf)(t_matrix m, double f)
+
+
+#### subtract float to the matrix
+
+
+```cpp
+t_matrix (*subf)(t_matrix m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*fsub)(double f, t_matrix m)
+
+
+#### subtract float f to matrix m
+
+
+```cpp
+t_matrix (*fsub)(double f, t_matrix m)
+```
+
+**Params:**
+
+- `f` - float
+- `m` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*sum)(t_matrix m1, t_matrix m2)
+
+
+#### sum matrix m1 with matrix m2
+
+
+```cpp
+t_matrix (*sum)(t_matrix m1, t_matrix m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*sub)(t_matrix m1, t_matrix m2)
+
+
+#### subtract matrix m2 to matrix m1
+
+
+```cpp
+t_matrix (*sub)(t_matrix m1, t_matrix m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
 ## 🔧 typedef struct LinAlg t_LinAlg
 
 t_LinAlg

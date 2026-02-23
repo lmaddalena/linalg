@@ -45,6 +45,11 @@ static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex);
 static double fn_sigmoid(double x);
 static double fn_dsigmoid(double x);
 static double fn_negative(double x);
+static t_matrix sumf(t_matrix m, double f);
+static t_matrix subf(t_matrix m, double f);
+static t_matrix fsub(double f, t_matrix);
+static t_matrix sum(t_matrix m1, t_matrix m2);
+static t_matrix sub(t_matrix m1, t_matrix m2);
 
 /* ========================== API ============================ */
 
@@ -78,6 +83,11 @@ t_LinAlg LinAlg_Init()
     la.fn_sigmoid = fn_sigmoid;
     la.fn_dsigmoid = fn_dsigmoid;
     la.fn_negative = fn_negative;
+    la.sumf = sumf;
+    la.subf = subf;
+    la.fsub = fsub;
+    la.sum = sum;
+    la.sub = sub;
 
     return la;
 }
@@ -472,4 +482,60 @@ static double fn_dsigmoid(double x)
 static double fn_negative(double x)
 {
     return -x;
+}
+
+static t_matrix sumf(t_matrix m, double f)
+{
+    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m.data[i] + f;
+
+    return res;
+}
+
+static t_matrix subf(t_matrix m, double f)
+{
+    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m.data[i] - f;
+
+    return res;
+
+}
+
+static t_matrix fsub(double f, t_matrix m)
+{    
+    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = f - m.data[i];
+
+    return res;
+}
+
+static t_matrix sum(t_matrix m1, t_matrix m2)
+{
+    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
+
+    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m1.data[i] + m2.data[i];
+
+    return res;
+}
+
+static t_matrix sub(t_matrix m1, t_matrix m2)
+{
+    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
+
+    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m1.data[i] - m2.data[i];
+
+    return res;
+
 }

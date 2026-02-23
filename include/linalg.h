@@ -287,7 +287,7 @@ struct LinAlg
     t_matrix (*reshape)(t_matrix m, int sizey, int sizex);
 
 
-    /**
+    /** sigmoid
      * 
      * ## sigmoid function
      * 
@@ -296,7 +296,7 @@ struct LinAlg
      */
     double (*fn_sigmoid)(double x);
 
-    /**
+    /** dsigmoid
      * 
      * ## sigmoid derivative function
      * 
@@ -305,7 +305,7 @@ struct LinAlg
      */
     double (*fn_dsigmoid)(double x);
 
-    /**
+    /** negative
      * 
      * ## negative function
      * 
@@ -314,7 +314,57 @@ struct LinAlg
      */
     double (*fn_negative)(double x);
 
-};
+
+    /** sum
+     * 
+     * ## sum float to the matrix
+     * 
+     * @param f float
+     * @param m matrix
+     * @return new matrix 
+     */
+    t_matrix (*sumf)(t_matrix m, double f);
+
+    /** subf
+     * 
+     * ## subtract float to the matrix
+     * 
+     * @param m matrix
+     * @param f float
+     * @return new matrix 
+     */
+    t_matrix (*subf)(t_matrix m, double f);
+
+    /** fsub
+     * 
+     * ## subtract float f to matrix m
+     * 
+     * @param f float
+     * @param m matrix
+     * @return new matrix 
+     */
+    t_matrix (*fsub)(double f, t_matrix m);
+
+    /** sum
+     * 
+     * ## sum matrix m1 with matrix m2
+     * 
+     * @param m1 matrix
+     * @param m2 matrix
+     * @return new matrix 
+     */
+    t_matrix (*sum)(t_matrix m1, t_matrix m2);
+
+    /** sub
+     * 
+     * ## subtract matrix m2 to matrix m1
+     * 
+     * @param m1 matrix
+     * @param m2 matrix
+     * @return new matrix 
+     */
+    t_matrix (*sub)(t_matrix m1, t_matrix m2);
+    };
 
 /**
  * t_LinAlg
