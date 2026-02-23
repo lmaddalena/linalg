@@ -6,7 +6,7 @@ TEST_DIR = tests
 
 CC = gcc
 CFLAGS = -std=c99 -O3 -march=native -g -Wall -Isrc -Werror 
-LDFLAGS = -L$(LIB_DIR) -llogger -ldl
+LDFLAGS = -L$(LIB_DIR) -llogger -ldl -lm
 TARGET = $(LIB_DIR)/liblinalg.a
 
 SRCS = $(wildcard $(SRC_DIR)/**/*.c $(SRC_DIR)/*.c)

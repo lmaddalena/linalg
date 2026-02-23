@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 /* ========================== MACROS ============================ */
 #define ASSERT(exp, msg) \
@@ -41,6 +42,7 @@ static t_matrix matrix_sum_cols(t_matrix m);
 static int matrix_equals(t_matrix m1, t_matrix m2);
 static t_matrix matrix_range(int range, int sizey, int sizex);
 static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex);
+static double fn_sigmoid(double x);
 
 /* ========================== API ============================ */
 
@@ -71,7 +73,8 @@ t_LinAlg LinAlg_Init()
     la.equals = matrix_equals;
     la.range = matrix_range;
     la.reshape = matrix_reshape;
-
+    la.fn_sigmoid = fn_sigmoid;
+    
     return la;
 }
 
@@ -451,3 +454,8 @@ static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex)
     return res;    
 }
 
+static double fn_sigmoid(double x)
+{
+    double s = 1 / (1 + exp(-x));
+    return s;
+}

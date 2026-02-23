@@ -286,6 +286,8 @@ struct LinAlg
     */        
     t_matrix (*reshape)(t_matrix m, int sizey, int sizex);
 
+
+    double (*fn_sigmoid)(double x);
 };
 
 /**

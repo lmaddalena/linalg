@@ -2,7 +2,7 @@
 #include "../include/linalg.h"
 #include "../include/logger.h"
 #include <time.h>
-
+#include <math.h>
 
 DEFINE_TEST(multi_dimension_matix_test)
 {
@@ -357,7 +357,25 @@ DEFINE_TEST(reshape_test)
     return NULL;
 }
 
+DEFINE_TEST(fn_sigmoid_test)
+{
+    logger_log_info("fn_sigmoid_test");
+    t_LinAlg la = LinAlg_Init();
 
+    double data[2] = {0, 2};
+    t_matrix actual = la.matrixd(data, 1, 2);
+
+    double data_expected[2] = {0.5, (round(0.880797 * 10000)) / 10000};
+    t_matrix expected = la.matrixd(data_expected, 1, 2);
+
+    la.apply(actual, la.fn_sigmoid);
+    la.setval(actual, 0, 1, round(la.getval(actual, 0, 1) * 10000) / 10000);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    return NULL;
+
+}
 
 DEFINE_TEST(all_tests)
 {
@@ -378,6 +396,7 @@ DEFINE_TEST(all_tests)
     test_run(sum_rows_test);
     test_run(sum_cols_test);
     test_run(reshape_test);
+    test_run(fn_sigmoid_test);
 
     return NULL;
 }
