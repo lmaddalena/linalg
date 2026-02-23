@@ -190,9 +190,8 @@ static t_matrix matrix_create_d(double *data, int sizey, int sizex)
     m.data = (double *)calloc(m.size, sizeof(double));
 
     ASSERT(m.data != NULL, "out of memory");
-    
-    for(int i = 0; i < m.size; i++)
-        m.data[i] = data[i];
+
+    memcpy(m.data, data, m.size * sizeof(double));
 
     return m;    
 }
