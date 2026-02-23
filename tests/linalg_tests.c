@@ -373,6 +373,8 @@ DEFINE_TEST(fn_sigmoid_test)
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
+    la.frees(2, actual, expected);
+
     return NULL;
 
 }
@@ -389,6 +391,8 @@ DEFINE_TEST(sumf_test)
     t_matrix expected = la.matrixd(d, 2, 5);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
 
     return NULL;
 
@@ -407,6 +411,8 @@ DEFINE_TEST(subf_test)
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
+    la.frees(3, m, actual, expected);
+
     return NULL;
 
 }
@@ -423,6 +429,8 @@ DEFINE_TEST(fsub_test)
     t_matrix expected = la.matrixd(d, 2, 5);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
 
     return NULL;
 
@@ -443,6 +451,8 @@ DEFINE_TEST(sum_test)
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
+    la.frees(4, m1, m2, actual, expected);
+
     return NULL;
 
 }
@@ -461,6 +471,8 @@ DEFINE_TEST(sub_test)
     t_matrix expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(4, m1, m2, actual, expected);
 
     return NULL;
 
