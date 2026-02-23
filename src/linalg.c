@@ -43,6 +43,8 @@ static int matrix_equals(t_matrix m1, t_matrix m2);
 static t_matrix matrix_range(int range, int sizey, int sizex);
 static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex);
 static double fn_sigmoid(double x);
+static double fn_dsigmoid(double x);
+static double fn_negative(double x);
 
 /* ========================== API ============================ */
 
@@ -74,7 +76,9 @@ t_LinAlg LinAlg_Init()
     la.range = matrix_range;
     la.reshape = matrix_reshape;
     la.fn_sigmoid = fn_sigmoid;
-    
+    la.fn_dsigmoid = fn_dsigmoid;
+    la.fn_negative = fn_negative;
+
     return la;
 }
 
@@ -458,4 +462,14 @@ static double fn_sigmoid(double x)
 {
     double s = 1 / (1 + exp(-x));
     return s;
+}
+
+static double fn_dsigmoid(double x)
+{
+    return fn_sigmoid(x)* (1 - fn_sigmoid(x));
+}
+
+static double fn_negative(double x)
+{
+    return -x;
 }

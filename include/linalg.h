@@ -287,7 +287,33 @@ struct LinAlg
     t_matrix (*reshape)(t_matrix m, int sizey, int sizex);
 
 
+    /**
+     * 
+     * ## sigmoid function
+     * 
+     * @param x x value
+     * @return sigmoid of x
+     */
     double (*fn_sigmoid)(double x);
+
+    /**
+     * 
+     * ## sigmoid derivative function
+     * 
+     * @param x x value
+     * @return sigmoid derivative of x
+     */
+    double (*fn_dsigmoid)(double x);
+
+    /**
+     * 
+     * ## negative function
+     * 
+     * @param x x value
+     * @return -x
+     */
+    double (*fn_negative)(double x);
+
 };
 
 /**

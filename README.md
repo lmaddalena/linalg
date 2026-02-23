@@ -474,6 +474,60 @@ t_matrix (*reshape)(t_matrix m, int sizey, int sizex)
 
 - new matrix of (sizey, sizex) dimensions
 
+## 🔹 double (*fn_sigmoid)(double x)
+
+
+#### sigmoid function
+
+
+```cpp
+double (*fn_sigmoid)(double x)
+```
+
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- sigmoid of x
+
+## 🔹 double (*fn_dsigmoid)(double x)
+
+
+#### sigmoid derivative function
+
+
+```cpp
+double (*fn_dsigmoid)(double x)
+```
+
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- sigmoid derivative of x
+
+## 🔹 double (*fn_negative)(double x)
+
+
+#### negative function
+
+
+```cpp
+double (*fn_negative)(double x)
+```
+
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- -x
+
 ## 🔧 typedef struct LinAlg t_LinAlg
 
 t_LinAlg
