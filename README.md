@@ -302,6 +302,25 @@ t_matrix (*slice_cols)(t_matrix m, int start, int end)
 
 - slices of the matrix
 
+## 🔧 * @return slices of the matrix
+
+
+#### Slice matrix cols and rows
+
+
+```cpp
+* @return slices of the matrix
+```
+
+**Params:**
+
+- `m` - matrix
+- `start_y` - start y index
+- `end_y` - end y index (escxluded)
+- `start_x` - start x index
+- `end_x` - end x index (escxluded)
+
+
 ## 🔹 void (*apply)(t_matrix m, double (*fnc)(double d))
 
 
@@ -612,6 +631,44 @@ t_matrix (*sum)(t_matrix m1, t_matrix m2)
 
 ```cpp
 t_matrix (*sub)(t_matrix m1, t_matrix m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*mul)(t_matrix m1, t_matrix m2)
+
+
+#### multiply matrix m1 by matrix m2
+
+
+```cpp
+t_matrix (*mul)(t_matrix m1, t_matrix m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*div)(t_matrix m1, t_matrix m2)
+
+
+#### divide matrix m2 by matrix m1
+
+
+```cpp
+t_matrix (*div)(t_matrix m1, t_matrix m2)
 ```
 
 **Params:**

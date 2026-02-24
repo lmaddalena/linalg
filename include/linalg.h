@@ -194,7 +194,22 @@ struct LinAlg
     */        
     t_matrix (*slice_cols)(t_matrix m, int start, int end);
 
-   /** apply
+   /** slice
+    * 
+    * ## Slice matrix cols and rows
+    *
+    * @param m matrix
+    * @param start_y start y index
+    * @param end_y end y index (escxluded)
+    * @param start_x start x index
+    * @param end_x end x index (escxluded)
+
+    * @return slices of the matrix
+    */        
+    t_matrix (*slice)(t_matrix m, int start_y, int end_y, int start_x, int end_x);
+
+
+    /** apply
     * 
     * ## Apply the function to each cell
     *
@@ -364,7 +379,29 @@ struct LinAlg
      * @return new matrix 
      */
     t_matrix (*sub)(t_matrix m1, t_matrix m2);
-    };
+
+    /** mul
+     * 
+     * ## multiply matrix m1 by matrix m2
+     * 
+     * @param m1 matrix
+     * @param m2 matrix
+     * @return new matrix 
+     */
+    t_matrix (*mul)(t_matrix m1, t_matrix m2);
+
+    /** div
+     * 
+     * ## divide matrix m2 by matrix m1
+     * 
+     * @param m1 matrix
+     * @param m2 matrix
+     * @return new matrix 
+     */
+    t_matrix (*div)(t_matrix m1, t_matrix m2);
+
+
+};
 
 /**
  * t_LinAlg

@@ -252,6 +252,34 @@ DEFINE_TEST(slice_cols_test)
     return NULL;
 }
 
+DEFINE_TEST(slice_test)
+{
+    logger_log_info("executing slice test");
+
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m = la.range(16, 4, 4);
+
+    t_matrix actual = la.slice(m, 1, 3, 1, 3);
+
+    double d[4] = {5, 6, 9, 10};
+    t_matrix expected = la.matrixd(d, 2, 2);
+
+    test_assert(la.equals(actual, expected), "Matrix is not what was expected");
+
+    la.frees(2, actual, expected);
+
+    actual = la.slice(m, 1, 4, 1, 2);
+    double d2[3] = {5, 9, 13};
+    expected = la.matrixd(d2, 3, 1);
+
+    test_assert(la.equals(actual, expected), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
+
+    return NULL;
+}
+
 double square(double d)
 {
     return d*d;
@@ -294,7 +322,6 @@ DEFINE_TEST(identity_test)
 
     return NULL;
 }
-
 
 DEFINE_TEST(sum_rows_test)
 {
@@ -490,6 +517,7 @@ DEFINE_TEST(all_tests)
     test_run(range_test);
     test_run(range2_test);
     test_run(range3_test);
+    test_run(slice_test);
     test_run(slice_rows_test);
     test_run(slice_cols_test);
     test_run(apply_test);
