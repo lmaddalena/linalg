@@ -409,7 +409,7 @@ static t_matrix matrix_sum_rows(t_matrix m)
 
     for(int y = 0; y < m.shape.y; y++)
     {
-        int sum = 0;
+        double sum = 0;
 
         for(int x = 0; x < m.shape.x; x++)
         {
@@ -428,7 +428,7 @@ static t_matrix matrix_sum_cols(t_matrix m)
 
     for(int x = 0; x < m.shape.x; x++)
     {
-        int sum = 0;
+        double sum = 0;
 
         for(int y = 0; y < m.shape.y; y++)
         {
