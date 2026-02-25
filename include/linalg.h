@@ -350,6 +350,26 @@ struct LinAlg
      */
     t_matrix (*subf)(t_matrix m, double f);
 
+    /** mulf
+     * 
+     * ## multiply the matrix m by scalar f
+     * 
+     * @param m matrix
+     * @param f float
+     * @return new matrix 
+     */
+    t_matrix (*mulf)(t_matrix m, double f);
+
+    /** divf
+     * 
+     * ## dvide the matrix m by scalar f
+     * 
+     * @param m matrix
+     * @param f float
+     * @return new matrix 
+     */
+    t_matrix (*divf)(t_matrix m, double f);
+
     /** fsub
      * 
      * ## subtract float f to matrix m

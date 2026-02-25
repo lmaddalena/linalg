@@ -585,6 +585,44 @@ t_matrix (*subf)(t_matrix m, double f)
 
 - new matrix
 
+## 🔹 t_matrix (*mulf)(t_matrix m, double f)
+
+
+#### multiply the matrix m by scalar f
+
+
+```cpp
+t_matrix (*mulf)(t_matrix m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix (*divf)(t_matrix m, double f)
+
+
+#### dvide the matrix m by scalar f
+
+
+```cpp
+t_matrix (*divf)(t_matrix m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
 ## 🔹 t_matrix (*fsub)(double f, t_matrix m)
 
 

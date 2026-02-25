@@ -48,6 +48,8 @@ static double fn_dsigmoid(double x);
 static double fn_negative(double x);
 static t_matrix matrix_sumf(t_matrix m, double f);
 static t_matrix matrix_subf(t_matrix m, double f);
+static t_matrix matrix_mulf(t_matrix m, double f);
+static t_matrix matrix_divf(t_matrix m, double f);
 static t_matrix matrix_fsub(double f, t_matrix);
 static t_matrix matrix_sum(t_matrix m1, t_matrix m2);
 static t_matrix matrix_sub(t_matrix m1, t_matrix m2);
@@ -94,6 +96,8 @@ t_LinAlg LinAlg_Init()
     la.sub = matrix_sub;
     la.mul = matrix_mul;
     la.div = matrix_div;
+    la.mulf = matrix_mulf;
+    la.divf = matrix_divf;
 
     return la;
 }
@@ -521,6 +525,28 @@ static t_matrix matrix_subf(t_matrix m, double f)
 
     for(int i = 0; i < res.size; i++)
         res.data[i] = m.data[i] - f;
+
+    return res;
+
+}
+
+static t_matrix matrix_mulf(t_matrix m, double f)
+{
+    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m.data[i] * f;
+
+    return res;
+
+}
+
+static t_matrix matrix_divf(t_matrix m, double f)
+{
+    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+
+    for(int i = 0; i < res.size; i++)
+        res.data[i] = m.data[i] / f;
 
     return res;
 

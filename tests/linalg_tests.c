@@ -444,6 +444,45 @@ DEFINE_TEST(subf_test)
 
 }
 
+DEFINE_TEST(mulf_test)
+{
+    logger_log_info("mulf_test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix m = la.range(3, 1, 3);
+    t_matrix actual = la.mulf(m, 2);
+
+    double d[3] = {0, 2, 4};
+    t_matrix expected = la.matrixd(d, 1, 3);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
+
+    return NULL;
+
+}
+
+DEFINE_TEST(divf_test)
+{
+    logger_log_info("divf_test");
+    t_LinAlg la = LinAlg_Init();
+
+    double da[3] = {2, 4, 6};
+    t_matrix m = la.matrixd(da, 1, 3);
+    t_matrix actual = la.divf(m, 2);
+    
+    double de[3] = {1, 2, 3};
+    t_matrix expected = la.matrixd(de, 1, 3);
+
+    test_assert(la.equals(expected, actual), "Matrix is not what was expected");
+
+    la.frees(3, m, actual, expected);
+
+    return NULL;
+
+}
+
 DEFINE_TEST(fsub_test)
 {
     logger_log_info("fsub_test");
@@ -505,6 +544,7 @@ DEFINE_TEST(sub_test)
 
 }
 
+
 DEFINE_TEST(all_tests)
 {
     test_run(multi_dimension_matix_test);
@@ -528,6 +568,8 @@ DEFINE_TEST(all_tests)
     test_run(fn_sigmoid_test);
     test_run(sumf_test);
     test_run(subf_test);
+    test_run(mulf_test);
+    test_run(divf_test);
     test_run(fsub_test);
     test_run(sum_test);
     test_run(sub_test);
