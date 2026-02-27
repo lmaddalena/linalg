@@ -15,6 +15,7 @@ void main() {
    t_LinAlg la = LinAlg_Init();
    t_matrix *m = la.range(6, 2, 3);
    la.print(m);
+   la.free(m);
 }
 
 output:
@@ -358,14 +359,14 @@ t_matrix* (*identity)(int n)
 
 - identity matrix
 
-## 🔹 t_matrix* (*ones)(int sizex, int sizey)
+## 🔹 t_matrix* (*ones)(int sizey, int sizex)
 
 
 #### Create a matrix of ones
 
 
 ```cpp
-t_matrix* (*ones)(int sizex, int sizey)
+t_matrix* (*ones)(int sizey, int sizex)
 ```
 
 **Params:**
@@ -377,14 +378,14 @@ t_matrix* (*ones)(int sizex, int sizey)
 
 - matrix of (sizey, sizex) dimensions filled with 1
 
-## 🔹 t_matrix* (*rand)(int sizex, int sizey, int lower, int upper)
+## 🔹 t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
 
 
 #### Create a matrix of random integer between lower and upper bound
 
 
 ```cpp
-t_matrix* (*rand)(int sizex, int sizey, int lower, int upper)
+t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
 ```
 
 **Params:**

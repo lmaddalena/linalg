@@ -19,6 +19,7 @@
  *    t_LinAlg la = LinAlg_Init();
  *    t_matrix *m = la.range(6, 2, 3);
  *    la.print(m);
+ *    la.free(m);
  * }
  *
  * output:
