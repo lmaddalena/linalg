@@ -204,8 +204,7 @@ struct LinAlg
     * @param end_y end y index (escxluded)
     * @param start_x start x index
     * @param end_x end x index (escxluded)
-
-    * @return slices of the matrix
+    * @return slice of the matrix
     */        
     t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x);
 

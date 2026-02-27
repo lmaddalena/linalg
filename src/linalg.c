@@ -333,17 +333,23 @@ static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
     }
     */
 
-    /* versione ottimizzata */
+    /* versione ottimizzata (compilare con -fopenmp)*/
+    #pragma omp parallel for
     for (int i = 0; i < m1->shape.y; i++) {
-        int m1_row_start = i * m1->shape.x;
-        int res_row_start = i * res->shape.x;
+        int i_m1 = i * m1->shape.x;
+        int i_res = i * res->shape.x;
 
-        for (int j = 0; j < m2->shape.x; j++) {
-            double v = 0;
-            for (int k = 0; k < m1->shape.x; k++) {
-                v += m1->data[m1_row_start + k] * m2->data[k * m2->shape.x + j];
+        for (int k = 0; k < m1->shape.x; k++) {
+            
+            double a = m1->data[i_m1 + k];
+            
+            // Puntatore alla riga k di m2
+            int k_m2 = k * m2->shape.x;
+
+            for (int j = 0; j < m2->shape.x; j++) {
+                // ACCESSO LINEARE: j aumenta di 1, la cache ringrazia!
+                res->data[i_res + j] += a * m2->data[k_m2 + j];
             }
-            res->data[res_row_start + j] = v;
         }
     }
 

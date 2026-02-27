@@ -303,14 +303,14 @@ t_matrix* (*slice_cols)(t_matrix *m, int start, int end)
 
 - slices of the matrix
 
-## 🔧 * @return slices of the matrix
+## 🔹 t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 
 
 #### Slice matrix cols and rows
 
 
 ```cpp
-* @return slices of the matrix
+t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 ```
 
 **Params:**
@@ -321,6 +321,9 @@ t_matrix* (*slice_cols)(t_matrix *m, int start, int end)
 - `start_x` - start x index
 - `end_x` - end x index (escxluded)
 
+**Returns:**
+
+- slice of the matrix
 
 ## 🔹 void (*apply)(t_matrix *m, double (*fnc)(double d))
 
