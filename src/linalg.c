@@ -333,8 +333,8 @@ static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
     }
     */
 
-    /* versione ottimizzata (compilare con -fopenmp)*/
-    #pragma omp parallel for
+    /* versione ottimizzata */
+    //#pragma omp parallel for // (compilare con -fopenmp)
     for (int i = 0; i < m1->shape.y; i++) {
         int i_m1 = i * m1->shape.x;
         int i_res = i * res->shape.x;

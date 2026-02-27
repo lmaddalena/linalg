@@ -5,7 +5,7 @@ BIN_DIR = bin
 TEST_DIR = tests
 
 CC = gcc
-CFLAGS = -std=c99 -O3 -march=native -g -Wall -Isrc -Werror -fopenmp
+CFLAGS = -std=c99 -O3 -march=native -g -Wall -Isrc -Werror
 LDFLAGS = -L$(LIB_DIR) -llogger -ldl -lm
 TARGET = $(LIB_DIR)/liblinalg.a
 
