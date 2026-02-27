@@ -20,41 +20,41 @@
 
 /* ========================== PROTOTYPES ============================ */
 
-static t_matrix matrix_create(int sizey, int sizex);
-static t_matrix matrix_create_d(double *data, int sizey, int sizex);
-static void assert_index(t_matrix m, int y, int x);
-static void matrix_setval(t_matrix m, int y, int x, double val);
-static double matrix_getval(t_matrix m, int y, int x);
-static void matrix_print_row(t_matrix m, int y);
-static void matrix_print(t_matrix m);
+static t_matrix* matrix_create(int sizey, int sizex);
+static t_matrix* matrix_create_d(const double *data, int sizey, int sizex);
+static void assert_index(t_matrix *m, int y, int x);
+static void matrix_setval(t_matrix *m, int y, int x, double val);
+static double matrix_getval(t_matrix *m, int y, int x);
+static void matrix_print_row(t_matrix *m, int y);
+static void matrix_print(t_matrix *m);
 static void matrix_frees(int count, ...);
-static void matrix_free(t_matrix m);
-static t_matrix matrix_dot(t_matrix m1, t_matrix m2);
-static t_matrix matrix_T(t_matrix m);
-static t_matrix matrix_slice_rows(t_matrix m, int start, int end);
-static t_matrix matrix_slice_cols(t_matrix m, int start, int end);
-static t_matrix matrix_slice(t_matrix m, int start_y, int end_y, int start_x, int end_x);
-static void matrix_apply(t_matrix m, double (*fnc)(double d));
-static t_matrix matrix_identity(int n);
-static t_matrix matrix_ones(int sizey, int sizex);
-static t_matrix matrix_rand(int sizey, int sizex, int lower, int upper);
-static t_matrix matrix_sum_rows(t_matrix m);
-static t_matrix matrix_sum_cols(t_matrix m);
-static int matrix_equals(t_matrix m1, t_matrix m2);
-static t_matrix matrix_range(int range, int sizey, int sizex);
-static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex);
+static void matrix_free(t_matrix *m);
+static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_T(t_matrix *m);
+static t_matrix* matrix_slice_rows(t_matrix *m, int start, int end);
+static t_matrix* matrix_slice_cols(t_matrix *m, int start, int end);
+static t_matrix* matrix_slice(t_matrix *m, int start_y, int end_y, int start_x, int end_x);
+static void matrix_apply(t_matrix *m, double (*fnc)(double d));
+static t_matrix* matrix_identity(int n);
+static t_matrix* matrix_ones(int sizey, int sizex);
+static t_matrix* matrix_rand(int sizey, int sizex, int lower, int upper);
+static t_matrix* matrix_sum_rows(t_matrix *m);
+static t_matrix* matrix_sum_cols(t_matrix *m);
+static int matrix_equals(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_range(int range, int sizey, int sizex);
+static t_matrix* matrix_reshape(t_matrix *m, int sizey, int sizex);
 static double fn_sigmoid(double x);
 static double fn_dsigmoid(double x);
 static double fn_negative(double x);
-static t_matrix matrix_sumf(t_matrix m, double f);
-static t_matrix matrix_subf(t_matrix m, double f);
-static t_matrix matrix_mulf(t_matrix m, double f);
-static t_matrix matrix_divf(t_matrix m, double f);
-static t_matrix matrix_fsub(double f, t_matrix);
-static t_matrix matrix_sum(t_matrix m1, t_matrix m2);
-static t_matrix matrix_sub(t_matrix m1, t_matrix m2);
-static t_matrix matrix_mul(t_matrix m1, t_matrix m2);
-static t_matrix matrix_div(t_matrix m1, t_matrix m2);
+static t_matrix* matrix_sumf(t_matrix *m, double f);
+static t_matrix* matrix_subf(t_matrix *m, double f);
+static t_matrix* matrix_mulf(t_matrix *m, double f);
+static t_matrix* matrix_divf(t_matrix *m, double f);
+static t_matrix* matrix_fsub(double f, t_matrix *m);
+static t_matrix* matrix_sum(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_sub(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_mul(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_div(t_matrix *m1, t_matrix *m2);
 
 /* ========================== API ============================ */
 
@@ -105,57 +105,34 @@ t_LinAlg LinAlg_Init()
 
 /* ========================== STATIC FUNCTIONS ============================ */
 
-static t_matrix matrix_rand(int sizey, int sizex, int lower, int upper)
+static t_matrix* matrix_rand(int sizey, int sizex, int lower, int upper)
 {
-    ASSERT(sizex > 0, "x must be upper than 0");
-    ASSERT(sizey > 0, "y must be upper than 0");
-
-    t_matrix m;
-
-    m.shape.x = sizex;
-    m.shape.y = sizey;
-    m.size = sizex * sizey;
-    m.data = (double *)malloc(m.size * sizeof(double));
-
-    ASSERT(m.data != NULL, "out of memory");
+    t_matrix *m = matrix_create(sizey, sizex);
 
     srand(time(NULL));
 
-    for(int i = 0; i < m.size; i++)
-        m.data[i] =  (rand() % upper) + lower;
+    for(int i = 0; i < m->size; i++)
+        m->data[i] =  (rand() % upper) + lower;
 
     return m;    
 }
 
-static t_matrix matrix_ones(int sizey, int sizex)
+static t_matrix* matrix_ones(int sizey, int sizex)
 {
     ASSERT(sizex > 0, "x must be upper than 0");
     ASSERT(sizey > 0, "y must be upper than 0");
 
-    t_matrix m;
+    t_matrix* m = matrix_create(sizey, sizex);
 
-    m.shape.x = sizex;
-    m.shape.y = sizey;
-    m.size = sizex * sizey;
-    m.data = (double *)malloc(m.size * sizeof(double));
-
-    ASSERT(m.data != NULL, "out of memory");
-
-    for(int i = 0; i < m.size; i++)
-        m.data[i] = 1;
+    for(int i = 0; i < m->size; i++)
+        m->data[i] = 1;
 
     return m;    
 }
 
-static t_matrix matrix_identity(int n)
+static t_matrix* matrix_identity(int n)
 {
-    t_matrix m;
-
-    m.shape.x = n;
-    m.shape.y = n;
-    m.size = n * n;
-    m.data = (double *)malloc(m.size * sizeof(double));
-
+    t_matrix *m = matrix_create(n, n);
 
     for(int y = 0; y < n; y ++)
         for(int x = 0; x < n; x++)
@@ -164,72 +141,90 @@ static t_matrix matrix_identity(int n)
     return m;
 }
 
-static void matrix_apply(t_matrix m, double (*fnc)(double d))
+static void matrix_apply(t_matrix *m, double (*fnc)(double d))
 {
-    for(int i = 0; i < m.size; i++)
-        m.data[i] = fnc(m.data[i]);
+    for(int i = 0; i < m->size; i++)
+        m->data[i] = fnc(m->data[i]);
 }
 
-static t_matrix matrix_create(int sizey, int sizex)
+static t_matrix* matrix_create(int sizey, int sizex)
 {
-    ASSERT(sizex > 0, "x must be upper than 0");
-    ASSERT(sizey > 0, "y must be upper than 0");
+    t_matrix *m;
 
-    t_matrix m;
+    m = malloc(sizeof(t_matrix));
+    if (m == NULL) {
+        ASSERT(0, "out of memory for matrix struct");
+        return NULL;
+    }
 
-    m.shape.x = sizex;
-    m.shape.y = sizey;
-    m.size = sizex * sizey;
-    m.data = (double *)calloc(m.size, sizeof(double));
 
-    ASSERT(m.data != NULL, "out of memory");
+    m->shape.x = sizex;
+    m->shape.y = sizey;
+    m->size = sizex * sizey;
+    m->data = calloc(m->size, sizeof(double));
+
+    if (m->data == NULL) {
+        free(m);
+        ASSERT(0, "out of memory for matrix data");
+        return NULL;
+    }
+
 
     return m;    
 }
 
-static t_matrix matrix_create_d(double *data, int sizey, int sizex)
+static t_matrix* matrix_create_d(const double *data, int sizey, int sizex)
 {
     ASSERT(sizex > 0, "x must be upper than 0");
     ASSERT(sizey > 0, "y must be upper than 0");
+    ASSERT(data != NULL, "input data pointer is null");
 
-    t_matrix m;
+    t_matrix *m = malloc(sizeof(t_matrix));
+    if (m == NULL) {
+        ASSERT(0, "out of memory for matrix struct");
+        return NULL;
+    }
 
-    m.shape.x = sizex;
-    m.shape.y = sizey;
-    m.size = sizex * sizey;
-    m.data = (double *)calloc(m.size, sizeof(double));
+    m->shape.x = sizex;
+    m->shape.y = sizey;
+    m->size = sizex * sizey;
+    m->data = malloc(sizeof(double) * m->size);
 
-    ASSERT(m.data != NULL, "out of memory");
+    if (m->data == NULL) {
+        free(m);
+        ASSERT(0, "out of memory for matrix data");
+        return NULL;
+    }
 
-    memcpy(m.data, data, m.size * sizeof(double));
+    memcpy(m->data, data, m->size * sizeof(double));
 
     return m;    
 }
 
-static void assert_index(t_matrix m, int y, int x)
+static void assert_index(t_matrix *m, int y, int x)
 {
-    ASSERT(y >= 0 && y < m.shape.y, "y is out of bound");
-    ASSERT(x >= 0 && x < m.shape.x, "x is out of bound");
+    ASSERT(y >= 0 && y < m->shape.y, "y is out of bound");
+    ASSERT(x >= 0 && x < m->shape.x, "x is out of bound");
 }
 
-static void matrix_setval(t_matrix m, int y, int x, double val) 
-{
-    assert_index(m, y, x);
-    m.data[y * m.shape.x + x] = val;
-}
-
-static double matrix_getval(t_matrix m, int y, int x) 
+static void matrix_setval(t_matrix *m, int y, int x, double val) 
 {
     assert_index(m, y, x);
-    return m.data[y * m.shape.x + x];
+    m->data[y * m->shape.x + x] = val;
 }
 
-static void matrix_print_row(t_matrix m, int y)
+static double matrix_getval(t_matrix *m, int y, int x) 
+{
+    assert_index(m, y, x);
+    return m->data[y * m->shape.x + x];
+}
+
+static void matrix_print_row(t_matrix *m, int y)
 {
     int maxcount = 10;
-    int max = m.shape.x;
+    int max = m->shape.x;
 
-    if(m.shape.x > maxcount)
+    if(m->shape.x > maxcount)
         max = maxcount / 2;        
 
     char format[] = "%.3f";
@@ -238,33 +233,33 @@ static void matrix_print_row(t_matrix m, int y)
     for(int x = 0; x < max; x++)
     {
         printf(format, matrix_getval(m, y, x));
-        if(x < m.shape.x -1)
+        if(x < m->shape.x -1)
             printf(", ");
 
     }
 
-    if(max < m.shape.x)
+    if(max < m->shape.x)
     {
         printf("..., ");
-        for(int x = m.shape.x - max; x < m.shape.x; x++)
+        for(int x = m->shape.x - max; x < m->shape.x; x++)
         {                   
             printf("%.3f", matrix_getval(m, y, x));
-            if(x < m.shape.x -1)
+            if(x < m->shape.x -1)
                 printf(", ");
         }
 
     }
     printf("]");
-    if(y < m.shape.y -1)
+    if(y < m->shape.y -1)
         printf("\n");
 }
 
-static void matrix_print(t_matrix m)
+static void matrix_print(t_matrix *m)
 {
     int maxcount = 10;
-    int max = m.shape.y;
+    int max = m->shape.y;
 
-    if(m.shape.y > maxcount)
+    if(m->shape.y > maxcount)
         max = maxcount / 2; 
 
     printf("[");
@@ -273,16 +268,16 @@ static void matrix_print(t_matrix m)
         matrix_print_row(m, y);
     }
 
-    if(max < m.shape.y)
+    if(max < m->shape.y)
     {
         printf("...\n");
 
-        for(int y = m.shape.y - max; y < m.shape.y; y++)
+        for(int y = m->shape.y - max; y < m->shape.y; y++)
         {
             matrix_print_row(m, y);    
         }
     }    
-    printf("] shape=(%d,%d)\n", m.shape.y, m.shape.x);
+    printf("] shape=(%d,%d)\n", m->shape.y, m->shape.x);
 
 }
 
@@ -295,8 +290,8 @@ static void matrix_frees(int count, ...)
 
     // Retrieve the arguments and call free
     for (int i = 0; i < count; i++) {
-        t_matrix m = va_arg(args, t_matrix);
-        free(m.data);
+        t_matrix* m = va_arg(args, t_matrix*);
+        matrix_free(m);
     }
 
     // use the va_end to clean va_list variable
@@ -305,62 +300,63 @@ static void matrix_frees(int count, ...)
 
 }
 
-static void matrix_free(t_matrix m)
+static void matrix_free(t_matrix *m)
 {
-        free(m.data);
+    if (m != NULL) {
+        if (m->data != NULL) {
+            free(m->data); 
+        }
+        free(m);
+    }
 }
 
-static t_matrix matrix_dot(t_matrix m1, t_matrix m2)
+static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
 {    
-    ASSERT(m1.shape.x == m2.shape.y, "shapes not aligned" );
+    ASSERT(m1->shape.x == m2->shape.y, "shapes not aligned" );
 
-    t_matrix res = matrix_create(m1.shape.y, m2.shape.x);
+    t_matrix *res = matrix_create(m1->shape.y, m2->shape.x);
 
-    for(int y1 = 0; y1 < m1.shape.y; y1++)
+    for(int y1 = 0; y1 < m1->shape.y; y1++)
     {
-        for(int x2 = 0; x2 < m2.shape.x; x2++)
+        for(int x2 = 0; x2 < m2->shape.x; x2++)
         {
             double v = 0;
-            for(int x1 = 0; x1 < m1.shape.x; x1++)
+            for(int x1 = 0; x1 < m1->shape.x; x1++)
             {
                 //v = v + matrix_getval(m1, y1, x1) * matrix_getval(m2, x1, x2);
-                v += m1.data[y1 * m1.shape.x + x1] * m2.data[x1 * m2.shape.x + x2];
+                v += m1->data[y1 * m1->shape.x + x1] * m2->data[x1 * m2->shape.x + x2];
             }
 
             //matrix_setval(res, y1, x2, v);
-            res.data[y1 * res.shape.x + x2] = v;
+            res->data[y1 * res->shape.x + x2] = v;
         }
 
     }
     return res;
 }
 
-static t_matrix matrix_T(t_matrix m)
+static t_matrix* matrix_T(t_matrix *m)
 {
-    t_matrix res = matrix_create(m.shape.x, m.shape.y);
+    t_matrix* res = matrix_create(m->shape.x, m->shape.y);
 
-    for(int y = 0; y < m.shape.y; y++)
-        for(int x = 0; x < m.shape.x; x++)
+    for(int y = 0; y < m->shape.y; y++)
+        for(int x = 0; x < m->shape.x; x++)
             matrix_setval(res, x, y, matrix_getval(m, y, x));
 
     return res;
 }
 
-static t_matrix matrix_slice_rows(t_matrix m, int start, int end)
+static t_matrix* matrix_slice_rows(t_matrix *m, int start, int end)
 {
     assert_index(m, start, 0);    
     assert_index(m, end - 1, 0);    
 
-    int n = (end - start) * m.shape.x;
+    int n = (end - start) * m->shape.x;
     double *d = malloc(n * sizeof(double));
 
-    memcpy(d, &m.data[start * m.shape.x], n * sizeof(double));
+    memcpy(d, &m->data[start * m->shape.x], n * sizeof(double));
 
-    t_matrix res;
-    res.shape.y = end - start;
-    res.shape.x = m.shape.x;
-    res.size = res.shape.y *  res.shape.x;
-    res.data = d;
+    t_matrix *res = matrix_create_d(d, end - start, m->shape.x);
 
     /*
     t_matrix res = matrix_create(end - start, m.shape.x);
@@ -372,14 +368,14 @@ static t_matrix matrix_slice_rows(t_matrix m, int start, int end)
     return res;
 }
 
-static t_matrix matrix_slice_cols(t_matrix m, int start, int end)
+static t_matrix* matrix_slice_cols(t_matrix *m, int start, int end)
 {
     assert_index(m, 0, start);    
     assert_index(m, 0, end - 1);  
     
-    t_matrix res = matrix_create(m.shape.y, end - start);
+    t_matrix *res = matrix_create(m->shape.y, end - start);
 
-    for(int y = 0; y < m.shape.y; y++)
+    for(int y = 0; y < m->shape.y; y++)
         for(int x = start; x < end; x++)
             matrix_setval(res, y, x - start, matrix_getval(m, y, x));
 
@@ -387,12 +383,12 @@ static t_matrix matrix_slice_cols(t_matrix m, int start, int end)
     return res;
 }
 
-static t_matrix matrix_slice(t_matrix m, int start_y, int end_y, int start_x, int end_x)
+static t_matrix* matrix_slice(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 {
     assert_index(m, start_y, start_x);    
     assert_index(m, end_y - 1, end_x - 1);  
 
-    t_matrix res = matrix_create(end_y - start_y, end_x - start_x);
+    t_matrix *res = matrix_create(end_y - start_y, end_x - start_x);
 
     for(int y = start_y; y < end_y; y++)
         for(int x = start_x; x < end_x; x++)
@@ -403,15 +399,15 @@ static t_matrix matrix_slice(t_matrix m, int start_y, int end_y, int start_x, in
 
 }
 
-static t_matrix matrix_sum_rows(t_matrix m)
+static t_matrix* matrix_sum_rows(t_matrix *m)
 {
-    t_matrix res = matrix_create(m.shape.y, 1);
+    t_matrix *res = matrix_create(m->shape.y, 1);
 
-    for(int y = 0; y < m.shape.y; y++)
+    for(int y = 0; y < m->shape.y; y++)
     {
         double sum = 0;
 
-        for(int x = 0; x < m.shape.x; x++)
+        for(int x = 0; x < m->shape.x; x++)
         {
             sum += matrix_getval(m, y, x);
         }
@@ -422,15 +418,15 @@ static t_matrix matrix_sum_rows(t_matrix m)
     return res;
 }
 
-static t_matrix matrix_sum_cols(t_matrix m)
+static t_matrix* matrix_sum_cols(t_matrix *m)
 {
-    t_matrix res = matrix_create(1, m.shape.x);
+    t_matrix *res = matrix_create(1, m->shape.x);
 
-    for(int x = 0; x < m.shape.x; x++)
+    for(int x = 0; x < m->shape.x; x++)
     {
         double sum = 0;
 
-        for(int y = 0; y < m.shape.y; y++)
+        for(int y = 0; y < m->shape.y; y++)
         {
             sum += matrix_getval(m, y, x);
         }
@@ -442,53 +438,41 @@ static t_matrix matrix_sum_cols(t_matrix m)
 
 }
 
-int matrix_equals(t_matrix m1, t_matrix m2)
+int matrix_equals(t_matrix *m1, t_matrix *m2)
 {
-    if(m1.size != m2.size)
+    if(m1->size != m2->size)
         return 0;
 
-    if(m1.shape.x != m2.shape.x)
+    if(m1->shape.x != m2->shape.x)
         return 0;
 
-    if(m1.shape.x != m2.shape.x)
+    if(m1->shape.x != m2->shape.x)
         return 0;
 
-    for(int i = 0; i < m1.size; i++)
-        if(m1.data[i] != m2.data[i])
+    for(int i = 0; i < m1->size; i++)
+        if(m1->data[i] != m2->data[i])
             return 0;
     return 1;
 }
 
-t_matrix matrix_range(int range, int sizey, int sizex)
+t_matrix* matrix_range(int range, int sizey, int sizex)
 {
-    t_matrix m = matrix_create(sizey, sizex);
+    t_matrix *m = matrix_create(sizey, sizex);
 
-    for(int i = 0; i < range && i < m.size; i++)
-        m.data[i] = i;
+    for(int i = 0; i < range && i < m->size; i++)
+        m->data[i] = i;
 
     return m;
 }
 
-static t_matrix matrix_reshape(t_matrix m, int sizey, int sizex)
+static t_matrix* matrix_reshape(t_matrix *m, int sizey, int sizex)
 {
     ASSERT(sizex > 0, "x must be upper than 0");
     ASSERT(sizey > 0, "y must be upper than 0");
 
-    t_matrix res;
+    ASSERT(m->size == sizey * sizex, "invalid size. New size must be equals to m size");
 
-    res.shape.x = sizex;
-    res.shape.y = sizey;
-    res.size = sizex * sizey;
-
-    ASSERT(m.size == res.size, "invalid size. New size must be equals to m size");
-
-    res.data = (double *)calloc(m.size, sizeof(double));
-
-
-    ASSERT(res.data != NULL, "out of memory");
-    
-    for(int i = 0; i < m.size; i++)
-        res.data[i] = m.data[i];
+    t_matrix *res = matrix_create_d(m->data, sizey, sizex);
 
     return res;    
 }
@@ -509,104 +493,104 @@ static double fn_negative(double x)
     return -x;
 }
 
-static t_matrix matrix_sumf(t_matrix m, double f)
+static t_matrix* matrix_sumf(t_matrix *m, double f)
 {
-    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+    t_matrix *res = matrix_create(m->shape.y, m->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m.data[i] + f;
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m->data[i] + f;
 
     return res;
 }
 
-static t_matrix matrix_subf(t_matrix m, double f)
+static t_matrix* matrix_subf(t_matrix *m, double f)
 {
-    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+    t_matrix *res = matrix_create(m->shape.y, m->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m.data[i] - f;
-
-    return res;
-
-}
-
-static t_matrix matrix_mulf(t_matrix m, double f)
-{
-    t_matrix res = matrix_create(m.shape.y, m.shape.x);
-
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m.data[i] * f;
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m->data[i] - f;
 
     return res;
 
 }
 
-static t_matrix matrix_divf(t_matrix m, double f)
+static t_matrix* matrix_mulf(t_matrix *m, double f)
 {
-    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+    t_matrix *res = matrix_create(m->shape.y, m->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m.data[i] / f;
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m->data[i] * f;
 
     return res;
 
 }
 
-static t_matrix matrix_fsub(double f, t_matrix m)
+static t_matrix* matrix_divf(t_matrix *m, double f)
+{
+    t_matrix *res = matrix_create(m->shape.y, m->shape.x);
+
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m->data[i] / f;
+
+    return res;
+
+}
+
+static t_matrix* matrix_fsub(double f, t_matrix *m)
 {    
-    t_matrix res = matrix_create(m.shape.y, m.shape.x);
+    t_matrix *res = matrix_create(m->shape.y, m->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = f - m.data[i];
-
-    return res;
-}
-
-static t_matrix matrix_sum(t_matrix m1, t_matrix m2)
-{
-    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
-
-    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
-
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m1.data[i] + m2.data[i];
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = f - m->data[i];
 
     return res;
 }
 
-static t_matrix matrix_sub(t_matrix m1, t_matrix m2)
+static t_matrix* matrix_sum(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
+    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
-    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
+    t_matrix *res = matrix_create(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m1.data[i] - m2.data[i];
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m1->data[i] + m2->data[i];
+
+    return res;
+}
+
+static t_matrix* matrix_sub(t_matrix *m1, t_matrix *m2)
+{
+    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
+
+    t_matrix *res = matrix_create(m1->shape.y, m1->shape.x);
+
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m1->data[i] - m2->data[i];
 
     return res;
 
 }
 
-static t_matrix matrix_mul(t_matrix m1, t_matrix m2)
+static t_matrix* matrix_mul(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
+    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
-    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
+    t_matrix *res = matrix_create(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m1.data[i] * m2.data[i];
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m1->data[i] * m2->data[i];
 
     return res;
 }
 
-static t_matrix matrix_div(t_matrix m1, t_matrix m2)
+static t_matrix* matrix_div(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1.shape.x == m2.shape.x && m1.shape.y == m2.shape.y, "matrices must have the same shape");
+    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
-    t_matrix res = matrix_create(m1.shape.y, m1.shape.x);
+    t_matrix *res = matrix_create(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res.size; i++)
-        res.data[i] = m1.data[i] / m2.data[i];
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = m1->data[i] / m2->data[i];
 
     return res;
 

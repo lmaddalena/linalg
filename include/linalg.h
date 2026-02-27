@@ -17,7 +17,7 @@
  * void main() {
  * 
  *    t_LinAlg la = LinAlg_Init();
- *    t_matrix m = la.range(6, 2, 3);
+ *    t_matrix *m = la.range(6, 2, 3);
  *    la.print(m);
  * }
  *
@@ -89,7 +89,7 @@ struct LinAlg
     * @param sizex x dimension
     * @return matrix of (sizey, sizex) dimensions
     */        
-    t_matrix (*matrix)(int sizey, int sizex);
+    t_matrix* (*matrix)(int sizey, int sizex);
 
     /** matrixd
     *
@@ -100,7 +100,7 @@ struct LinAlg
     * @param sizex x dimension
     * @return matrix of (sizey, sizex) dimensions
     */        
-    t_matrix (*matrixd)(double *data, int sizey, int sizex);
+    t_matrix* (*matrixd)(const double *data, int sizey, int sizex);
 
     /** Dot
     *
@@ -110,7 +110,7 @@ struct LinAlg
     * @param m2 matrix
     * @return new matrix with dot product between matrix m1 and m2
     */        
-    t_matrix (*dot)(t_matrix m1, t_matrix m2);
+    t_matrix* (*dot)(t_matrix *m1, t_matrix *m2);
 
     /** T
     *
@@ -119,7 +119,7 @@ struct LinAlg
     * @param m matrix to transpose
     * @return new matrix with transposition of matrix m
     */        
-    t_matrix (*T)(t_matrix m);
+    t_matrix* (*T)(t_matrix *m);
 
     /** frees
     *
@@ -138,7 +138,7 @@ struct LinAlg
     * @param m matrix to be destroied
     * @return nothing
     */        
-    void (*free)(t_matrix m);
+    void (*free)(t_matrix *m);
 
     /** getval
     *
@@ -149,7 +149,7 @@ struct LinAlg
     * @param x x coordinate
     * @return cell value
     */        
-    double (*getval)(t_matrix m, int y, int x); 
+    double (*getval)(t_matrix *m, int y, int x); 
 
    /** setval
     *
@@ -161,7 +161,7 @@ struct LinAlg
     * @param val value of the cell
     * @return nothing
     */        
-    void (*setval)(t_matrix m, int y, int x, double val);
+    void (*setval)(t_matrix *m, int y, int x, double val);
 
    /** print
     * 
@@ -170,7 +170,7 @@ struct LinAlg
     * @param m matrix
     * @return nothing
     */        
-    void (*print)(t_matrix m);
+    void (*print)(t_matrix *m);
 
    /** slice_rows
     * 
@@ -181,7 +181,7 @@ struct LinAlg
     * @param end end index (escxluded)
     * @return slices of the matrix
     */        
-    t_matrix (*slice_rows)(t_matrix m, int start, int end);
+    t_matrix* (*slice_rows)(t_matrix *m, int start, int end);
 
    /** slice_cols
     * 
@@ -192,7 +192,7 @@ struct LinAlg
     * @param end end index (escxluded)
     * @return slices of the matrix
     */        
-    t_matrix (*slice_cols)(t_matrix m, int start, int end);
+    t_matrix* (*slice_cols)(t_matrix *m, int start, int end);
 
    /** slice
     * 
@@ -206,7 +206,7 @@ struct LinAlg
 
     * @return slices of the matrix
     */        
-    t_matrix (*slice)(t_matrix m, int start_y, int end_y, int start_x, int end_x);
+    t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x);
 
 
     /** apply
@@ -217,7 +217,7 @@ struct LinAlg
     * @param fnc function to be applied
     * @return nothing
     */        
-    void (*apply)(t_matrix m, double (*fnc)(double d));
+    void (*apply)(t_matrix *m, double (*fnc)(double d));
 
    /** identity
     *
@@ -226,7 +226,7 @@ struct LinAlg
     * @param n size of the square matrix
     * @return identity matrix
     */        
-    t_matrix (*identity)(int n);
+    t_matrix* (*identity)(int n);
 
    /** ones
     * 
@@ -236,7 +236,7 @@ struct LinAlg
     * @param sizex x dimension
     * @return matrix of (sizey, sizex) dimensions filled with 1
     */        
-    t_matrix (*ones)(int sizex, int sizey);
+    t_matrix* (*ones)(int sizex, int sizey);
 
    /** rand
     *
@@ -248,7 +248,7 @@ struct LinAlg
     * @param upper upper bound of random integer
     * @return matrix of (sizey, sizex) dimensions filled with 1
     */        
-    t_matrix (*rand)(int sizex, int sizey, int lower, int upper);
+    t_matrix* (*rand)(int sizex, int sizey, int lower, int upper);
 
    /** sum_rows
     * 
@@ -257,7 +257,7 @@ struct LinAlg
     * @param m matrix
     * @return matrix of (sizey, 1) dimensions with rows sum
     */        
-    t_matrix (*sum_rows)(t_matrix m);
+    t_matrix* (*sum_rows)(t_matrix *m);
 
    /** sum_cols
     * 
@@ -266,7 +266,7 @@ struct LinAlg
     * @param m matrix
     * @return matrix of (1, sizex) dimensions with columns sum
     */        
-    t_matrix (*sum_cols)(t_matrix m);
+    t_matrix* (*sum_cols)(t_matrix *m);
 
    /** compare
     * 
@@ -276,7 +276,7 @@ struct LinAlg
     * @param m2 second matrix to compare
     * @return return 1 if m1 equals m2, 0 otherwise
     */        
-    int (*equals)(t_matrix m1, t_matrix m2);
+    int (*equals)(t_matrix *m1, t_matrix *m2);
 
     /** range
      * 
@@ -287,7 +287,7 @@ struct LinAlg
     * @param sizex x dimension
     * @return matrix of (sizey, sizex) dimensions
     */        
-    t_matrix (*range)(int range, int sizey, int sizex);
+    t_matrix* (*range)(int range, int sizey, int sizex);
 
 
     /** reshape
@@ -299,7 +299,7 @@ struct LinAlg
     * @param sizex new x dimension
     * @return new matrix of (sizey, sizex) dimensions
     */        
-    t_matrix (*reshape)(t_matrix m, int sizey, int sizex);
+    t_matrix* (*reshape)(t_matrix *m, int sizey, int sizex);
 
 
     /** sigmoid
@@ -338,7 +338,7 @@ struct LinAlg
      * @param m matrix
      * @return new matrix 
      */
-    t_matrix (*sumf)(t_matrix m, double f);
+    t_matrix* (*sumf)(t_matrix *m, double f);
 
     /** subf
      * 
@@ -348,7 +348,7 @@ struct LinAlg
      * @param f float
      * @return new matrix 
      */
-    t_matrix (*subf)(t_matrix m, double f);
+    t_matrix* (*subf)(t_matrix *m, double f);
 
     /** mulf
      * 
@@ -358,7 +358,7 @@ struct LinAlg
      * @param f float
      * @return new matrix 
      */
-    t_matrix (*mulf)(t_matrix m, double f);
+    t_matrix* (*mulf)(t_matrix *m, double f);
 
     /** divf
      * 
@@ -368,7 +368,7 @@ struct LinAlg
      * @param f float
      * @return new matrix 
      */
-    t_matrix (*divf)(t_matrix m, double f);
+    t_matrix* (*divf)(t_matrix *m, double f);
 
     /** fsub
      * 
@@ -378,7 +378,7 @@ struct LinAlg
      * @param m matrix
      * @return new matrix 
      */
-    t_matrix (*fsub)(double f, t_matrix m);
+    t_matrix* (*fsub)(double f, t_matrix *m);
 
     /** sum
      * 
@@ -388,7 +388,7 @@ struct LinAlg
      * @param m2 matrix
      * @return new matrix 
      */
-    t_matrix (*sum)(t_matrix m1, t_matrix m2);
+    t_matrix* (*sum)(t_matrix *m1, t_matrix *m2);
 
     /** sub
      * 
@@ -398,7 +398,7 @@ struct LinAlg
      * @param m2 matrix
      * @return new matrix 
      */
-    t_matrix (*sub)(t_matrix m1, t_matrix m2);
+    t_matrix* (*sub)(t_matrix *m1, t_matrix *m2);
 
     /** mul
      * 
@@ -408,7 +408,7 @@ struct LinAlg
      * @param m2 matrix
      * @return new matrix 
      */
-    t_matrix (*mul)(t_matrix m1, t_matrix m2);
+    t_matrix* (*mul)(t_matrix *m1, t_matrix *m2);
 
     /** div
      * 
@@ -418,7 +418,7 @@ struct LinAlg
      * @param m2 matrix
      * @return new matrix 
      */
-    t_matrix (*div)(t_matrix m1, t_matrix m2);
+    t_matrix* (*div)(t_matrix *m1, t_matrix *m2);
 
 
 };

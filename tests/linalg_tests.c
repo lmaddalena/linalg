@@ -11,20 +11,20 @@ DEFINE_TEST(multi_dimension_matix_test)
     t_LinAlg la = LinAlg_Init();
 
     // mm is (50, 12288)
-    t_matrix mm = la.range(614400, 50, 12288);
+    t_matrix *mm = la.range(614400, 50, 12288);
 
-    for(int i = 0; i < mm.shape.y; i++)
+    for(int i = 0; i < mm->shape.y; i++)
     {
         // row is (1, 12228)
-        t_matrix row = la.slice_rows(mm, i, i + 1);
+        t_matrix *row = la.slice_rows(mm, i, i + 1);
 
         // r, g, b are (1, 4096)
-        t_matrix r = la.slice_cols(row, 0, 4096);
-        t_matrix g = la.slice_cols(row, 4096, 8192);
-        t_matrix b = la.slice_cols(row, 8192, 12288);
+        t_matrix *r = la.slice_cols(row, 0, 4096);
+        t_matrix *g = la.slice_cols(row, 4096, 8192);
+        t_matrix *b = la.slice_cols(row, 8192, 12288);
 
         // rr is (64, 64)
-        t_matrix rr = la.matrixd(r.data, 64, 64);
+        t_matrix *rr = la.matrixd(r->data, 64, 64);
 
         la.free(row);
 
@@ -42,12 +42,12 @@ DEFINE_TEST(matrix_test)
 {
     logger_log_info("executing matrix test");
     t_LinAlg la = LinAlg_Init();
-    t_matrix m = la.matrix(3, 2);
+    t_matrix *m = la.matrix(3, 2);
     
-    test_assert(m.data != NULL, "matrix creation faild");
-    test_assert(m.size == 6, "invalid size");
-    test_assert(m.shape.x == 2, "invalid shape x");
-    test_assert(m.shape.y == 3, "invalid shape y");
+    test_assert(m->data != NULL, "matrix creation faild");
+    test_assert(m->size == 6, "invalid size");
+    test_assert(m->shape.x == 2, "invalid shape x");
+    test_assert(m->shape.y == 3, "invalid shape y");
 
     la.free(m);
 
@@ -59,13 +59,17 @@ DEFINE_TEST(matrixd_test)
     logger_log_info("executing matrixd test");
     t_LinAlg la = LinAlg_Init();
     double data[6] = {1, 2, 3, 4, 5, 6};
-    t_matrix m = la.matrixd(data, 3, 2);
+    t_matrix *m = la.matrixd(data, 3, 2);
     
-    test_assert(m.data != NULL, "matrix creation faild");
-    test_assert(m.size == 6, "invalid size");
-    test_assert(m.shape.x == 2, "invalid shape x");
-    test_assert(m.shape.y == 3, "invalid shape y");
+    test_assert(m->data != NULL, "matrix creation faild");
+    test_assert(m->size == 6, "invalid size");
+    test_assert(m->shape.x == 2, "invalid shape x");
+    test_assert(m->shape.y == 3, "invalid shape y");
 
+    // Assert dei dati (fondamentale per memcpy)
+    for(int i = 0; i < 6; i++) {
+        test_assert(m->data[i] == data[i], "Data corruption at index");
+    }    
     la.free(m);
 
     return NULL;
@@ -77,7 +81,7 @@ DEFINE_TEST(equals_test)
 
     t_LinAlg la = LinAlg_Init();
     double data[6] = {1, 2, 3, 4, 5, 6};
-    t_matrix m = la.matrixd(data, 3, 2);
+    t_matrix *m = la.matrixd(data, 3, 2);
     
     test_assert(la.equals(m, m), "matrices are not equal");
 
@@ -93,15 +97,15 @@ DEFINE_TEST(dot_test)
     t_LinAlg la = LinAlg_Init();
     
     double d1[4] = {1, 2, 3, 4};
-    t_matrix m1 = la.matrixd(d1, 2, 2);
+    t_matrix *m1 = la.matrixd(d1, 2, 2);
 
     double d2[6] = {1, 2, 3, 4, 5, 6};
-    t_matrix m2 = la.matrixd(d2, 2, 3);
+    t_matrix *m2 = la.matrixd(d2, 2, 3);
 
-    t_matrix actual = la.dot(m1, m2);
+    t_matrix *actual = la.dot(m1, m2);
 
     double d3[6] = {9, 12, 15, 19, 26, 33};
-    t_matrix expected = la.matrixd(d3, 2, 3);
+    t_matrix *expected = la.matrixd(d3, 2, 3);
 
     test_assert(la.equals(actual, expected), "dot prodoct is not what was expected");
 
@@ -116,21 +120,21 @@ DEFINE_TEST(dot2_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.matrix(1000, 1000);
+    t_matrix *m = la.matrix(1000, 1000);
 
-    for(int i = 0; i < m.size; i++)
-        m.data[i] = i/1000;
+    for(int i = 0; i < m->size; i++)
+        m->data[i] = i/1000;
 
     clock_t start, end;
     double elapsed;
 
     start = clock();
 
-    t_matrix m2 = la.dot(m, m);
+    t_matrix *m2 = la.dot(m, m);
     end = clock();
     elapsed = (double)(end - start) / (double)CLOCKS_PER_SEC;
     
-    logger_log_info("dot matrix (%d,%d)x(%d,%d) ends in %.4f mils", m.shape.x, m.shape.y, m.shape.x, m.shape.y, elapsed * 1000);    
+    logger_log_info("dot matrix (%d,%d)x(%d,%d) ends in %.4f mils", m->shape.x, m->shape.y, m->shape.x, m->shape.y, elapsed * 1000);    
 
     la.frees(2, m, m2);
 
@@ -144,12 +148,12 @@ DEFINE_TEST(T_test)
     t_LinAlg la = LinAlg_Init();
 
     double d[6] = {1, 2, 3, 4, 5, 6};
-    t_matrix m = la.matrixd(d, 2, 3);
+    t_matrix *m = la.matrixd(d, 2, 3);
 
     double d2[6] = {1, 4, 2, 5, 3, 6};
-    t_matrix expected = la.matrixd(d2, 3, 2);
+    t_matrix *expected = la.matrixd(d2, 3, 2);
 
-    t_matrix actual = la.T(m);
+    t_matrix *actual = la.T(m);
 
     test_assert(la.equals(actual, expected), "Matrix transpose is not what was expected");
 
@@ -164,10 +168,10 @@ DEFINE_TEST(range_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix actual = la.range(6, 2, 3);
+    t_matrix *actual = la.range(6, 2, 3);
 
     double d[6] = {0, 1, 2, 3, 4, 5};
-    t_matrix expected = la.matrixd(d, 2, 3);
+    t_matrix *expected = la.matrixd(d, 2, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -182,10 +186,10 @@ DEFINE_TEST(range2_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix actual = la.range(3, 2, 3);
+    t_matrix *actual = la.range(3, 2, 3);
 
     double d[6] = {0, 1, 2, 0, 0, 0};
-    t_matrix expected = la.matrixd(d, 2, 3);
+    t_matrix *expected = la.matrixd(d, 2, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -200,10 +204,10 @@ DEFINE_TEST(range3_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix actual = la.range(20, 2, 3);
+    t_matrix *actual = la.range(20, 2, 3);
 
     double d[6] = {0, 1, 2, 3, 4, 5};
-    t_matrix expected = la.matrixd(d, 2, 3);
+    t_matrix *expected = la.matrixd(d, 2, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -218,12 +222,12 @@ DEFINE_TEST(slice_rows_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(12, 4, 3);
+    t_matrix *m = la.range(12, 4, 3);
 
-    t_matrix actual = la.slice_rows(m, 1, 2);
+    t_matrix *actual = la.slice_rows(m, 1, 2);
 
     double d[3] = {3, 4, 5};
-    t_matrix expected = la.matrixd(d, 1, 3);
+    t_matrix *expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -238,12 +242,12 @@ DEFINE_TEST(slice_cols_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(12, 4, 3);
+    t_matrix *m = la.range(12, 4, 3);
 
-    t_matrix actual = la.slice_cols(m, 1, 2);
+    t_matrix *actual = la.slice_cols(m, 1, 2);
 
     double d[4] = {1, 4, 7, 10};
-    t_matrix expected = la.matrixd(d, 4, 1);
+    t_matrix *expected = la.matrixd(d, 4, 1);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -258,12 +262,12 @@ DEFINE_TEST(slice_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(16, 4, 4);
+    t_matrix *m = la.range(16, 4, 4);
 
-    t_matrix actual = la.slice(m, 1, 3, 1, 3);
+    t_matrix *actual = la.slice(m, 1, 3, 1, 3);
 
     double d[4] = {5, 6, 9, 10};
-    t_matrix expected = la.matrixd(d, 2, 2);
+    t_matrix *expected = la.matrixd(d, 2, 2);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -291,12 +295,12 @@ DEFINE_TEST(apply_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix actual = la.range(6, 2, 3);
+    t_matrix *actual = la.range(6, 2, 3);
 
     la.apply(actual, square);
 
     double d[6] = {0, 1, 4, 9, 16, 25};
-    t_matrix expected = la.matrixd(d, 2, 3);
+    t_matrix *expected = la.matrixd(d, 2, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -311,10 +315,10 @@ DEFINE_TEST(identity_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix actual = la.identity(3);
+    t_matrix *actual = la.identity(3);
 
     double d[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
-    t_matrix expected = la.matrixd(d, 3, 3);
+    t_matrix *expected = la.matrixd(d, 3, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -329,12 +333,12 @@ DEFINE_TEST(sum_rows_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(12, 4, 3);
+    t_matrix *m = la.range(12, 4, 3);
 
-    t_matrix actual = la.sum_rows(m);
+    t_matrix *actual = la.sum_rows(m);
     
     double d[4] = {3, 12, 21, 30};
-    t_matrix expected = la.matrixd(d, 4, 1);
+    t_matrix *expected = la.matrixd(d, 4, 1);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -349,12 +353,12 @@ DEFINE_TEST(sum_cols_test)
 
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(12, 4, 3);
+    t_matrix *m = la.range(12, 4, 3);
 
-    t_matrix actual = la.sum_cols(m);
+    t_matrix *actual = la.sum_cols(m);
     
     double d[3] = {18, 22, 26};
-    t_matrix expected = la.matrixd(d, 1, 3);
+    t_matrix *expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(actual, expected), "Matrix is not what was expected");
 
@@ -370,13 +374,13 @@ DEFINE_TEST(reshape_test)
 
     double data[6] = {1, 2, 3, 4, 5, 6};
 
-    t_matrix m = la.matrixd(data, 3, 2);
+    t_matrix *m = la.matrixd(data, 3, 2);
 
-    t_matrix actual = la.reshape(m, 2, 3);
+    t_matrix *actual = la.reshape(m, 2, 3);
     
-    t_matrix expected = la.matrixd(data, 2, 3);
+    t_matrix *expected = la.matrixd(data, 2, 3);
     
-    test_assert(actual.data != NULL, "matrix creation faild");
+    test_assert(actual->data != NULL, "matrix creation faild");
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
     la.frees(3, m, actual, expected);
@@ -390,10 +394,10 @@ DEFINE_TEST(fn_sigmoid_test)
     t_LinAlg la = LinAlg_Init();
 
     double data[2] = {0, 2};
-    t_matrix actual = la.matrixd(data, 1, 2);
+    t_matrix *actual = la.matrixd(data, 1, 2);
 
     double data_expected[2] = {0.5, (round(0.880797 * 10000)) / 10000};
-    t_matrix expected = la.matrixd(data_expected, 1, 2);
+    t_matrix *expected = la.matrixd(data_expected, 1, 2);
 
     la.apply(actual, la.fn_sigmoid);
     la.setval(actual, 0, 1, round(la.getval(actual, 0, 1) * 10000) / 10000);
@@ -411,11 +415,11 @@ DEFINE_TEST(sumf_test)
     logger_log_info("sumf_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(10, 2, 5);
-    t_matrix actual = la.sumf(m, 1);
+    t_matrix *m = la.range(10, 2, 5);
+    t_matrix *actual = la.sumf(m, 1);
 
     double d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    t_matrix expected = la.matrixd(d, 2, 5);
+    t_matrix *expected = la.matrixd(d, 2, 5);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -430,11 +434,11 @@ DEFINE_TEST(subf_test)
     logger_log_info("subf_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(10, 2, 5);
-    t_matrix actual = la.subf(m, 1);
+    t_matrix *m = la.range(10, 2, 5);
+    t_matrix *actual = la.subf(m, 1);
 
     double d[10] = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
-    t_matrix expected = la.matrixd(d, 2, 5);
+    t_matrix *expected = la.matrixd(d, 2, 5);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -449,11 +453,11 @@ DEFINE_TEST(mulf_test)
     logger_log_info("mulf_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(3, 1, 3);
-    t_matrix actual = la.mulf(m, 2);
+    t_matrix *m = la.range(3, 1, 3);
+    t_matrix *actual = la.mulf(m, 2);
 
     double d[3] = {0, 2, 4};
-    t_matrix expected = la.matrixd(d, 1, 3);
+    t_matrix *expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -469,11 +473,11 @@ DEFINE_TEST(divf_test)
     t_LinAlg la = LinAlg_Init();
 
     double da[3] = {2, 4, 6};
-    t_matrix m = la.matrixd(da, 1, 3);
-    t_matrix actual = la.divf(m, 2);
+    t_matrix *m = la.matrixd(da, 1, 3);
+    t_matrix *actual = la.divf(m, 2);
     
     double de[3] = {1, 2, 3};
-    t_matrix expected = la.matrixd(de, 1, 3);
+    t_matrix *expected = la.matrixd(de, 1, 3);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -488,11 +492,11 @@ DEFINE_TEST(fsub_test)
     logger_log_info("fsub_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m = la.range(10, 2, 5);
-    t_matrix actual = la.fsub(1, m);
+    t_matrix *m = la.range(10, 2, 5);
+    t_matrix *actual = la.fsub(1, m);
 
     double d[10] = { 1, 0, -1, -2, -3, -4, -5, -6, -7, -8};
-    t_matrix expected = la.matrixd(d, 2, 5);
+    t_matrix *expected = la.matrixd(d, 2, 5);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -507,13 +511,13 @@ DEFINE_TEST(sum_test)
     logger_log_info("sum_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m1 = la.range(3, 1, 3);
-    t_matrix m2 = la.range(3, 1, 3);
+    t_matrix *m1 = la.range(3, 1, 3);
+    t_matrix *m2 = la.range(3, 1, 3);
     
-    t_matrix actual = la.sum(m1, m2);
+    t_matrix *actual = la.sum(m1, m2);
 
     double d[3] = { 0, 2, 4};
-    t_matrix expected = la.matrixd(d, 1, 3);
+    t_matrix *expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
@@ -528,13 +532,13 @@ DEFINE_TEST(sub_test)
     logger_log_info("sub_test");
     t_LinAlg la = LinAlg_Init();
 
-    t_matrix m1 = la.matrix(1, 3);
-    t_matrix m2 = la.range(3, 1, 3);
+    t_matrix *m1 = la.matrix(1, 3);
+    t_matrix *m2 = la.range(3, 1, 3);
     
-    t_matrix actual = la.sub(m1, m2);
+    t_matrix *actual = la.sub(m1, m2);
 
     double d[3] = { 0, -1, -2};
-    t_matrix expected = la.matrixd(d, 1, 3);
+    t_matrix *expected = la.matrixd(d, 1, 3);
 
     test_assert(la.equals(expected, actual), "Matrix is not what was expected");
 
