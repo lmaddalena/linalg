@@ -236,7 +236,7 @@ struct LinAlg
     * @param sizex x dimension
     * @return matrix of (sizey, sizex) dimensions filled with 1
     */        
-    t_matrix* (*ones)(int sizex, int sizey);
+    t_matrix* (*ones)(int sizey, int sizex);
 
    /** rand
     *
@@ -248,7 +248,7 @@ struct LinAlg
     * @param upper upper bound of random integer
     * @return matrix of (sizey, sizex) dimensions filled with 1
     */        
-    t_matrix* (*rand)(int sizex, int sizey, int lower, int upper);
+    t_matrix* (*rand)(int sizey, int sizex, int lower, int upper);
 
    /** sum_rows
     * 

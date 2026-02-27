@@ -315,7 +315,8 @@ static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
     ASSERT(m1->shape.x == m2->shape.y, "shapes not aligned" );
 
     t_matrix *res = matrix_create(m1->shape.y, m2->shape.x);
-
+    
+    /*
     for(int y1 = 0; y1 < m1->shape.y; y1++)
     {
         for(int x2 = 0; x2 < m2->shape.x; x2++)
@@ -323,15 +324,29 @@ static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
             double v = 0;
             for(int x1 = 0; x1 < m1->shape.x; x1++)
             {
-                //v = v + matrix_getval(m1, y1, x1) * matrix_getval(m2, x1, x2);
                 v += m1->data[y1 * m1->shape.x + x1] * m2->data[x1 * m2->shape.x + x2];
             }
 
-            //matrix_setval(res, y1, x2, v);
             res->data[y1 * res->shape.x + x2] = v;
         }
 
     }
+    */
+
+    /* versione ottimizzata */
+    for (int i = 0; i < m1->shape.y; i++) {
+        int m1_row_start = i * m1->shape.x;
+        int res_row_start = i * res->shape.x;
+
+        for (int j = 0; j < m2->shape.x; j++) {
+            double v = 0;
+            for (int k = 0; k < m1->shape.x; k++) {
+                v += m1->data[m1_row_start + k] * m2->data[k * m2->shape.x + j];
+            }
+            res->data[res_row_start + j] = v;
+        }
+    }
+
     return res;
 }
 
@@ -341,7 +356,7 @@ static t_matrix* matrix_T(t_matrix *m)
 
     for(int y = 0; y < m->shape.y; y++)
         for(int x = 0; x < m->shape.x; x++)
-            matrix_setval(res, x, y, matrix_getval(m, y, x));
+            res->data[x * m->shape.y + y] = m->data[y * m->shape.x + x];
 
     return res;
 }
@@ -470,7 +485,7 @@ static t_matrix* matrix_reshape(t_matrix *m, int sizey, int sizex)
     ASSERT(sizex > 0, "x must be upper than 0");
     ASSERT(sizey > 0, "y must be upper than 0");
 
-    ASSERT(m->size == sizey * sizex, "invalid size. New size must be equals to m size");
+    ASSERT(m->size == sizey * sizex, "Dimension mismatch");
 
     t_matrix *res = matrix_create_d(m->data, sizey, sizex);
 
