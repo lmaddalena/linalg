@@ -416,7 +416,7 @@ DEFINE_TEST(reshape_test)
 
 DEFINE_TEST(fn_sigmoid_test)
 {
-    logger_log_info("fn_sigmoid_test");
+    logger_log_info("executing fn_sigmoid test");
     t_LinAlg la = LinAlg_Init();
 
     double data[2] = {0, 2};
@@ -438,7 +438,7 @@ DEFINE_TEST(fn_sigmoid_test)
 
 DEFINE_TEST(sumf_test)
 {
-    logger_log_info("sumf_test");
+    logger_log_info("executing sumf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -457,7 +457,7 @@ DEFINE_TEST(sumf_test)
 
 DEFINE_TEST(subf_test)
 {
-    logger_log_info("subf_test");
+    logger_log_info("executing subf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -476,7 +476,7 @@ DEFINE_TEST(subf_test)
 
 DEFINE_TEST(mulf_test)
 {
-    logger_log_info("mulf_test");
+    logger_log_info("executing mulf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(3, 1, 3);
@@ -495,7 +495,7 @@ DEFINE_TEST(mulf_test)
 
 DEFINE_TEST(divf_test)
 {
-    logger_log_info("divf_test");
+    logger_log_info("executing divf test");
     t_LinAlg la = LinAlg_Init();
 
     double da[3] = {2, 4, 6};
@@ -515,7 +515,7 @@ DEFINE_TEST(divf_test)
 
 DEFINE_TEST(fsub_test)
 {
-    logger_log_info("fsub_test");
+    logger_log_info("executing fsub test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -534,7 +534,7 @@ DEFINE_TEST(fsub_test)
 
 DEFINE_TEST(sum_test)
 {
-    logger_log_info("sum_test");
+    logger_log_info("executing sum test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m1 = la.range(3, 1, 3);
@@ -555,7 +555,7 @@ DEFINE_TEST(sum_test)
 
 DEFINE_TEST(sub_test)
 {
-    logger_log_info("sub_test");
+    logger_log_info("executing sub test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m1 = la.matrix(1, 3);
