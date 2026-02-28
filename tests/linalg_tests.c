@@ -141,6 +141,32 @@ DEFINE_TEST(dot2_test)
     return NULL;
 }
 
+DEFINE_TEST(matmul_atb_test)
+{
+    logger_log_info("executing matmul_atb test");
+
+    t_LinAlg la = LinAlg_Init();
+    
+    double d1[6] = {1, 5, 4, 9, 3, 8};
+    t_matrix *A = la.matrixd(d1, 3, 2);
+
+    double d2[6] = {6, 7, 1, 3, 5, 9};
+    t_matrix *B = la.matrixd(d2, 3, 2);
+
+    t_matrix *actual = la.matmul_atb(A, B);
+
+    t_matrix *expected;
+    t_matrix *AT;
+    AT = la.T(A);
+    expected = la.dot(AT, B);
+
+    test_assert(la.equals(actual, expected), "dot prodoct is not what was expected");
+
+    la.frees(5, A, B, AT, actual, expected);
+
+    return NULL;
+}
+
 DEFINE_TEST(T_test)
 {
     logger_log_info("executing T test");
@@ -557,6 +583,7 @@ DEFINE_TEST(all_tests)
     test_run(equals_test);
     test_run(dot_test);
     test_run(dot2_test);
+    test_run(matmul_atb_test);
     test_run(T_test);
     test_run(range_test);
     test_run(range2_test);
