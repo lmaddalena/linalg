@@ -282,6 +282,25 @@ void (*print)(t_matrix *m)
 
 - nothing
 
+## 🔹 void (*printf)(t_matrix *m, char *fmt)
+
+
+#### Print the matrix using format fmt
+
+
+```cpp
+void (*printf)(t_matrix *m, char *fmt)
+```
+
+**Params:**
+
+- `m` - matrix
+- `fmt` - format (es. %.6f)
+
+**Returns:**
+
+- nothing
+
 ## 🔹 t_matrix* (*slice_rows)(t_matrix *m, int start, int end)
 
 
@@ -419,7 +438,26 @@ t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
 
 **Returns:**
 
-- matrix of (sizey, sizex) dimensions filled with 1
+- matrix of (sizey, sizex) dimensions
+
+## 🔹 t_matrix* (*randf)(int sizey, int sizex)
+
+
+#### Create a matrix of random float between 0.0 and 1.0
+
+
+```cpp
+t_matrix* (*randf)(int sizey, int sizex)
+```
+
+**Params:**
+
+- `sizey` - y dimension
+- `sizex` - x dimension
+
+**Returns:**
+
+- matrix of (sizey, sizex)
 
 ## 🔹 t_matrix* (*sum_rows)(t_matrix *m)
 

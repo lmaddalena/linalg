@@ -25,8 +25,9 @@ static t_matrix* matrix_create_d(const double *data, int sizey, int sizex);
 static void assert_index(t_matrix *m, int y, int x);
 static void matrix_setval(t_matrix *m, int y, int x, double val);
 static double matrix_getval(t_matrix *m, int y, int x);
-static void matrix_print_row(t_matrix *m, int y);
+static void matrix_print_row(t_matrix *m, int y, char *fmt);
 static void matrix_print(t_matrix *m);
+static void matrix_printf(t_matrix *m, char *fmt);
 static void matrix_frees(int count, ...);
 static void matrix_free(t_matrix *m);
 static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2);
@@ -39,6 +40,7 @@ static void matrix_apply(t_matrix *m, double (*fnc)(double d));
 static t_matrix* matrix_identity(int n);
 static t_matrix* matrix_ones(int sizey, int sizex);
 static t_matrix* matrix_rand(int sizey, int sizex, int lower, int upper);
+static t_matrix* matrix_randf(int sizey, int sizex);
 static t_matrix* matrix_sum_rows(t_matrix *m);
 static t_matrix* matrix_sum_cols(t_matrix *m);
 static int matrix_equals(t_matrix *m1, t_matrix *m2);
@@ -75,6 +77,7 @@ t_LinAlg LinAlg_Init()
     la.getval = matrix_getval;
     la.setval = matrix_setval;
     la.print = matrix_print;
+    la.printf = matrix_printf;
     la.T = matrix_T;
     la.slice = matrix_slice;
     la.slice_rows = matrix_slice_rows;
@@ -83,6 +86,7 @@ t_LinAlg LinAlg_Init()
     la.identity = matrix_identity;
     la.ones = matrix_ones;
     la.rand = matrix_rand;
+    la.randf = matrix_randf;
     la.sum_rows = matrix_sum_rows;
     la.sum_cols = matrix_sum_cols;
     la.equals = matrix_equals;
@@ -115,6 +119,18 @@ static t_matrix* matrix_rand(int sizey, int sizex, int lower, int upper)
 
     for(int i = 0; i < m->size; i++)
         m->data[i] =  rand() % (upper - lower + 1) + lower;
+
+    return m;    
+}
+
+static t_matrix* matrix_randf(int sizey, int sizex)
+{
+    t_matrix *m = matrix_create(sizey, sizex);
+
+    srand(time(NULL));
+
+    for(int i = 0; i < m->size; i++)
+        m->data[i] =  (float)rand() / RAND_MAX;
 
     return m;    
 }
@@ -221,7 +237,7 @@ static double matrix_getval(t_matrix *m, int y, int x)
     return m->data[y * m->shape.x + x];
 }
 
-static void matrix_print_row(t_matrix *m, int y)
+static void matrix_print_row(t_matrix *m, int y, char *fmt)
 {
     int maxcount = 10;
     int max = m->shape.x;
@@ -229,12 +245,12 @@ static void matrix_print_row(t_matrix *m, int y)
     if(m->shape.x > maxcount)
         max = maxcount / 2;        
 
-    char format[] = "%.3f";
+    //char format[] = "%.3f";
     
     printf("[");
     for(int x = 0; x < max; x++)
     {
-        printf(format, matrix_getval(m, y, x));
+        printf(fmt, matrix_getval(m, y, x));
         if(x < m->shape.x -1)
             printf(", ");
 
@@ -245,7 +261,7 @@ static void matrix_print_row(t_matrix *m, int y)
         printf("..., ");
         for(int x = m->shape.x - max; x < m->shape.x; x++)
         {                   
-            printf("%.3f", matrix_getval(m, y, x));
+            printf(fmt, matrix_getval(m, y, x));
             if(x < m->shape.x -1)
                 printf(", ");
         }
@@ -267,7 +283,7 @@ static void matrix_print(t_matrix *m)
     printf("[");
     for(int y = 0; y < max; y++)
     {
-        matrix_print_row(m, y);
+        matrix_print_row(m, y, "%.3f");
     }
 
     if(max < m->shape.y)
@@ -276,7 +292,34 @@ static void matrix_print(t_matrix *m)
 
         for(int y = m->shape.y - max; y < m->shape.y; y++)
         {
-            matrix_print_row(m, y);    
+            matrix_print_row(m, y, "%.3f");    
+        }
+    }    
+    printf("] shape=(%d,%d)\n", m->shape.y, m->shape.x);
+
+}
+
+static void matrix_printf(t_matrix *m, char *fmt)
+{
+    int maxcount = 10;
+    int max = m->shape.y;
+
+    if(m->shape.y > maxcount)
+        max = maxcount / 2; 
+
+    printf("[");
+    for(int y = 0; y < max; y++)
+    {
+        matrix_print_row(m, y, fmt);
+    }
+
+    if(max < m->shape.y)
+    {
+        printf("...\n");
+
+        for(int y = m->shape.y - max; y < m->shape.y; y++)
+        {
+            matrix_print_row(m, y, fmt);    
         }
     }    
     printf("] shape=(%d,%d)\n", m->shape.y, m->shape.x);

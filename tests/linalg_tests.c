@@ -84,7 +84,20 @@ DEFINE_TEST(rand_test)
     
     test_assert(m->data != NULL, "matrix creation faild");
  
-    la.print(m);
+    la.free(m);
+
+    return NULL;
+}
+
+DEFINE_TEST(randf_test)
+{
+    logger_log_info("executing randf test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix *m = la.randf(10, 10);
+
+    test_assert(m->data != NULL, "matrix creation faild");
+ 
     la.free(m);
 
     return NULL;
@@ -596,6 +609,7 @@ DEFINE_TEST(all_tests)
     test_run(matrix_test);
     test_run(matrixd_test);
     test_run(rand_test);
+    test_run(randf_test);
     test_run(equals_test);
     test_run(dot_test);
     test_run(dot2_test);

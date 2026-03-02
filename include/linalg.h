@@ -183,7 +183,17 @@ struct LinAlg
     */        
     void (*print)(t_matrix *m);
 
-   /** slice_rows
+   /** printf
+    * 
+    * ## Print the matrix using format fmt
+    *
+    * @param m matrix
+    * @param fmt format (es. %.6f)
+    * @return nothing
+    */        
+    void (*printf)(t_matrix *m, char *fmt);
+
+    /** slice_rows
     * 
     * ## Slice matrix rows
     *
@@ -256,11 +266,21 @@ struct LinAlg
     * @param sizex x dimension
     * @param lower lower bound of random integer
     * @param upper upper bound of random integer
-    * @return matrix of (sizey, sizex) dimensions filled with 1
+    * @return matrix of (sizey, sizex) dimensions
     */        
     t_matrix* (*rand)(int sizey, int sizex, int lower, int upper);
 
-   /** sum_rows
+   /** randf
+    *
+    * ## Create a matrix of random float between 0.0 and 1.0
+    * 
+    * @param sizey y dimension
+    * @param sizex x dimension
+    * @return matrix of (sizey, sizex)
+    */        
+    t_matrix* (*randf)(int sizey, int sizex);
+
+    /** sum_rows
     * 
     * ## Sum matrix rows
     *
