@@ -75,6 +75,21 @@ DEFINE_TEST(matrixd_test)
     return NULL;
 }
 
+DEFINE_TEST(rand_test)
+{
+    logger_log_info("executing rand test");
+    t_LinAlg la = LinAlg_Init();
+
+    t_matrix *m = la.rand(10, 10, 3, 5);
+    
+    test_assert(m->data != NULL, "matrix creation faild");
+ 
+    la.print(m);
+    la.free(m);
+
+    return NULL;
+}
+
 DEFINE_TEST(equals_test)
 {
     logger_log_info("executing equals test");
@@ -554,6 +569,7 @@ DEFINE_TEST(all_tests)
     test_run(multi_dimension_matix_test);
     test_run(matrix_test);
     test_run(matrixd_test);
+    test_run(rand_test);
     test_run(equals_test);
     test_run(dot_test);
     test_run(dot2_test);

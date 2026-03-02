@@ -112,7 +112,7 @@ static t_matrix* matrix_rand(int sizey, int sizex, int lower, int upper)
     srand(time(NULL));
 
     for(int i = 0; i < m->size; i++)
-        m->data[i] =  (rand() % upper) + lower;
+        m->data[i] =  rand() % (upper - lower + 1) + lower;
 
     return m;    
 }
