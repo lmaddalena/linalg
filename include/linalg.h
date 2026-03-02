@@ -113,6 +113,16 @@ struct LinAlg
     */        
     t_matrix* (*dot)(t_matrix *m1, t_matrix *m2);
 
+    /**
+    * matrix_matmul
+    * ## Calcola il prodotto C = (A^T) x B
+    * 
+    * @param A first matrix
+    * @param B second matrix
+    * @return (A^T) x B
+    */ 
+    t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B);
+
     /** T
     *
     * ## Transpose the matrix

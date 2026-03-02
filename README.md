@@ -149,6 +149,25 @@ t_matrix* (*dot)(t_matrix *m1, t_matrix *m2)
 
 - new matrix with dot product between matrix m1 and m2
 
+## 🔹 t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B)
+
+matrix_matmul
+#### Calcola il prodotto C = (A^T) x B
+
+
+```cpp
+t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B)
+```
+
+**Params:**
+
+- `A` - first matrix
+- `B` - second matrix
+
+**Returns:**
+
+- (A^T) x B
+
 ## 🔹 t_matrix* (*T)(t_matrix *m)
 
 

@@ -30,6 +30,7 @@ static void matrix_print(t_matrix *m);
 static void matrix_frees(int count, ...);
 static void matrix_free(t_matrix *m);
 static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2);
+static t_matrix* matrix_matmul_atb(t_matrix *A, t_matrix *B);
 static t_matrix* matrix_T(t_matrix *m);
 static t_matrix* matrix_slice_rows(t_matrix *m, int start, int end);
 static t_matrix* matrix_slice_cols(t_matrix *m, int start, int end);
@@ -68,6 +69,7 @@ t_LinAlg LinAlg_Init()
     la.matrixd = matrix_create_d;
     la.matrix = matrix_create;
     la.dot = matrix_dot;
+    la.matmul_atb = matrix_matmul_atb;
     la.frees = matrix_frees;
     la.free = matrix_free;
     la.getval = matrix_getval;
@@ -354,6 +356,37 @@ static t_matrix* matrix_dot(t_matrix *m1, t_matrix *m2)
     }
 
     return res;
+}
+
+/**
+ * matrix_matmul_atb
+ * Calcola il prodotto C = (A^T) x B
+ */
+static t_matrix* matrix_matmul_atb(t_matrix *A, t_matrix *B){
+
+    ASSERT(A->shape.y == B->shape.y, "Shapes not aligned for AT * B");
+
+    t_matrix *C = matrix_create(A->shape.x, B->shape.x);
+    
+    // Algoritmo IKJ adattato per A trasposta
+    // i: scorre le colonne di A (che sono le righe di AT)
+    // k: scorre le righe di A (che sono le colonne di AT e le righe di B)
+    // j: scorre le colonne di B
+    for (int i = 0; i < A->shape.x; i++) {
+        int row_C = i * C->shape.x;
+
+        for (int k = 0; k < A->shape.y; k++) {
+            // Invece di A[i][k], prendiamo A[k][i] che sarebbe AT[i][k]
+            double val_AT = A->data[k * A->shape.x + i];
+            int row_B = k * B->shape.x;
+
+            for (int j = 0; j < B->shape.x; j++) {
+                C->data[row_C + j] += val_AT * B->data[row_B + j];
+            }
+        }
+    }
+
+    return C;
 }
 
 static t_matrix* matrix_T(t_matrix *m)

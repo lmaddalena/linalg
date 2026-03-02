@@ -156,6 +156,32 @@ DEFINE_TEST(dot2_test)
     return NULL;
 }
 
+DEFINE_TEST(matmul_atb_test)
+{
+    logger_log_info("executing matmul_atb test");
+
+    t_LinAlg la = LinAlg_Init();
+    
+    double d1[6] = {1, 5, 4, 9, 3, 8};
+    t_matrix *A = la.matrixd(d1, 3, 2);
+
+    double d2[6] = {6, 7, 1, 3, 5, 9};
+    t_matrix *B = la.matrixd(d2, 3, 2);
+
+    t_matrix *actual = la.matmul_atb(A, B);
+
+    t_matrix *expected;
+    t_matrix *AT;
+    AT = la.T(A);
+    expected = la.dot(AT, B);
+
+    test_assert(la.equals(actual, expected), "dot prodoct is not what was expected");
+
+    la.frees(5, A, B, AT, actual, expected);
+
+    return NULL;
+}
+
 DEFINE_TEST(T_test)
 {
     logger_log_info("executing T test");
@@ -405,7 +431,7 @@ DEFINE_TEST(reshape_test)
 
 DEFINE_TEST(fn_sigmoid_test)
 {
-    logger_log_info("fn_sigmoid_test");
+    logger_log_info("executing fn_sigmoid test");
     t_LinAlg la = LinAlg_Init();
 
     double data[2] = {0, 2};
@@ -427,7 +453,7 @@ DEFINE_TEST(fn_sigmoid_test)
 
 DEFINE_TEST(sumf_test)
 {
-    logger_log_info("sumf_test");
+    logger_log_info("executing sumf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -446,7 +472,7 @@ DEFINE_TEST(sumf_test)
 
 DEFINE_TEST(subf_test)
 {
-    logger_log_info("subf_test");
+    logger_log_info("executing subf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -465,7 +491,7 @@ DEFINE_TEST(subf_test)
 
 DEFINE_TEST(mulf_test)
 {
-    logger_log_info("mulf_test");
+    logger_log_info("executing mulf test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(3, 1, 3);
@@ -484,7 +510,7 @@ DEFINE_TEST(mulf_test)
 
 DEFINE_TEST(divf_test)
 {
-    logger_log_info("divf_test");
+    logger_log_info("executing divf test");
     t_LinAlg la = LinAlg_Init();
 
     double da[3] = {2, 4, 6};
@@ -504,7 +530,7 @@ DEFINE_TEST(divf_test)
 
 DEFINE_TEST(fsub_test)
 {
-    logger_log_info("fsub_test");
+    logger_log_info("executing fsub test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m = la.range(10, 2, 5);
@@ -523,7 +549,7 @@ DEFINE_TEST(fsub_test)
 
 DEFINE_TEST(sum_test)
 {
-    logger_log_info("sum_test");
+    logger_log_info("executing sum test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m1 = la.range(3, 1, 3);
@@ -544,7 +570,7 @@ DEFINE_TEST(sum_test)
 
 DEFINE_TEST(sub_test)
 {
-    logger_log_info("sub_test");
+    logger_log_info("executing sub test");
     t_LinAlg la = LinAlg_Init();
 
     t_matrix *m1 = la.matrix(1, 3);
@@ -573,6 +599,7 @@ DEFINE_TEST(all_tests)
     test_run(equals_test);
     test_run(dot_test);
     test_run(dot2_test);
+    test_run(matmul_atb_test);
     test_run(T_test);
     test_run(range_test);
     test_run(range2_test);
