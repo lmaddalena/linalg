@@ -89,20 +89,22 @@ enum ACTIVATION_FNC
 ```
 
 
-## 🔧 struct NN_layer
+## 🔧 struct NN_Layer
 
 
 the Neural Network layer
 
 
 ```cpp
-struct NN_layer
+struct NN_Layer
 ```
 
 **Params:**
 
-- `prev` - previous NN layer
-- `next` - next NN layer
+- `W` - weight matrix
+- `b` - bias vector
+- `dW` - gradient of the loss with respect to W
+- `db` - gradient of the loss with respect to b
 - `activation` - activation function
 
 
@@ -112,6 +114,17 @@ struct NN_layer
 
 ```cpp
 typedef struct NN_Layer t_NN_layer
+```
+
+
+## 🔧 struct NN_Model
+
+
+Neural Network model
+
+
+```cpp
+struct NN_Model
 ```
 
 
@@ -823,4 +836,51 @@ the ReLU derivative function
 ```cpp
 double fn_drelu(double x)
 ```
+
+
+## 🔹 t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+
+
+Create the Neural Network Model
+
+
+```cpp
+t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+```
+
+
+## 🔹 t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
+
+
+Create the Neural Network Layer
+
+
+```cpp
+t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
+```
+
+**Params:**
+
+- `nunits` - number of units of the layer
+- `ninputs` - number of inputs of each unit (same as nunits of previous layer)
+- `fnc` - activation function
+
+**Returns:**
+
+- the Neural Network Layer
+
+## 🔹 void NN_print_model(t_NN_model *model, char *fmt)
+
+
+print the Neural Network Model
+
+
+```cpp
+void NN_print_model(t_NN_model *model, char *fmt)
+```
+
+**Params:**
+
+- `model` - the model
+- `fmt` - format of matrix cells (es. %.6f)
 

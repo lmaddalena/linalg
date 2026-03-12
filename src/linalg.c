@@ -592,5 +592,102 @@ t_matrix* LA_div(t_matrix *m1, t_matrix *m2)
         res->data[i] = m1->data[i] / m2->data[i];
 
     return res;
+}
 
+t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
+{
+    t_NN_layer *layer = malloc(sizeof(t_NN_layer));
+
+    layer->W = LA_matrix(ninputs, nunits);
+    layer->b = LA_matrix(nunits, 1);
+    layer->dW = NULL;
+    layer->db = NULL;
+    layer->activation = fnc;
+
+    return layer;
+}
+
+t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+{
+    for(int i = nlayers -1; i >= 0; i--)
+    {
+        t_NN_layer *curr = layers[i];
+        t_NN_layer *prev = NULL;
+
+        if(i > 0)
+        {
+            prev = layers[i - 1];
+            ASSERT(curr->W->shape.y == prev->W->shape.x, "invalid layer shape.\nThe shape y of layer n must be equals to shape x of layer n-1.");
+        }
+    }
+
+    t_NN_model *model = malloc(sizeof(t_NN_model));
+
+    model->layers = layers;
+    model->nlayers = nlayers;
+
+    return model;
+}
+
+void NN_free_model(t_NN_model *model)
+{
+    if (model != NULL) {
+        if (model->layers != NULL) {
+            for(int i = 0; i < model->nlayers; i++)
+                NN_free_layer(model->layers[i]); 
+        }
+        free(model);
+    }
+
+}
+
+void NN_free_layer(t_NN_layer *layer)
+{
+    if (layer != NULL) {
+        LA_free(layer->W);
+        LA_free(layer->b);
+        LA_free(layer->dW);
+        LA_free(layer->db);
+        free(layer);
+    }
+}
+
+void NN_print_model(t_NN_model *model, char *fmt)
+{
+    if(model == NULL)
+        return;
+
+    printf("\nMODEL:\n\n");
+    
+    for(int l = 0; l < model->nlayers; l++)
+    {
+        t_NN_layer *layer = model->layers[l];
+        
+        printf("Layer: %d ", l+1);
+        if(l == 0)
+            printf("(input)\n");
+        else if(l == model->nlayers - 1)
+            printf("(output)\n");
+        else
+            printf("\n");
+
+        printf("-------------------------------\n");
+
+        printf("shape: (%d, %d)\n", layer->W->shape.y, layer->W->shape.x);
+        printf("Activation function: ");
+        switch (layer->activation)
+        {
+            case SIGMOID :
+                printf("sigmoid\n");
+                break;
+            case RELU :
+                printf("ReLU\n");
+                break;
+            default :
+                printf("\n");
+        }
+
+        printf("\n");
+
+    }
 }

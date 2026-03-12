@@ -558,7 +558,25 @@ DEFINE_TEST(sub_test)
 
 }
 
+DEFINE_TEST(NN_create_model_test)
+{
+    logger_log_info("executing NN_create_model_test test");
 
+    t_NN_layer *input = NN_create_layer(5, 5, RELU);
+    t_NN_layer *hidden = NN_create_layer(10, 5, RELU);
+    t_NN_layer *output = NN_create_layer(1, 10, SIGMOID);
+
+    t_NN_layer *layers[3] = {input, hidden, output};
+
+    t_NN_model *model = NN_create_model(3, layers);
+
+    NN_print_model(model, "%.0f");
+
+    NN_free_model(model);
+
+    return NULL;
+
+}
 DEFINE_TEST(all_tests)
 {
     test_run(multi_dimension_matix_test);
@@ -590,6 +608,7 @@ DEFINE_TEST(all_tests)
     test_run(fsub_test);
     test_run(sum_test);
     test_run(sub_test);
+    test_run(NN_create_model_test);
 
     return NULL;
 }

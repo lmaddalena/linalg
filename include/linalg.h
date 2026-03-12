@@ -88,22 +88,38 @@ enum ACTIVATION_FNC
  * 
  * the Neural Network layer
  * 
- * @param prev previous NN layer
- * @param next next NN layer
+ * @param W weight matrix
+ * @param b bias vector
+ * @param dW gradient of the loss with respect to W
+ * @param db gradient of the loss with respect to b
  * @param activation activation function
  */
-struct NN_layer
+struct NN_Layer
 {
-    struct NN_layer *prev;
-    struct NN_layer *next;
+    t_matrix *W;
+    t_matrix *b;
+    t_matrix *dW;
+    t_matrix *db;
     enum ACTIVATION_FNC activation;
-
 };
 
 /** t_NN_layer
  * 
  */
 typedef struct NN_Layer t_NN_layer;
+
+/** NN_Model
+ * 
+ * Neural Network model
+ * 
+ */
+struct NN_Model
+{
+    t_NN_layer **layers;
+    int nlayers;    
+};
+
+typedef struct NN_Model t_NN_model;
 
 /** LA_matrix
 *
@@ -483,5 +499,35 @@ double fn_relu(double x);
  */
 double fn_drelu(double x);
 
+/** NN_create_model
+ * 
+ * Create the Neural Network Model
+ * 
+ */
+t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers);
 
+/** NN_create_layer
+ * 
+ * Create the Neural Network Layer
+ * 
+ * @param nunits number of units of the layer
+ * @param ninputs number of inputs of each unit (same as nunits of previous layer)
+ * @param fnc activation function
+ * @return the Neural Network Layer
+ */
+t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc);
+
+/** NN_print_model
+ * 
+ * print the Neural Network Model
+ * 
+ * @param model the model
+ * @param fmt format of matrix cells (es. %.6f)
+ */
+void NN_print_model(t_NN_model *model, char *fmt);
+
+void NN_free_model(t_NN_model *model);
+
+void NN_free_layer(t_NN_layer *layer);
 #endif
+
