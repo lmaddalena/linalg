@@ -6,7 +6,7 @@
  * 
  * Library for Linear Algebra operations
  *
- * ## Example
+ * Example
  *
  * Create a (2,3) matrix of numbers from 0 to 5
  *
@@ -16,10 +16,9 @@
  *
  * void main() {
  * 
- *    t_LinAlg la = LinAlg_Init();
- *    t_matrix *m = la.range(6, 2, 3);
- *    la.print(m);
- *    la.free(m);
+ *    t_matrix *m = LA_range(6, 2, 3);
+ *    LA_print(m);
+ *    LA_free(m);
  * }
  *
  * output:
@@ -39,7 +38,7 @@
 
  /** shape
   * 
-  * ## shape of the matrix
+  * shape of the matrix
   * 
   * @param x x dimension
   * @param y y dimension
@@ -50,14 +49,14 @@ struct shape
     int y;
 };
 
-/**
- * t_shape
+/** t_shape
+ * 
  */
 typedef struct shape t_shape;
 
 /** matrix
  * 
- * ## the matrix
+ * the matrix
  * 
  * @param size size of the matrix
  * @param shape shape of the matrix
@@ -70,405 +69,419 @@ struct matrix
     double * data;        
 };
 
-/**
- * t_matrix
+/** t_matrix
+ * 
  */
 typedef struct matrix t_matrix;
 
 
-/** LinAlg
+/**  ACTIVATION_FNC
  * 
- * ## Linear Algebra Api's
-*/
-struct LinAlg
+ */
+enum ACTIVATION_FNC
 {
-    /** matrix
-    *
-    * ## Create a matrix of (y, x) dimensions.
-    *
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @return matrix of (sizey, sizex) dimensions
-    */        
-    t_matrix* (*matrix)(int sizey, int sizex);
+    SIGMOID,
+    RELU
+};
 
-    /** matrixd
-    *
-    * ## Create a matrix of (y, x) dimensions.
-    *
-    * @param d data 
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @return matrix of (sizey, sizex) dimensions
-    */        
-    t_matrix* (*matrixd)(const double *data, int sizey, int sizex);
-
-    /** Dot
-    *
-    * ## Execute the dot product between matrix m1 and m2
-    *
-    * @param m1 matrix
-    * @param m2 matrix
-    * @return new matrix with dot product between matrix m1 and m2
-    */        
-    t_matrix* (*dot)(t_matrix *m1, t_matrix *m2);
-
-    /**
-    * matrix_matmul
-    * ## Calcola il prodotto C = (A^T) x B
-    * 
-    * @param A first matrix
-    * @param B second matrix
-    * @return (A^T) x B
-    */ 
-    t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B);
-
-    /** T
-    *
-    * ## Transpose the matrix
-    *
-    * @param m matrix to transpose
-    * @return new matrix with transposition of matrix m
-    */        
-    t_matrix* (*T)(t_matrix *m);
-
-    /** frees
-    *
-    * ## Destroy n matrices
-    * 
-    * @param count number of matrices passed as arguments
-    * @param ... m1, m2, ..., mn matrices to be destroied
-    * @return nothing
-    */        
-    void (*frees)(int count, ...);
-
-    /** free
-    *
-    * ## Destroy the matrix
-    *
-    * @param m matrix to be destroied
-    * @return nothing
-    */        
-    void (*free)(t_matrix *m);
-
-    /** getval
-    *
-    * ## Get the value at x,y position
-    *
-    * @param m matrix
-    * @param y y coordinate
-    * @param x x coordinate
-    * @return cell value
-    */        
-    double (*getval)(t_matrix *m, int y, int x); 
-
-   /** setval
-    *
-    * ## Set the value at x,y position
-    *
-    * @param m matrix
-    * @param y y coordinate
-    * @param x x coordinate
-    * @param val value of the cell
-    * @return nothing
-    */        
-    void (*setval)(t_matrix *m, int y, int x, double val);
-
-   /** print
-    * 
-    * ## Print the matrix
-    *
-    * @param m matrix
-    * @return nothing
-    */        
-    void (*print)(t_matrix *m);
-
-   /** printf
-    * 
-    * ## Print the matrix using format fmt
-    *
-    * @param m matrix
-    * @param fmt format (es. %.6f)
-    * @return nothing
-    */        
-    void (*printf)(t_matrix *m, char *fmt);
-
-    /** slice_rows
-    * 
-    * ## Slice matrix rows
-    *
-    * @param m matrix
-    * @param start start index  
-    * @param end end index (escxluded)
-    * @return slices of the matrix
-    */        
-    t_matrix* (*slice_rows)(t_matrix *m, int start, int end);
-
-   /** slice_cols
-    * 
-    * ## Slice matrix rows
-    *
-    * @param m matrix
-    * @param start start index  
-    * @param end end index (escxluded)
-    * @return slices of the matrix
-    */        
-    t_matrix* (*slice_cols)(t_matrix *m, int start, int end);
-
-   /** slice
-    * 
-    * ## Slice matrix cols and rows
-    *
-    * @param m matrix
-    * @param start_y start y index
-    * @param end_y end y index (escxluded)
-    * @param start_x start x index
-    * @param end_x end x index (escxluded)
-    * @return slice of the matrix
-    */        
-    t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x);
-
-
-    /** apply
-    * 
-    * ## Apply the function to each cell
-    *
-    * @param m matrix to be modified
-    * @param fnc function to be applied
-    * @return nothing
-    */        
-    void (*apply)(t_matrix *m, double (*fnc)(double d));
-
-   /** identity
-    *
-    * ## Create a square matrix with ones on the main diagonal
-    * 
-    * @param n size of the square matrix
-    * @return identity matrix
-    */        
-    t_matrix* (*identity)(int n);
-
-   /** ones
-    * 
-    * ## Create a matrix of ones
-    *
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @return matrix of (sizey, sizex) dimensions filled with 1
-    */        
-    t_matrix* (*ones)(int sizey, int sizex);
-
-   /** rand
-    *
-    * ## Create a matrix of random integer between lower and upper bound
-    * 
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @param lower lower bound of random integer
-    * @param upper upper bound of random integer
-    * @return matrix of (sizey, sizex) dimensions
-    */        
-    t_matrix* (*rand)(int sizey, int sizex, int lower, int upper);
-
-   /** randf
-    *
-    * ## Create a matrix of random float between 0.0 and 1.0
-    * 
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @return matrix of (sizey, sizex)
-    */        
-    t_matrix* (*randf)(int sizey, int sizex);
-
-    /** sum_rows
-    * 
-    * ## Sum matrix rows
-    *
-    * @param m matrix
-    * @return matrix of (sizey, 1) dimensions with rows sum
-    */        
-    t_matrix* (*sum_rows)(t_matrix *m);
-
-   /** sum_cols
-    * 
-    * ## Sum matrix columns
-    *
-    * @param m matrix
-    * @return matrix of (1, sizex) dimensions with columns sum
-    */        
-    t_matrix* (*sum_cols)(t_matrix *m);
-
-   /** compare
-    * 
-    * ## Compare two matrices
-    *
-    * @param m1 first matrix to compare
-    * @param m2 second matrix to compare
-    * @return return 1 if m1 equals m2, 0 otherwise
-    */        
-    int (*equals)(t_matrix *m1, t_matrix *m2);
-
-    /** range
-     * 
-     * ## Create a matrix filled with numbers in range
-    *
-    * @param range range of numbers
-    * @param sizey y dimension
-    * @param sizex x dimension
-    * @return matrix of (sizey, sizex) dimensions
-    */        
-    t_matrix* (*range)(int range, int sizey, int sizex);
-
-
-    /** reshape
-    *
-    * ## resha the matrix with the new sizes.
-    *
-    * @param m old matrix
-    * @param sizey new y dimension
-    * @param sizex new x dimension
-    * @return new matrix of (sizey, sizex) dimensions
-    */        
-    t_matrix* (*reshape)(t_matrix *m, int sizey, int sizex);
-
-
-    /** sigmoid
-     * 
-     * ## sigmoid function
-     * 
-     * @param x x value
-     * @return sigmoid of x
-     */
-    double (*fn_sigmoid)(double x);
-
-    /** dsigmoid
-     * 
-     * ## sigmoid derivative function
-     * 
-     * @param x x value
-     * @return sigmoid derivative of x
-     */
-    double (*fn_dsigmoid)(double x);
-
-    /** negative
-     * 
-     * ## negative function
-     * 
-     * @param x x value
-     * @return -x
-     */
-    double (*fn_negative)(double x);
-
-
-    /** sum
-     * 
-     * ## sum float to the matrix
-     * 
-     * @param f float
-     * @param m matrix
-     * @return new matrix 
-     */
-    t_matrix* (*sumf)(t_matrix *m, double f);
-
-    /** subf
-     * 
-     * ## subtract float to the matrix
-     * 
-     * @param m matrix
-     * @param f float
-     * @return new matrix 
-     */
-    t_matrix* (*subf)(t_matrix *m, double f);
-
-    /** mulf
-     * 
-     * ## multiply the matrix m by scalar f
-     * 
-     * @param m matrix
-     * @param f float
-     * @return new matrix 
-     */
-    t_matrix* (*mulf)(t_matrix *m, double f);
-
-    /** divf
-     * 
-     * ## dvide the matrix m by scalar f
-     * 
-     * @param m matrix
-     * @param f float
-     * @return new matrix 
-     */
-    t_matrix* (*divf)(t_matrix *m, double f);
-
-    /** fsub
-     * 
-     * ## subtract float f to matrix m
-     * 
-     * @param f float
-     * @param m matrix
-     * @return new matrix 
-     */
-    t_matrix* (*fsub)(double f, t_matrix *m);
-
-    /** sum
-     * 
-     * ## sum matrix m1 with matrix m2
-     * 
-     * @param m1 matrix
-     * @param m2 matrix
-     * @return new matrix 
-     */
-    t_matrix* (*sum)(t_matrix *m1, t_matrix *m2);
-
-    /** sub
-     * 
-     * ## subtract matrix m2 to matrix m1
-     * 
-     * @param m1 matrix
-     * @param m2 matrix
-     * @return new matrix 
-     */
-    t_matrix* (*sub)(t_matrix *m1, t_matrix *m2);
-
-    /** mul
-     * 
-     * ## multiply matrix m1 by matrix m2
-     * 
-     * @param m1 matrix
-     * @param m2 matrix
-     * @return new matrix 
-     */
-    t_matrix* (*mul)(t_matrix *m1, t_matrix *m2);
-
-    /** div
-     * 
-     * ## divide matrix m2 by matrix m1
-     * 
-     * @param m1 matrix
-     * @param m2 matrix
-     * @return new matrix 
-     */
-    t_matrix* (*div)(t_matrix *m1, t_matrix *m2);
-
+/** NN_layer
+ * 
+ * the Neural Network layer
+ * 
+ * @param prev previous NN layer
+ * @param next next NN layer
+ * @param activation activation function
+ */
+struct NN_layer
+{
+    struct NN_layer *prev;
+    struct NN_layer *next;
+    enum ACTIVATION_FNC activation;
 
 };
 
-/**
- * t_LinAlg
+/** t_NN_layer
+ * 
  */
-typedef struct LinAlg t_LinAlg;
+typedef struct NN_Layer t_NN_layer;
 
-/**
- * # Functions
- */
-
-/** LinAlg_Init()
+/** LA_matrix
 *
-* ## Initialize LinAlg
-* 
-* @return t_LinAlg type
+* Create a matrix of (y, x) dimensions.
+*
+* @param sizey y dimension
+* @param sizex x dimension
+* @return matrix of (sizey, sizex) dimensions
 */        
-t_LinAlg LinAlg_Init();
+t_matrix* LA_matrix(int sizey, int sizex);
 
-    
+/** LA_matrixd
+*
+* Create a matrix of (y, x) dimensions.
+*
+* @param d data 
+* @param sizey y dimension
+* @param sizex x dimension
+* @return matrix of (sizey, sizex) dimensions
+*/        
+t_matrix* LA_matrixd(const double *data, int sizey, int sizex);
+
+/** LA_dot
+*
+* Execute the dot product between matrix m1 and m2
+*
+* @param m1 matrix
+* @param m2 matrix
+* @return new matrix with dot product between matrix m1 and m2
+*/        
+t_matrix* LA_dot(t_matrix *m1, t_matrix *m2);
+
+/**  LA_dot_atb
+*
+* compute C = (A^T) x B
+* 
+* @param A first matrix
+* @param B second matrix
+* @return (A^T) x B
+*/ 
+t_matrix* LA_dot_atb(t_matrix *A, t_matrix *B);
+
+/** T
+*
+* Transpose the matrix
+*
+* @param m matrix to transpose
+* @return new matrix with transposition of matrix m
+*/        
+t_matrix* LA_T(t_matrix *m);
+
+/** LA_slice_rows
+* 
+* Slice matrix rows
+*
+* @param m matrix
+* @param start start index  
+* @param end end index (escxluded)
+* @return slices of the matrix
+*/        
+t_matrix* LA_slice_rows(t_matrix *m, int start, int end);
+
+/** LA_slice_cols
+* 
+* Slice matrix cols
+*
+* @param m matrix
+* @param start start index  
+* @param end end index (escxluded)
+* @return slices of the matrix
+*/        
+t_matrix* LA_slice_cols(t_matrix *m, int start, int end);
+
+/** LA_slice
+* 
+* Slice matrix cols and rows
+*
+* @param m matrix
+* @param start_y start y index
+* @param end_y end y index (escxluded)
+* @param start_x start x index
+* @param end_x end x index (escxluded)
+* @return slice of the matrix
+*/        
+t_matrix* LA_slice(t_matrix *m, int start_y, int end_y, int start_x, int end_x);
+
+/** LA_identity
+*
+* Create a square matrix with ones on the main diagonal
+* 
+* @param n size of the square matrix
+* @return identity matrix
+*/        
+t_matrix* LA_identity(int n);
+
+/** LA_ones
+* 
+* Create a matrix of ones
+*
+* @param sizey y dimension
+* @param sizex x dimension
+* @return matrix of (sizey, sizex) dimensions filled with 1
+*/        
+t_matrix* LA_ones(int sizey, int sizex);
+
+/** LA_rand
+*
+* Create a matrix of random integer between lower and upper bound
+* 
+* @param sizey y dimension
+* @param sizex x dimension
+* @param lower lower bound of random integer
+* @param upper upper bound of random integer
+* @return matrix of (sizey, sizex) dimensions
+*/        
+t_matrix* LA_rand(int sizey, int sizex, int lower, int upper);
+
+/** LA_randf
+*
+* Create a matrix of random float between 0.0 and 1.0
+* 
+* @param sizey y dimension
+* @param sizex x dimension
+* @return matrix of (sizey, sizex)
+*/        
+t_matrix* LA_randf(int sizey, int sizex);
+
+/** LA_sum_rows
+* 
+* Sum matrix rows
+*
+* @param m matrix
+* @return matrix of (sizey, 1) dimensions with rows sum
+*/        
+t_matrix* LA_sum_rows(t_matrix *m);
+
+/** LA_sum_cols
+* 
+* Sum matrix columns
+*
+* @param m matrix
+* @return matrix of (1, sizex) dimensions with columns sum
+*/        
+t_matrix* LA_sum_cols(t_matrix *m);
+
+/** LA_range
+ * 
+ * Create a matrix filled with numbers in range
+*
+* @param range range of numbers
+* @param sizey y dimension
+* @param sizex x dimension
+* @return matrix of (sizey, sizex) dimensions
+*/        
+t_matrix* LA_range(int range, int sizey, int sizex);
+
+/** LA_reshape
+*
+* resha the matrix with the new sizes.
+*
+* @param m old matrix
+* @param sizey new y dimension
+* @param sizex new x dimension
+* @return new matrix of (sizey, sizex) dimensions
+*/        
+t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex);
+
+/** LA_sumf
+ * 
+ * sum float to the matrix
+ * 
+ * @param f float
+ * @param m matrix
+ * @return new matrix 
+ */
+t_matrix* LA_sumf(t_matrix *m, double f);
+
+/** LA_subf
+ * 
+ * subtract float to the matrix
+ * 
+ * @param m matrix
+ * @param f float
+ * @return new matrix 
+ */
+t_matrix* LA_subf(t_matrix *m, double f);
+
+/** LA_mulf
+ * 
+ * multiply the matrix m by scalar f
+ * 
+ * @param m matrix
+ * @param f float
+ * @return new matrix 
+ */
+t_matrix* LA_mulf(t_matrix *m, double f);
+
+/** LA_divf
+ * 
+ * dvide the matrix m by scalar f
+ * 
+ * @param m matrix
+ * @param f float
+ * @return new matrix 
+ */
+t_matrix* LA_divf(t_matrix *m, double f);
+
+/** LA_fsub
+ * 
+ * subtract float f to matrix m
+ * 
+ * @param f float
+ * @param m matrix
+ * @return new matrix 
+ */
+t_matrix* LA_fsub(double f, t_matrix *m);
+
+/** LA_sum
+ * 
+ * sum matrix m1 with matrix m2
+ * 
+ * @param m1 matrix
+ * @param m2 matrix
+ * @return new matrix 
+ */
+t_matrix* LA_sum(t_matrix *m1, t_matrix *m2);
+
+/** LA_sub
+ * 
+ * subtract matrix m2 to matrix m1
+ * 
+ * @param m1 matrix
+ * @param m2 matrix
+ * @return new matrix 
+ */
+t_matrix* LA_sub(t_matrix *m1, t_matrix *m2);
+
+/** LA_mul
+ * 
+ * multiply matrix m1 by matrix m2
+ * 
+ * @param m1 matrix
+ * @param m2 matrix
+ * @return new matrix 
+ */
+t_matrix* LA_mul(t_matrix *m1, t_matrix *m2);
+
+/** LA_div
+ * 
+ * divide matrix m2 by matrix m1
+ * 
+ * @param m1 matrix
+ * @param m2 matrix
+ * @return new matrix 
+ */
+t_matrix* LA_div(t_matrix *m1, t_matrix *m2);
+
+/** LA_equals
+* 
+* Compare two matrices
+*
+* @param m1 first matrix to compare
+* @param m2 second matrix to compare
+* @return return 1 if m1 equals to m2, 0 otherwise
+*/        
+int LA_equals(t_matrix *m1, t_matrix *m2);
+
+/** LA_apply
+* 
+* Apply the function to each cell
+*
+* @param m matrix to be modified
+* @param fnc function to be applied
+* @return nothing
+*/        
+void LA_apply(t_matrix *m, double (*fnc)(double d));
+
+/** LA_setval
+*
+* Set the value at x,y position
+*
+* @param m matrix
+* @param y y coordinate
+* @param x x coordinate
+* @param val value of the cell
+* @return nothing
+*/        
+void LA_setval(t_matrix *m, int y, int x, double val);
+
+/** LA_getval
+*
+* Get the value at x,y position
+*
+* @param m matrix
+* @param y y coordinate
+* @param x x coordinate
+* @return cell value
+*/        
+double LA_getval(t_matrix *m, int y, int x);
+
+/** LA_print
+* 
+* Print the matrix
+*
+* @param m matrix
+* @return nothing
+*/        
+void LA_print(t_matrix *m);
+
+/** LA_printf
+* 
+* Print the matrix using format fmt
+*
+* @param m matrix
+* @param fmt format (es. %.6f)
+* @return nothing
+*/        
+void LA_printf(t_matrix *m, char *fmt);
+
+/** LA_frees
+*
+* Destroy n matrices
+* 
+* @param count number of matrices passed as arguments
+* @param ... m1, m2, ..., mn matrices to be destroied
+* @return nothing
+*/        
+void LA_frees(int count, ...);
+
+/** LA_free
+*
+* Destroy the matrix
+*
+* @param m matrix to be destroied
+* @return nothing
+*/        
+void LA_free(t_matrix *m);
+
+/** fn_sigmoid
+ * 
+ * sigmoid function
+ * 
+ * @param x x value
+ * @return sigmoid of x
+ */
+double fn_sigmoid(double x);
+
+/** fn_dsigmoid
+ * 
+ * sigmoid derivative function
+ * 
+ * @param x x value
+ * @return sigmoid derivative of x
+ */
+double fn_dsigmoid(double x);
+
+/** fn_negative
+ * 
+ * negative function
+ * 
+ * @param x x value
+ * @return -x
+ */
+double fn_negative(double x);
+
+/** fn_relu
+ * 
+ * ReLU function
+ * 
+ */
+double fn_relu(double x);
+
+/** fn_drelu
+ * 
+ * the ReLU derivative function
+ * 
+ */
+double fn_drelu(double x);
+
+
 #endif

@@ -2,20 +2,19 @@
 
 Library for Linear Algebra operations
 
-## Example
-    
-    Create a (2,3) matrix of numbers from 0 to 5
-    
+Example
+
+Create a (2,3) matrix of numbers from 0 to 5
+
 ```c
 #include "linalg.h"
 
 
 void main() {
 
-   t_LinAlg la = LinAlg_Init();
-   t_matrix *m = la.range(6, 2, 3);
-   la.print(m);
-   la.free(m);
+   t_matrix *m = LA_range(6, 2, 3);
+   LA_print(m);
+   LA_free(m);
 }
 
 output:
@@ -24,16 +23,16 @@ output:
 [3.000, 4.000, 5.000]] shape=(2,3)
 
 ```
-    
 
-    
+
+
 # Types definitions
 
 
 ## 🔧 struct shape
 
 
-#### shape of the matrix
+shape of the matrix
 
 
 ```cpp
@@ -48,7 +47,7 @@ struct shape
 
 ## 🔧 typedef struct shape t_shape
 
-t_shape
+
 
 ```cpp
 typedef struct shape t_shape
@@ -58,7 +57,7 @@ typedef struct shape t_shape
 ## 🔧 struct matrix
 
 
-#### the matrix
+the matrix
 
 
 ```cpp
@@ -74,31 +73,56 @@ struct matrix
 
 ## 🔧 typedef struct matrix t_matrix
 
-t_matrix
+
 
 ```cpp
 typedef struct matrix t_matrix
 ```
 
 
-## 🔧 struct LinAlg
+## 🔧 enum ACTIVATION_FNC
 
 
-#### Linear Algebra Api's
 
 ```cpp
-struct LinAlg
+enum ACTIVATION_FNC
 ```
 
 
-## 🔹 t_matrix* (*matrix)(int sizey, int sizex)
+## 🔧 struct NN_layer
 
 
-#### Create a matrix of (y, x) dimensions.
+the Neural Network layer
 
 
 ```cpp
-t_matrix* (*matrix)(int sizey, int sizex)
+struct NN_layer
+```
+
+**Params:**
+
+- `prev` - previous NN layer
+- `next` - next NN layer
+- `activation` - activation function
+
+
+## 🔧 typedef struct NN_Layer t_NN_layer
+
+
+
+```cpp
+typedef struct NN_Layer t_NN_layer
+```
+
+
+## 🔹 t_matrix* LA_matrix(int sizey, int sizex)
+
+
+Create a matrix of (y, x) dimensions.
+
+
+```cpp
+t_matrix* LA_matrix(int sizey, int sizex)
 ```
 
 **Params:**
@@ -110,14 +134,14 @@ t_matrix* (*matrix)(int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* (*matrixd)(const double *data, int sizey, int sizex)
+## 🔹 t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
 
 
-#### Create a matrix of (y, x) dimensions.
+Create a matrix of (y, x) dimensions.
 
 
 ```cpp
-t_matrix* (*matrixd)(const double *data, int sizey, int sizex)
+t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
 ```
 
 **Params:**
@@ -130,14 +154,14 @@ t_matrix* (*matrixd)(const double *data, int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* (*dot)(t_matrix *m1, t_matrix *m2)
+## 🔹 t_matrix* LA_dot(t_matrix *m1, t_matrix *m2)
 
 
-#### Execute the dot product between matrix m1 and m2
+Execute the dot product between matrix m1 and m2
 
 
 ```cpp
-t_matrix* (*dot)(t_matrix *m1, t_matrix *m2)
+t_matrix* LA_dot(t_matrix *m1, t_matrix *m2)
 ```
 
 **Params:**
@@ -149,14 +173,14 @@ t_matrix* (*dot)(t_matrix *m1, t_matrix *m2)
 
 - new matrix with dot product between matrix m1 and m2
 
-## 🔹 t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B)
+## 🔹 t_matrix* LA_dot_atb(t_matrix *A, t_matrix *B)
 
-matrix_matmul
-#### Calcola il prodotto C = (A^T) x B
+
+compute C = (A^T) x B
 
 
 ```cpp
-t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B)
+t_matrix* LA_dot_atb(t_matrix *A, t_matrix *B)
 ```
 
 **Params:**
@@ -168,14 +192,14 @@ t_matrix* (*matmul_atb)(t_matrix *A, t_matrix *B)
 
 - (A^T) x B
 
-## 🔹 t_matrix* (*T)(t_matrix *m)
+## 🔹 t_matrix* LA_T(t_matrix *m)
 
 
-#### Transpose the matrix
+Transpose the matrix
 
 
 ```cpp
-t_matrix* (*T)(t_matrix *m)
+t_matrix* LA_T(t_matrix *m)
 ```
 
 **Params:**
@@ -186,129 +210,14 @@ t_matrix* (*T)(t_matrix *m)
 
 - new matrix with transposition of matrix m
 
-## 🔹 void (*frees)(int count, ...)
+## 🔹 t_matrix* LA_slice_rows(t_matrix *m, int start, int end)
 
 
-#### Destroy n matrices
-
-
-```cpp
-void (*frees)(int count, ...)
-```
-
-**Params:**
-
-- `count` - number of matrices passed as arguments
-- `...` - m1, m2, ..., mn matrices to be destroied
-
-**Returns:**
-
-- nothing
-
-## 🔹 void (*free)(t_matrix *m)
-
-
-#### Destroy the matrix
+Slice matrix rows
 
 
 ```cpp
-void (*free)(t_matrix *m)
-```
-
-**Params:**
-
-- `m` - matrix to be destroied
-
-**Returns:**
-
-- nothing
-
-## 🔹 double (*getval)(t_matrix *m, int y, int x)
-
-
-#### Get the value at x,y position
-
-
-```cpp
-double (*getval)(t_matrix *m, int y, int x)
-```
-
-**Params:**
-
-- `m` - matrix
-- `y` - y coordinate
-- `x` - x coordinate
-
-**Returns:**
-
-- cell value
-
-## 🔹 void (*setval)(t_matrix *m, int y, int x, double val)
-
-
-#### Set the value at x,y position
-
-
-```cpp
-void (*setval)(t_matrix *m, int y, int x, double val)
-```
-
-**Params:**
-
-- `m` - matrix
-- `y` - y coordinate
-- `x` - x coordinate
-- `val` - value of the cell
-
-**Returns:**
-
-- nothing
-
-## 🔹 void (*print)(t_matrix *m)
-
-
-#### Print the matrix
-
-
-```cpp
-void (*print)(t_matrix *m)
-```
-
-**Params:**
-
-- `m` - matrix
-
-**Returns:**
-
-- nothing
-
-## 🔹 void (*printf)(t_matrix *m, char *fmt)
-
-
-#### Print the matrix using format fmt
-
-
-```cpp
-void (*printf)(t_matrix *m, char *fmt)
-```
-
-**Params:**
-
-- `m` - matrix
-- `fmt` - format (es. %.6f)
-
-**Returns:**
-
-- nothing
-
-## 🔹 t_matrix* (*slice_rows)(t_matrix *m, int start, int end)
-
-
-#### Slice matrix rows
-
-
-```cpp
-t_matrix* (*slice_rows)(t_matrix *m, int start, int end)
+t_matrix* LA_slice_rows(t_matrix *m, int start, int end)
 ```
 
 **Params:**
@@ -321,14 +230,14 @@ t_matrix* (*slice_rows)(t_matrix *m, int start, int end)
 
 - slices of the matrix
 
-## 🔹 t_matrix* (*slice_cols)(t_matrix *m, int start, int end)
+## 🔹 t_matrix* LA_slice_cols(t_matrix *m, int start, int end)
 
 
-#### Slice matrix rows
+Slice matrix cols
 
 
 ```cpp
-t_matrix* (*slice_cols)(t_matrix *m, int start, int end)
+t_matrix* LA_slice_cols(t_matrix *m, int start, int end)
 ```
 
 **Params:**
@@ -341,14 +250,14 @@ t_matrix* (*slice_cols)(t_matrix *m, int start, int end)
 
 - slices of the matrix
 
-## 🔹 t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
+## 🔹 t_matrix* LA_slice(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 
 
-#### Slice matrix cols and rows
+Slice matrix cols and rows
 
 
 ```cpp
-t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
+t_matrix* LA_slice(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 ```
 
 **Params:**
@@ -363,33 +272,14 @@ t_matrix* (*slice)(t_matrix *m, int start_y, int end_y, int start_x, int end_x)
 
 - slice of the matrix
 
-## 🔹 void (*apply)(t_matrix *m, double (*fnc)(double d))
+## 🔹 t_matrix* LA_identity(int n)
 
 
-#### Apply the function to each cell
-
-
-```cpp
-void (*apply)(t_matrix *m, double (*fnc)(double d))
-```
-
-**Params:**
-
-- `m` - matrix to be modified
-- `fnc` - function to be applied
-
-**Returns:**
-
-- nothing
-
-## 🔹 t_matrix* (*identity)(int n)
-
-
-#### Create a square matrix with ones on the main diagonal
+Create a square matrix with ones on the main diagonal
 
 
 ```cpp
-t_matrix* (*identity)(int n)
+t_matrix* LA_identity(int n)
 ```
 
 **Params:**
@@ -400,14 +290,14 @@ t_matrix* (*identity)(int n)
 
 - identity matrix
 
-## 🔹 t_matrix* (*ones)(int sizey, int sizex)
+## 🔹 t_matrix* LA_ones(int sizey, int sizex)
 
 
-#### Create a matrix of ones
+Create a matrix of ones
 
 
 ```cpp
-t_matrix* (*ones)(int sizey, int sizex)
+t_matrix* LA_ones(int sizey, int sizex)
 ```
 
 **Params:**
@@ -419,14 +309,14 @@ t_matrix* (*ones)(int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions filled with 1
 
-## 🔹 t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
+## 🔹 t_matrix* LA_rand(int sizey, int sizex, int lower, int upper)
 
 
-#### Create a matrix of random integer between lower and upper bound
+Create a matrix of random integer between lower and upper bound
 
 
 ```cpp
-t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
+t_matrix* LA_rand(int sizey, int sizex, int lower, int upper)
 ```
 
 **Params:**
@@ -440,14 +330,14 @@ t_matrix* (*rand)(int sizey, int sizex, int lower, int upper)
 
 - matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* (*randf)(int sizey, int sizex)
+## 🔹 t_matrix* LA_randf(int sizey, int sizex)
 
 
-#### Create a matrix of random float between 0.0 and 1.0
+Create a matrix of random float between 0.0 and 1.0
 
 
 ```cpp
-t_matrix* (*randf)(int sizey, int sizex)
+t_matrix* LA_randf(int sizey, int sizex)
 ```
 
 **Params:**
@@ -459,14 +349,14 @@ t_matrix* (*randf)(int sizey, int sizex)
 
 - matrix of (sizey, sizex)
 
-## 🔹 t_matrix* (*sum_rows)(t_matrix *m)
+## 🔹 t_matrix* LA_sum_rows(t_matrix *m)
 
 
-#### Sum matrix rows
+Sum matrix rows
 
 
 ```cpp
-t_matrix* (*sum_rows)(t_matrix *m)
+t_matrix* LA_sum_rows(t_matrix *m)
 ```
 
 **Params:**
@@ -477,14 +367,14 @@ t_matrix* (*sum_rows)(t_matrix *m)
 
 - matrix of (sizey, 1) dimensions with rows sum
 
-## 🔹 t_matrix* (*sum_cols)(t_matrix *m)
+## 🔹 t_matrix* LA_sum_cols(t_matrix *m)
 
 
-#### Sum matrix columns
+Sum matrix columns
 
 
 ```cpp
-t_matrix* (*sum_cols)(t_matrix *m)
+t_matrix* LA_sum_cols(t_matrix *m)
 ```
 
 **Params:**
@@ -495,33 +385,14 @@ t_matrix* (*sum_cols)(t_matrix *m)
 
 - matrix of (1, sizex) dimensions with columns sum
 
-## 🔹 int (*equals)(t_matrix *m1, t_matrix *m2)
+## 🔹 t_matrix* LA_range(int range, int sizey, int sizex)
 
 
-#### Compare two matrices
-
-
-```cpp
-int (*equals)(t_matrix *m1, t_matrix *m2)
-```
-
-**Params:**
-
-- `m1` - first matrix to compare
-- `m2` - second matrix to compare
-
-**Returns:**
-
-- return 1 if m1 equals m2, 0 otherwise
-
-## 🔹 t_matrix* (*range)(int range, int sizey, int sizex)
-
-
-#### Create a matrix filled with numbers in range
+Create a matrix filled with numbers in range
 
 
 ```cpp
-t_matrix* (*range)(int range, int sizey, int sizex)
+t_matrix* LA_range(int range, int sizey, int sizex)
 ```
 
 **Params:**
@@ -534,14 +405,14 @@ t_matrix* (*range)(int range, int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* (*reshape)(t_matrix *m, int sizey, int sizex)
+## 🔹 t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
 
 
-#### resha the matrix with the new sizes.
+resha the matrix with the new sizes.
 
 
 ```cpp
-t_matrix* (*reshape)(t_matrix *m, int sizey, int sizex)
+t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
 ```
 
 **Params:**
@@ -554,14 +425,338 @@ t_matrix* (*reshape)(t_matrix *m, int sizey, int sizex)
 
 - new matrix of (sizey, sizex) dimensions
 
-## 🔹 double (*fn_sigmoid)(double x)
+## 🔹 t_matrix* LA_sumf(t_matrix *m, double f)
 
 
-#### sigmoid function
+sum float to the matrix
 
 
 ```cpp
-double (*fn_sigmoid)(double x)
+t_matrix* LA_sumf(t_matrix *m, double f)
+```
+
+**Params:**
+
+- `f` - float
+- `m` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_subf(t_matrix *m, double f)
+
+
+subtract float to the matrix
+
+
+```cpp
+t_matrix* LA_subf(t_matrix *m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_mulf(t_matrix *m, double f)
+
+
+multiply the matrix m by scalar f
+
+
+```cpp
+t_matrix* LA_mulf(t_matrix *m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_divf(t_matrix *m, double f)
+
+
+dvide the matrix m by scalar f
+
+
+```cpp
+t_matrix* LA_divf(t_matrix *m, double f)
+```
+
+**Params:**
+
+- `m` - matrix
+- `f` - float
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_fsub(double f, t_matrix *m)
+
+
+subtract float f to matrix m
+
+
+```cpp
+t_matrix* LA_fsub(double f, t_matrix *m)
+```
+
+**Params:**
+
+- `f` - float
+- `m` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_sum(t_matrix *m1, t_matrix *m2)
+
+
+sum matrix m1 with matrix m2
+
+
+```cpp
+t_matrix* LA_sum(t_matrix *m1, t_matrix *m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_sub(t_matrix *m1, t_matrix *m2)
+
+
+subtract matrix m2 to matrix m1
+
+
+```cpp
+t_matrix* LA_sub(t_matrix *m1, t_matrix *m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_mul(t_matrix *m1, t_matrix *m2)
+
+
+multiply matrix m1 by matrix m2
+
+
+```cpp
+t_matrix* LA_mul(t_matrix *m1, t_matrix *m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 t_matrix* LA_div(t_matrix *m1, t_matrix *m2)
+
+
+divide matrix m2 by matrix m1
+
+
+```cpp
+t_matrix* LA_div(t_matrix *m1, t_matrix *m2)
+```
+
+**Params:**
+
+- `m1` - matrix
+- `m2` - matrix
+
+**Returns:**
+
+- new matrix
+
+## 🔹 int LA_equals(t_matrix *m1, t_matrix *m2)
+
+
+Compare two matrices
+
+
+```cpp
+int LA_equals(t_matrix *m1, t_matrix *m2)
+```
+
+**Params:**
+
+- `m1` - first matrix to compare
+- `m2` - second matrix to compare
+
+**Returns:**
+
+- return 1 if m1 equals to m2, 0 otherwise
+
+## 🔹 void LA_apply(t_matrix *m, double (*fnc)(double d))
+
+
+Apply the function to each cell
+
+
+```cpp
+void LA_apply(t_matrix *m, double (*fnc)(double d))
+```
+
+**Params:**
+
+- `m` - matrix to be modified
+- `fnc` - function to be applied
+
+**Returns:**
+
+- nothing
+
+## 🔹 void LA_setval(t_matrix *m, int y, int x, double val)
+
+
+Set the value at x,y position
+
+
+```cpp
+void LA_setval(t_matrix *m, int y, int x, double val)
+```
+
+**Params:**
+
+- `m` - matrix
+- `y` - y coordinate
+- `x` - x coordinate
+- `val` - value of the cell
+
+**Returns:**
+
+- nothing
+
+## 🔹 double LA_getval(t_matrix *m, int y, int x)
+
+
+Get the value at x,y position
+
+
+```cpp
+double LA_getval(t_matrix *m, int y, int x)
+```
+
+**Params:**
+
+- `m` - matrix
+- `y` - y coordinate
+- `x` - x coordinate
+
+**Returns:**
+
+- cell value
+
+## 🔹 void LA_print(t_matrix *m)
+
+
+Print the matrix
+
+
+```cpp
+void LA_print(t_matrix *m)
+```
+
+**Params:**
+
+- `m` - matrix
+
+**Returns:**
+
+- nothing
+
+## 🔹 void LA_printf(t_matrix *m, char *fmt)
+
+
+Print the matrix using format fmt
+
+
+```cpp
+void LA_printf(t_matrix *m, char *fmt)
+```
+
+**Params:**
+
+- `m` - matrix
+- `fmt` - format (es. %.6f)
+
+**Returns:**
+
+- nothing
+
+## 🔹 void LA_frees(int count, ...)
+
+
+Destroy n matrices
+
+
+```cpp
+void LA_frees(int count, ...)
+```
+
+**Params:**
+
+- `count` - number of matrices passed as arguments
+- `...` - m1, m2, ..., mn matrices to be destroied
+
+**Returns:**
+
+- nothing
+
+## 🔹 void LA_free(t_matrix *m)
+
+
+Destroy the matrix
+
+
+```cpp
+void LA_free(t_matrix *m)
+```
+
+**Params:**
+
+- `m` - matrix to be destroied
+
+**Returns:**
+
+- nothing
+
+## 🔹 double fn_sigmoid(double x)
+
+
+sigmoid function
+
+
+```cpp
+double fn_sigmoid(double x)
 ```
 
 **Params:**
@@ -572,14 +767,14 @@ double (*fn_sigmoid)(double x)
 
 - sigmoid of x
 
-## 🔹 double (*fn_dsigmoid)(double x)
+## 🔹 double fn_dsigmoid(double x)
 
 
-#### sigmoid derivative function
+sigmoid derivative function
 
 
 ```cpp
-double (*fn_dsigmoid)(double x)
+double fn_dsigmoid(double x)
 ```
 
 **Params:**
@@ -590,14 +785,14 @@ double (*fn_dsigmoid)(double x)
 
 - sigmoid derivative of x
 
-## 🔹 double (*fn_negative)(double x)
+## 🔹 double fn_negative(double x)
 
 
-#### negative function
+negative function
 
 
 ```cpp
-double (*fn_negative)(double x)
+double fn_negative(double x)
 ```
 
 **Params:**
@@ -608,198 +803,24 @@ double (*fn_negative)(double x)
 
 - -x
 
-## 🔹 t_matrix* (*sumf)(t_matrix *m, double f)
+## 🔹 double fn_relu(double x)
 
 
-#### sum float to the matrix
-
-
-```cpp
-t_matrix* (*sumf)(t_matrix *m, double f)
-```
-
-**Params:**
-
-- `f` - float
-- `m` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*subf)(t_matrix *m, double f)
-
-
-#### subtract float to the matrix
+ReLU function
 
 
 ```cpp
-t_matrix* (*subf)(t_matrix *m, double f)
+double fn_relu(double x)
 ```
 
-**Params:**
 
-- `m` - matrix
-- `f` - float
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*mulf)(t_matrix *m, double f)
+## 🔹 double fn_drelu(double x)
 
 
-#### multiply the matrix m by scalar f
+the ReLU derivative function
 
 
 ```cpp
-t_matrix* (*mulf)(t_matrix *m, double f)
+double fn_drelu(double x)
 ```
 
-**Params:**
-
-- `m` - matrix
-- `f` - float
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*divf)(t_matrix *m, double f)
-
-
-#### dvide the matrix m by scalar f
-
-
-```cpp
-t_matrix* (*divf)(t_matrix *m, double f)
-```
-
-**Params:**
-
-- `m` - matrix
-- `f` - float
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*fsub)(double f, t_matrix *m)
-
-
-#### subtract float f to matrix m
-
-
-```cpp
-t_matrix* (*fsub)(double f, t_matrix *m)
-```
-
-**Params:**
-
-- `f` - float
-- `m` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*sum)(t_matrix *m1, t_matrix *m2)
-
-
-#### sum matrix m1 with matrix m2
-
-
-```cpp
-t_matrix* (*sum)(t_matrix *m1, t_matrix *m2)
-```
-
-**Params:**
-
-- `m1` - matrix
-- `m2` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*sub)(t_matrix *m1, t_matrix *m2)
-
-
-#### subtract matrix m2 to matrix m1
-
-
-```cpp
-t_matrix* (*sub)(t_matrix *m1, t_matrix *m2)
-```
-
-**Params:**
-
-- `m1` - matrix
-- `m2` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*mul)(t_matrix *m1, t_matrix *m2)
-
-
-#### multiply matrix m1 by matrix m2
-
-
-```cpp
-t_matrix* (*mul)(t_matrix *m1, t_matrix *m2)
-```
-
-**Params:**
-
-- `m1` - matrix
-- `m2` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔹 t_matrix* (*div)(t_matrix *m1, t_matrix *m2)
-
-
-#### divide matrix m2 by matrix m1
-
-
-```cpp
-t_matrix* (*div)(t_matrix *m1, t_matrix *m2)
-```
-
-**Params:**
-
-- `m1` - matrix
-- `m2` - matrix
-
-**Returns:**
-
-- new matrix
-
-## 🔧 typedef struct LinAlg t_LinAlg
-
-t_LinAlg
-
-```cpp
-typedef struct LinAlg t_LinAlg
-```
-
-
-# Functions
-
-## 🔹 t_LinAlg LinAlg_Init()
-
-
-#### Initialize LinAlg
-
-
-```cpp
-t_LinAlg LinAlg_Init()
-```
-
-**Returns:**
-
-- t_LinAlg type
