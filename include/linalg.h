@@ -524,7 +524,7 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc);
  * @param model the model
  * @param fmt format of matrix cells (es. %.6f)
  */
-void NN_print_model(t_NN_model *model, char *fmt);
+void NN_print_model(t_NN_model *model);
 
 void NN_free_model(t_NN_model *model);
 

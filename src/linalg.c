@@ -652,18 +652,23 @@ void NN_free_layer(t_NN_layer *layer)
     }
 }
 
-void NN_print_model(t_NN_model *model, char *fmt)
+void NN_print_model(t_NN_model *model)
 {
     if(model == NULL)
         return;
 
     printf("\nMODEL:\n\n");
     
+    int totalparams = 0;
+
     for(int l = 0; l < model->nlayers; l++)
     {
         t_NN_layer *layer = model->layers[l];
         
-        printf("Layer: %d ", l+1);
+        int params = layer->W->size + layer->b->size;
+        totalparams += params;
+
+        printf("Layer: %d ", l + 1);
         if(l == 0)
             printf("(input)\n");
         else if(l == model->nlayers - 1)
@@ -673,7 +678,8 @@ void NN_print_model(t_NN_model *model, char *fmt)
 
         printf("-------------------------------\n");
 
-        printf("shape: (%d, %d)\n", layer->W->shape.y, layer->W->shape.x);
+        printf("Shape: (%d, %d)\n", layer->W->shape.y, layer->W->shape.x);
+        printf("Params: %d (%.2f KB)\n", params, (double)(params * sizeof(double) / 1024.0));
         printf("Activation function: ");
         switch (layer->activation)
         {
@@ -686,8 +692,9 @@ void NN_print_model(t_NN_model *model, char *fmt)
             default :
                 printf("\n");
         }
-
         printf("\n");
-
     }
+
+    printf("Total params: %d (%.2f KB)\n", totalparams, (double)(totalparams * sizeof(double) / 1024.0));
+
 }
