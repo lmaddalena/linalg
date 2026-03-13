@@ -547,24 +547,60 @@ t_matrix* LA_fsub(double f, t_matrix *m)
 
 t_matrix* LA_sum(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
+    int sameshapes = m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y;
+    int broadcast_y = m1->shape.x == m2->shape.x && m2->shape.y == 1;
+    int broadcast_x = m1->shape.y == m2->shape.y && m2->shape.x == 1;
+    
+    ASSERT(sameshapes || broadcast_x || broadcast_y, "operands could not be broadcast together");
 
     t_matrix *res = LA_matrix(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res->size; i++)
-        res->data[i] = m1->data[i] + m2->data[i];
+    for(int y = 0; y < m1->shape.y; y++)
+    {
+        for(int x = 0; x < m1->shape.x; x++)
+        {    
+            if(broadcast_y)        
+                LA_setval(res, y, x, LA_getval(m1, y, x) + LA_getval(m2, y % m2->shape.y, x));
+            else if(broadcast_x)
+                LA_setval(res, y, x, LA_getval(m1, y, x) + LA_getval(m2, y, x % m2->shape.x));
+            else
+                LA_setval(res, y, x, LA_getval(m1, y, x) + LA_getval(m2, y, x));
+        }
+    }
+
+//    for(int i = 0; i < res->size; i++)
+//        res->data[i] = m1->data[i] + m2->data[i];
 
     return res;
 }
 
 t_matrix* LA_sub(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
+    int sameshapes = m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y;
+    int broadcast_y = m1->shape.x == m2->shape.x && m2->shape.y == 1;
+    int broadcast_x = m1->shape.y == m2->shape.y && m2->shape.x == 1;
+    
+    ASSERT(sameshapes || broadcast_x || broadcast_y, "operands could not be broadcast together");
+
+    //ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
     t_matrix *res = LA_matrix(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res->size; i++)
-        res->data[i] = m1->data[i] - m2->data[i];
+    for(int y = 0; y < m1->shape.y; y++)
+    {
+        for(int x = 0; x < m1->shape.x; x++)
+        {    
+            if(broadcast_y)        
+                LA_setval(res, y, x, LA_getval(m1, y, x) - LA_getval(m2, y % m2->shape.y, x));
+            else if(broadcast_x)
+                LA_setval(res, y, x, LA_getval(m1, y, x) - LA_getval(m2, y, x % m2->shape.x));
+            else
+                LA_setval(res, y, x, LA_getval(m1, y, x) - LA_getval(m2, y, x));
+        }
+    }
+
+    //for(int i = 0; i < res->size; i++)
+    //    res->data[i] = m1->data[i] - m2->data[i];
 
     return res;
 
@@ -572,24 +608,63 @@ t_matrix* LA_sub(t_matrix *m1, t_matrix *m2)
 
 t_matrix* LA_mul(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
+    int sameshapes = m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y;
+    int broadcast_y = m1->shape.x == m2->shape.x && m2->shape.y == 1;
+    int broadcast_x = m1->shape.y == m2->shape.y && m2->shape.x == 1;
+    
+    ASSERT(sameshapes || broadcast_x || broadcast_y, "operands could not be broadcast together");
+
+    //ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
     t_matrix *res = LA_matrix(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res->size; i++)
-        res->data[i] = m1->data[i] * m2->data[i];
+    for(int y = 0; y < m1->shape.y; y++)
+    {
+        for(int x = 0; x < m1->shape.x; x++)
+        {    
+            if(broadcast_y)        
+                LA_setval(res, y, x, LA_getval(m1, y, x) * LA_getval(m2, y % m2->shape.y, x));
+            else if(broadcast_x)
+                LA_setval(res, y, x, LA_getval(m1, y, x) * LA_getval(m2, y, x % m2->shape.x));
+            else
+                LA_setval(res, y, x, LA_getval(m1, y, x) * LA_getval(m2, y, x));
+        }
+    }
+
+    //for(int i = 0; i < res->size; i++)
+    //    res->data[i] = m1->data[i] * m2->data[i];
 
     return res;
 }
 
 t_matrix* LA_div(t_matrix *m1, t_matrix *m2)
 {
-    ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
+    int sameshapes = m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y;
+    int broadcast_y = m1->shape.x == m2->shape.x && m2->shape.y == 1;
+    int broadcast_x = m1->shape.y == m2->shape.y && m2->shape.x == 1;
+    
+    ASSERT(sameshapes || broadcast_x || broadcast_y, "operands could not be broadcast together");
+
+    //ASSERT(m1->shape.x == m2->shape.x && m1->shape.y == m2->shape.y, "matrices must have the same shape");
 
     t_matrix *res = LA_matrix(m1->shape.y, m1->shape.x);
 
-    for(int i = 0; i < res->size; i++)
-        res->data[i] = m1->data[i] / m2->data[i];
+    for(int y = 0; y < m1->shape.y; y++)
+    {
+        for(int x = 0; x < m1->shape.x; x++)
+        {    
+            if(broadcast_y)        
+                LA_setval(res, y, x, LA_getval(m1, y, x) / LA_getval(m2, y % m2->shape.y, x));
+            else if(broadcast_x)
+                LA_setval(res, y, x, LA_getval(m1, y, x) / LA_getval(m2, y, x % m2->shape.x));
+            else
+                LA_setval(res, y, x, LA_getval(m1, y, x) / LA_getval(m2, y, x));
+        }
+    }
+
+
+    //for(int i = 0; i < res->size; i++)
+    //    res->data[i] = m1->data[i] / m2->data[i];
 
     return res;
 }

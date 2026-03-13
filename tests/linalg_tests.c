@@ -538,6 +538,46 @@ DEFINE_TEST(sum_test)
 
 }
 
+DEFINE_TEST(sum_broadcasting_y_test)
+{
+    logger_log_info("executing sum test with broadcasting y");
+
+    t_matrix *m1 = LA_range(4, 2, 2);
+    t_matrix *m2 = LA_range(2, 1, 2);
+    
+    t_matrix *actual = LA_sum(m1, m2);
+
+    double d[4] = { 0, 2, 2, 4 };
+    t_matrix *expected = LA_matrixd(d, 2, 2);
+
+    test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
+
+    LA_frees(4, m1, m2, actual, expected);
+
+    return NULL;
+
+}
+
+DEFINE_TEST(sum_broadcasting_x_test)
+{
+    logger_log_info("executing sum test with broadcasting x");
+
+    t_matrix *m1 = LA_range(4, 2, 2);
+    t_matrix *m2 = LA_range(2, 2, 1);
+    
+    t_matrix *actual = LA_sum(m1, m2);
+
+    double d[4] = { 0, 1, 3, 4 };
+    t_matrix *expected = LA_matrixd(d, 2, 2);
+
+    test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
+
+    LA_frees(4, m1, m2, actual, expected);
+
+    return NULL;
+
+}
+
 DEFINE_TEST(sub_test)
 {
     logger_log_info("executing sub test");
@@ -607,6 +647,8 @@ DEFINE_TEST(all_tests)
     test_run(divf_test);
     test_run(fsub_test);
     test_run(sum_test);
+    test_run(sum_broadcasting_y_test);
+    test_run(sum_broadcasting_x_test);
     test_run(sub_test);
     test_run(NN_create_model_test);
 
