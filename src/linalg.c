@@ -216,7 +216,7 @@ void LA_printf(t_matrix *m, char *fmt)
 
 }
 
-void LA_frees(int count, ...)
+void LA_nfree(int count, ...)
 {
     va_list args;
 

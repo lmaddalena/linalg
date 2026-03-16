@@ -439,7 +439,7 @@ void LA_print(t_matrix *m);
 */        
 void LA_printf(t_matrix *m, char *fmt);
 
-/** LA_frees
+/** LA_nfree
 *
 * Destroy n matrices
 * 
@@ -447,7 +447,7 @@ void LA_printf(t_matrix *m, char *fmt);
 * @param ... m1, m2, ..., mn matrices to be destroied
 * @return nothing
 */        
-void LA_frees(int count, ...);
+void LA_nfree(int count, ...);
 
 /** LA_free
 *

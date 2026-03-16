@@ -725,14 +725,14 @@ void LA_printf(t_matrix *m, char *fmt)
 
 - nothing
 
-## 🔹 void LA_frees(int count, ...)
+## 🔹 void LA_nfree(int count, ...)
 
 
 Destroy n matrices
 
 
 ```cpp
-void LA_frees(int count, ...)
+void LA_nfree(int count, ...)
 ```
 
 **Params:**
@@ -869,14 +869,14 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
 
 - the Neural Network Layer
 
-## 🔹 void NN_print_model(t_NN_model *model, char *fmt)
+## 🔹 void NN_print_model(t_NN_model *model)
 
 
 print the Neural Network Model
 
 
 ```cpp
-void NN_print_model(t_NN_model *model, char *fmt)
+void NN_print_model(t_NN_model *model)
 ```
 
 **Params:**

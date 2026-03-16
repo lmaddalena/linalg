@@ -26,7 +26,7 @@ DEFINE_TEST(multi_dimension_matix_test)
 
         LA_free(row);
 
-        LA_frees(3, r, g, b, rr);
+        LA_nfree(3, r, g, b, rr);
 
         return NULL;
     }
@@ -129,7 +129,7 @@ DEFINE_TEST(dot_test)
 
     test_assert(LA_equals(actual, expected), "dot prodoct is not what was expected");
 
-    LA_frees(4, m1, m2, actual, expected);
+    LA_nfree(4, m1, m2, actual, expected);
 
     return NULL;
 }
@@ -154,7 +154,7 @@ DEFINE_TEST(dot2_test)
     
     logger_log_info("dot matrix (%d,%d)x(%d,%d) ends in %.4f mils", m->shape.x, m->shape.y, m->shape.x, m->shape.y, elapsed * 1000);    
 
-    LA_frees(2, m, m2);
+    LA_nfree(2, m, m2);
 
     return NULL;
 }
@@ -178,7 +178,7 @@ DEFINE_TEST(dot_atb_test)
 
     test_assert(LA_equals(actual, expected), "dot prodoct is not what was expected");
 
-    LA_frees(5, A, B, AT, actual, expected);
+    LA_nfree(5, A, B, AT, actual, expected);
 
     return NULL;
 }
@@ -197,7 +197,7 @@ DEFINE_TEST(T_test)
 
     test_assert(LA_equals(actual, expected), "Matrix transpose is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -213,7 +213,7 @@ DEFINE_TEST(range_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 }
@@ -229,7 +229,7 @@ DEFINE_TEST(range2_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 }
@@ -245,7 +245,7 @@ DEFINE_TEST(range3_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 }
@@ -263,7 +263,7 @@ DEFINE_TEST(slice_rows_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -281,7 +281,7 @@ DEFINE_TEST(slice_cols_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -299,7 +299,7 @@ DEFINE_TEST(slice_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     actual = LA_slice(m, 1, 4, 1, 2);
     double d2[3] = {5, 9, 13};
@@ -307,7 +307,7 @@ DEFINE_TEST(slice_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -330,7 +330,7 @@ DEFINE_TEST(apply_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 }
@@ -346,7 +346,7 @@ DEFINE_TEST(identity_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 }
@@ -364,7 +364,7 @@ DEFINE_TEST(sum_rows_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -382,7 +382,7 @@ DEFINE_TEST(sum_cols_test)
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -402,7 +402,7 @@ DEFINE_TEST(reshape_test)
     test_assert(actual->data != NULL, "matrix creation faild");
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -422,7 +422,7 @@ DEFINE_TEST(fn_sigmoid_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(2, actual, expected);
+    LA_nfree(2, actual, expected);
 
     return NULL;
 
@@ -439,7 +439,7 @@ DEFINE_TEST(sumf_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 
@@ -457,7 +457,7 @@ DEFINE_TEST(subf_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 
@@ -475,7 +475,7 @@ DEFINE_TEST(mulf_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 
@@ -494,7 +494,7 @@ DEFINE_TEST(divf_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 
@@ -512,7 +512,7 @@ DEFINE_TEST(fsub_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(3, m, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 
@@ -532,7 +532,7 @@ DEFINE_TEST(sum_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(4, m1, m2, actual, expected);
+    LA_nfree(4, m1, m2, actual, expected);
 
     return NULL;
 
@@ -552,7 +552,7 @@ DEFINE_TEST(sum_broadcasting_y_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(4, m1, m2, actual, expected);
+    LA_nfree(4, m1, m2, actual, expected);
 
     return NULL;
 
@@ -572,7 +572,7 @@ DEFINE_TEST(sum_broadcasting_x_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(4, m1, m2, actual, expected);
+    LA_nfree(4, m1, m2, actual, expected);
 
     return NULL;
 
@@ -592,7 +592,7 @@ DEFINE_TEST(sub_test)
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_frees(4, m1, m2, actual, expected);
+    LA_nfree(4, m1, m2, actual, expected);
 
     return NULL;
 
