@@ -74,7 +74,6 @@ struct matrix
  */
 typedef struct matrix t_matrix;
 
-
 /**  ACTIVATION_FNC
  * 
  */
@@ -83,6 +82,26 @@ enum ACTIVATION_FNC
     SIGMOID,
     RELU
 };
+
+/** NN_layer_spec
+ * 
+ * NN layer specification
+ * 
+ * @param nunits number of Neural Network units
+ * @param activation_function activation function of each unit
+ */
+struct NN_layer_spec
+{
+    int nunits;
+    enum ACTIVATION_FNC activation_function;
+};
+
+/** t_NN_layer_spec
+ * 
+ */
+typedef struct NN_layer_spec t_NN_layer_spec;
+
+
 
 /** NN_layer
  * 
@@ -501,10 +520,14 @@ double fn_drelu(double x);
 
 /** NN_create_model
  * 
- * Create the Neural Network Model
+ * Create the Neural Network Model using NN_layer_spec
+ * 
+ * @param ninputs number of inputs of the model
+ * @param nlayers number of layers
+ * @param spec layers specification
  * 
  */
-t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers);
+t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[]);
 
 /** NN_create_layer
  * 

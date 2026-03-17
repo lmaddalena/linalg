@@ -682,26 +682,32 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
     return layer;
 }
 
-t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[])
 {
-    for(int i = nlayers -1; i >= 0; i--)
-    {
-        t_NN_layer *curr = layers[i];
-        t_NN_layer *prev = NULL;
+    t_NN_model *model = malloc(sizeof(t_NN_model));
 
-        if(i > 0)
+    model->layers = malloc(sizeof(t_NN_layer) * nlayers);
+    model->nlayers = nlayers;
+
+    for(int i = 0; i < nlayers; i++)
+    {       
+        if(i == 0) // input layer
         {
-            prev = layers[i - 1];
-            ASSERT(curr->W->shape.y == prev->W->shape.x, "invalid layer shape.\nThe shape y of layer n must be equals to shape x of layer n-1.");
+            model->layers[i] = NN_create_layer(spec[i].nunits, ninputs, spec[i].activation_function);
+        }
+        else if(i == nlayers - 1) // output layer
+        {
+            model->layers[i] = NN_create_layer(spec[i].nunits, spec[i-1].nunits, spec[i].activation_function);            
+        }
+        else // hidden layer
+        {
+            model->layers[i] = NN_create_layer(spec[i].nunits, spec[i-1].nunits, spec[i].activation_function);            
         }
     }
 
-    t_NN_model *model = malloc(sizeof(t_NN_model));
-
-    model->layers = layers;
-    model->nlayers = nlayers;
 
     return model;
+
 }
 
 void NN_free_model(t_NN_model *model)

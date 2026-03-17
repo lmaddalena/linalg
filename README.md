@@ -89,6 +89,31 @@ enum ACTIVATION_FNC
 ```
 
 
+## 🔧 struct NN_layer_spec
+
+
+NN layer specification
+
+
+```cpp
+struct NN_layer_spec
+```
+
+**Params:**
+
+- `nunits` - number of Neural Network units
+- `activation_function` - activation function of each unit
+
+
+## 🔧 typedef struct NN_layer_spec t_NN_layer_spec
+
+
+
+```cpp
+typedef struct NN_layer_spec t_NN_layer_spec
+```
+
+
 ## 🔧 struct NN_Layer
 
 
@@ -838,15 +863,22 @@ double fn_drelu(double x)
 ```
 
 
-## 🔹 t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+## 🔹 t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[])
 
 
-Create the Neural Network Model
+Create the Neural Network Model using NN_layer_spec
+
 
 
 ```cpp
-t_NN_model *NN_create_model(int nlayers, t_NN_layer **layers)
+t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[])
 ```
+
+**Params:**
+
+- `ninputs` - number of inputs of the model
+- `nlayers` - number of layers
+- `spec` - layers specification
 
 
 ## 🔹 t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
