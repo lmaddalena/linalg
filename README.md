@@ -130,7 +130,9 @@ struct NN_Layer
 - `b` - bias vector
 - `dW` - gradient of the loss with respect to W
 - `db` - gradient of the loss with respect to b
-- `activation` - activation function
+- `A` - activation of the unit A = f(Z)
+- `Z` - Z of the unit (Z = W'X)
+- `activation_fnc` - activation function
 
 
 ## 🔧 typedef struct NN_Layer t_NN_layer
@@ -653,14 +655,14 @@ int LA_equals(t_matrix *m1, t_matrix *m2)
 
 - return 1 if m1 equals to m2, 0 otherwise
 
-## 🔹 void LA_apply(t_matrix *m, double (*fnc)(double d))
+## 🔹 t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 
 Apply the function to each cell
 
 
 ```cpp
-void LA_apply(t_matrix *m, double (*fnc)(double d))
+t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 ```
 
 **Params:**
@@ -915,4 +917,52 @@ void NN_print_model(t_NN_model *model)
 
 - `model` - the model
 - `fmt` - format of matrix cells (es. %.6f)
+
+
+## 🔹 void NN_free_model(t_NN_model *model)
+
+
+free the model
+
+
+
+```cpp
+void NN_free_model(t_NN_model *model)
+```
+
+**Params:**
+
+- `model` - the model
+
+
+## 🔹 void NN_free_layer(t_NN_layer *layer)
+
+
+free the layer
+
+
+```cpp
+void NN_free_layer(t_NN_layer *layer)
+```
+
+**Params:**
+
+- `layer` - the layer
+
+
+## 🔹 void NN_model_execute(t_matrix *input, t_NN_model *model)
+
+
+Execute the model, compute Z and A (activation)
+
+
+
+```cpp
+void NN_model_execute(t_matrix *input, t_NN_model *model)
+```
+
+**Params:**
+
+- `input` - input matrix
+- `model` - to execute
 

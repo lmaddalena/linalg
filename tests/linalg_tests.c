@@ -321,16 +321,16 @@ DEFINE_TEST(apply_test)
 {
     logger_log_info("executing apply test");
 
-    t_matrix *actual = LA_range(6, 2, 3);
+    t_matrix *m = LA_range(6, 2, 3);
 
-    LA_apply(actual, square);
+    t_matrix *actual = LA_apply(m, square);
 
     double d[6] = {0, 1, 4, 9, 16, 25};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
 
-    LA_nfree(2, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 }
@@ -412,17 +412,17 @@ DEFINE_TEST(fn_sigmoid_test)
     logger_log_info("executing fn_sigmoid test");
 
     double data[2] = {0, 2};
-    t_matrix *actual = LA_matrixd(data, 1, 2);
+    t_matrix *m = LA_matrixd(data, 1, 2);
 
     double data_expected[2] = {0.5, (round(0.880797 * 10000)) / 10000};
     t_matrix *expected = LA_matrixd(data_expected, 1, 2);
 
-    LA_apply(actual, fn_sigmoid);
+    t_matrix *actual = LA_apply(m, fn_sigmoid);
     LA_setval(actual, 0, 1, round(LA_getval(actual, 0, 1) * 10000) / 10000);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
 
-    LA_nfree(2, actual, expected);
+    LA_nfree(3, m, actual, expected);
 
     return NULL;
 

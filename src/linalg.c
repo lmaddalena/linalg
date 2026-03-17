@@ -73,10 +73,15 @@ t_matrix* LA_identity(int n)
     return m;
 }
 
-void LA_apply(t_matrix *m, double (*fnc)(double d))
+t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 {
-    for(int i = 0; i < m->size; i++)
-        m->data[i] = fnc(m->data[i]);
+    t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
+
+    for(int i = 0; i < res->size; i++)
+        res->data[i] = fnc(m->data[i]);
+
+    return res;
+
 }
 
 t_matrix* LA_matrix(int sizey, int sizex)
@@ -677,7 +682,9 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
     layer->b = LA_matrix(nunits, 1);
     layer->dW = NULL;
     layer->db = NULL;
-    layer->activation = fnc;
+    layer->A = NULL;
+    layer->Z = NULL;
+    layer->activation_fnc = fnc;
 
     return layer;
 }
@@ -708,6 +715,21 @@ t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[
 
     return model;
 
+}
+
+void NN_model_execute(t_matrix *input, t_NN_model *model)
+{
+    t_matrix *X = input;
+
+    for(int i = 0; i < model->nlayers; i++)
+    {
+        t_matrix *Ztemp = LA_dot_atb(model->layers[i]->W, X);
+        model->layers[i]->Z = LA_sum(Ztemp, model->layers[i]->b);
+        model->layers[i]->A = LA_apply(model->layers[i]->Z, fn_sigmoid);
+        X = model->layers[i]->A;
+
+        LA_free(Ztemp);
+    }
 }
 
 void NN_free_model(t_NN_model *model)
@@ -762,7 +784,7 @@ void NN_print_model(t_NN_model *model)
         printf("Shape: (%d, %d)\n", layer->W->shape.y, layer->W->shape.x);
         printf("Params: %d (%.2f KB)\n", params, (double)(params * sizeof(double) / 1024.0));
         printf("Activation function: ");
-        switch (layer->activation)
+        switch (layer->activation_fnc)
         {
             case SIGMOID :
                 printf("sigmoid\n");

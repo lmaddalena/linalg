@@ -111,7 +111,9 @@ typedef struct NN_layer_spec t_NN_layer_spec;
  * @param b bias vector
  * @param dW gradient of the loss with respect to W
  * @param db gradient of the loss with respect to b
- * @param activation activation function
+ * @param A activation of the unit A = f(Z)
+ * @param Z Z of the unit (Z = W'X)
+ * @param activation_fnc activation function
  */
 struct NN_Layer
 {
@@ -119,7 +121,10 @@ struct NN_Layer
     t_matrix *b;
     t_matrix *dW;
     t_matrix *db;
-    enum ACTIVATION_FNC activation;
+    t_matrix *A;
+    t_matrix *Z;
+
+    enum ACTIVATION_FNC activation_fnc;
 };
 
 /** t_NN_layer
@@ -414,7 +419,7 @@ int LA_equals(t_matrix *m1, t_matrix *m2);
 * @param fnc function to be applied
 * @return nothing
 */        
-void LA_apply(t_matrix *m, double (*fnc)(double d));
+t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d));
 
 /** LA_setval
 *
@@ -549,8 +554,32 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc);
  */
 void NN_print_model(t_NN_model *model);
 
+/** NN_free_model
+ * 
+ * free the model
+ * 
+ * @param model the model
+ * 
+ */
 void NN_free_model(t_NN_model *model);
 
+/** NN_free_layer
+ * 
+ * free the layer
+ * 
+ * @param layer the layer
+ */
 void NN_free_layer(t_NN_layer *layer);
+
+/** NN_model_execute
+ * 
+ * Execute the model, compute Z and A (activation)
+ * 
+ * @param input input matrix
+ * @param model to execute
+ * 
+ */
+void NN_model_execute(t_matrix *input, t_NN_model *model);
+
 #endif
 
