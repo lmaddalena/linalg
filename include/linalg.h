@@ -417,9 +417,19 @@ int LA_equals(t_matrix *m1, t_matrix *m2);
 *
 * @param m matrix to be modified
 * @param fnc function to be applied
-* @return nothing
+* @return new matrix
 */        
 t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d));
+
+/** LA_apply_inline
+* 
+* Apply the function to each cell
+*
+* @param m matrix to be modified
+* @param fnc function to be applied
+* @return nothing
+*/        
+void LA_apply_inline(t_matrix *m, double (*fnc)(double d));
 
 /** LA_setval
 *

@@ -335,6 +335,23 @@ DEFINE_TEST(apply_test)
     return NULL;
 }
 
+DEFINE_TEST(apply_inline_test)
+{
+    logger_log_info("executing apply test");
+
+    t_matrix *actual = LA_range(6, 2, 3);
+
+    LA_apply_inline(actual, square);
+
+    double d[6] = {0, 1, 4, 9, 16, 25};
+    t_matrix *expected = LA_matrixd(d, 2, 3);
+
+    test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
+
+    LA_nfree(2, actual, expected);
+
+    return NULL;
+}
 DEFINE_TEST(identity_test)
 {
     logger_log_info("executing identity test");

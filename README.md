@@ -672,6 +672,25 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 **Returns:**
 
+- new matrix
+
+## 🔹 void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+
+
+Apply the function to each cell
+
+
+```cpp
+void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+```
+
+**Params:**
+
+- `m` - matrix to be modified
+- `fnc` - function to be applied
+
+**Returns:**
+
 - nothing
 
 ## 🔹 void LA_setval(t_matrix *m, int y, int x, double val)

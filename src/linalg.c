@@ -84,6 +84,14 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 }
 
+void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+{
+
+    for(int i = 0; i < m->size; i++)
+        m->data[i] = fnc(m->data[i]);
+}
+
+
 t_matrix* LA_matrix(int sizey, int sizex)
 {
     t_matrix *m;
@@ -678,14 +686,19 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
 {
     t_NN_layer *layer = malloc(sizeof(t_NN_layer));
 
-    layer->W = LA_matrix(ninputs, nunits);
-    layer->b = LA_matrix(nunits, 1);
+    t_matrix *w_temp = LA_randf(ninputs, nunits);
+    t_matrix *b_temp = LA_randf(nunits, 1);
+
+    layer->W = LA_divf(w_temp, 0.001);
+    layer->b = LA_divf(b_temp, 0.001);
     layer->dW = NULL;
     layer->db = NULL;
     layer->A = NULL;
     layer->Z = NULL;
     layer->activation_fnc = fnc;
 
+    LA_nfree(2, w_temp, b_temp);
+    
     return layer;
 }
 
