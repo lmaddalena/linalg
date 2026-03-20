@@ -44,7 +44,7 @@ t_matrix* LA_randf(int sizey, int sizex)
     srand(time(NULL));
 
     for(int i = 0; i < m->size; i++)
-        m->data[i] =  (float)rand() / RAND_MAX;
+        m->data[i] =  (double)rand() / (double)RAND_MAX;
 
     return m;    
 }
