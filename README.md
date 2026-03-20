@@ -969,7 +969,7 @@ void NN_free_layer(t_NN_layer *layer)
 - `layer` - the layer
 
 
-## 🔹 void NN_model_execute(t_matrix *input, t_NN_model *model)
+## 🔹 t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 
 
 Execute the model, compute Z and A (activation)
@@ -977,7 +977,7 @@ Execute the model, compute Z and A (activation)
 
 
 ```cpp
-void NN_model_execute(t_matrix *input, t_NN_model *model)
+t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 ```
 
 **Params:**
@@ -985,3 +985,6 @@ void NN_model_execute(t_matrix *input, t_NN_model *model)
 - `input` - input matrix
 - `model` - to execute
 
+**Returns:**
+
+- Activation of last layer

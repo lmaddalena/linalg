@@ -587,9 +587,10 @@ void NN_free_layer(t_NN_layer *layer);
  * 
  * @param input input matrix
  * @param model to execute
+ * @return Activation of last layer
  * 
  */
-void NN_model_execute(t_matrix *input, t_NN_model *model);
+t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model);
 
 #endif
 

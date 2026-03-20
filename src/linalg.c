@@ -730,7 +730,7 @@ t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[
 
 }
 
-void NN_model_execute(t_matrix *input, t_NN_model *model)
+t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 {
     t_matrix *X = input;
 
@@ -758,6 +758,11 @@ void NN_model_execute(t_matrix *input, t_NN_model *model)
 
         LA_free(Ztemp);
     }
+
+    t_matrix *Y = model->layers[model->nlayers - 1]->A;
+
+    return Y;
+    
 }
 
 void NN_free_model(t_NN_model *model)
