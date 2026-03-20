@@ -689,8 +689,8 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
     t_matrix *w_temp = LA_randf(ninputs, nunits);
     t_matrix *b_temp = LA_randf(nunits, 1);
 
-    layer->W = LA_divf(w_temp, 0.001);
-    layer->b = LA_divf(b_temp, 0.001);
+    layer->W = LA_mulf(w_temp, 0.01);
+    layer->b = LA_mulf(b_temp, 0.01);
     layer->dW = NULL;
     layer->db = NULL;
     layer->A = NULL;
@@ -736,9 +736,24 @@ void NN_model_execute(t_matrix *input, t_NN_model *model)
 
     for(int i = 0; i < model->nlayers; i++)
     {
+        double (*fnc)(double d);
+
+        switch (model->layers[i]->activation_fnc)
+        {
+            case SIGMOID :
+                fnc = fn_sigmoid;
+                break;
+            case RELU :
+                fnc = fn_relu;
+                break;
+            default :
+                fnc = fn_relu;
+        }
+
+        // Z = W'X + b
         t_matrix *Ztemp = LA_dot_atb(model->layers[i]->W, X);
         model->layers[i]->Z = LA_sum(Ztemp, model->layers[i]->b);
-        model->layers[i]->A = LA_apply(model->layers[i]->Z, fn_sigmoid);
+        model->layers[i]->A = LA_apply(model->layers[i]->Z, fnc);
         X = model->layers[i]->A;
 
         LA_free(Ztemp);
