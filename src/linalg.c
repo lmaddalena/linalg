@@ -505,6 +505,11 @@ double fn_drelu(double x)
         return 1;
 }
 
+double fn_log(double x)
+{
+    return log(x);
+}
+
 t_matrix* LA_sumf(t_matrix *m, double f)
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
@@ -679,6 +684,12 @@ t_matrix* LA_div(t_matrix *m1, t_matrix *m2)
     //for(int i = 0; i < res->size; i++)
     //    res->data[i] = m1->data[i] / m2->data[i];
 
+    return res;
+}
+
+t_matrix *LA_log(t_matrix *m)
+{
+    t_matrix *res = LA_apply(m, fn_log);
     return res;
 }
 

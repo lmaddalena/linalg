@@ -872,6 +872,13 @@ ReLU function
 double fn_relu(double x)
 ```
 
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- max(x, 0)
 
 ## 🔹 double fn_drelu(double x)
 
@@ -879,10 +886,55 @@ double fn_relu(double x)
 the ReLU derivative function
 
 
+
 ```cpp
 double fn_drelu(double x)
 ```
 
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- ReLU derivative
+
+## 🔹 double fn_log(double x)
+
+
+natural logarithm
+
+
+```cpp
+double fn_log(double x)
+```
+
+**Params:**
+
+- `x` - x value
+
+**Returns:**
+
+- natural logarithm of x
+
+## 🔹 t_matrix *LA_log(t_matrix *m)
+
+
+natural logarithm of matrix m
+
+
+
+```cpp
+t_matrix *LA_log(t_matrix *m)
+```
+
+**Params:**
+
+- `m` - matrix
+
+**Returns:**
+
+- new matrix
 
 ## 🔹 t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[])
 

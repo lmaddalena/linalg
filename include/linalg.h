@@ -523,6 +523,8 @@ double fn_negative(double x);
  * 
  * ReLU function
  * 
+ * @param x x value
+ * @return max(x, 0)
  */
 double fn_relu(double x);
 
@@ -530,8 +532,30 @@ double fn_relu(double x);
  * 
  * the ReLU derivative function
  * 
+ * @param x x value
+ * @return ReLU derivative
+ * 
  */
 double fn_drelu(double x);
+
+/** fn_log
+ * 
+ * natural logarithm
+ * 
+ * @param x x value
+ * @return natural logarithm of x
+ */
+double fn_log(double x);
+
+/** LA_log
+ * 
+ * natural logarithm of matrix m
+ * 
+ * @param m matrix
+ * @return new matrix
+ * 
+ */
+t_matrix *LA_log(t_matrix *m);
 
 /** NN_create_model
  * 
