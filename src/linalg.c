@@ -845,3 +845,36 @@ void NN_print_model(t_NN_model *model)
     printf("Total params: %d (%.2f KB)\n", totalparams, (double)(totalparams * sizeof(double) / 1024.0));
 
 }
+
+t_matrix *NN_cross_entropy_loss(t_matrix *A, t_matrix *Y)
+{
+    // A (n, m)
+    // Y (n, m)
+
+    int m = A->shape.x;  // number of training example
+    int n = A->shape.y;  // number of parameters
+
+    double epsilon = 1e-15; // epsilon smoothing, impedisce che si verifichi log(0)
+
+    t_matrix *J = LA_matrix(n, 1);
+
+    
+    for(int k = 0; k < n; k++)
+    {
+        double j = 0;
+
+        for(int i = 0; i < m; i++)
+        {
+            double yi = LA_getval(Y, 0, i);
+            double ai = LA_getval(A, 0, i);
+
+            j += -yi * log(ai + epsilon) - (1 - yi) * log(1 - ai + epsilon);
+        }
+
+        j = j / m;
+
+        LA_setval(J, k, 0, j);
+    }
+
+    return J;
+}

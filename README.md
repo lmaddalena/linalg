@@ -1040,3 +1040,24 @@ t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 **Returns:**
 
 - Activation of last layer
+
+## 🔹 t_matrix *NN_cross_entropy_loss(t_matrix *A, t_matrix *Y)
+
+
+Compute the Cross-Entropy loss between matrices A and Y
+A and Y must be in shape (n, m), where n is the number of parameters and m is the number of training example
+
+
+
+```cpp
+t_matrix *NN_cross_entropy_loss(t_matrix *A, t_matrix *Y)
+```
+
+**Params:**
+
+- `A` - actual values
+- `Y` - expected values
+
+**Returns:**
+
+- matrix of shape (n, 1) with Cross-Entropy Loss
