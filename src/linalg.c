@@ -84,7 +84,7 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 }
 
-void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
 {
 
     for(int i = 0; i < m->size; i++)
@@ -466,7 +466,9 @@ t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
 
     ASSERT(m->size == sizey * sizex, "Dimension mismatch");
 
-    t_matrix *res = LA_matrixd(m->data, sizey, sizex);
+    t_matrix *res = LA_matrix(sizey, sizex);
+
+    memcpy(res->data, m->data, m->size * sizeof(double));
 
     return res;    
 }

@@ -674,14 +674,14 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 - new matrix
 
-## 🔹 void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+## 🔹 void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
 
 
 Apply the function to each cell
 
 
 ```cpp
-void LA_apply_inline(t_matrix *m, double (*fnc)(double d))
+void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
 ```
 
 **Params:**

@@ -429,7 +429,7 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d));
 * @param fnc function to be applied
 * @return nothing
 */        
-void LA_apply_inline(t_matrix *m, double (*fnc)(double d));
+void LA_apply_inplace(t_matrix *m, double (*fnc)(double d));
 
 /** LA_setval
 *

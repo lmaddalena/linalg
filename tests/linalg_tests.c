@@ -335,13 +335,13 @@ DEFINE_TEST(apply_test)
     return NULL;
 }
 
-DEFINE_TEST(apply_inline_test)
+DEFINE_TEST(apply_inplace_test)
 {
-    logger_log_info("executing apply test");
+    logger_log_info("executing apply inplace test");
 
     t_matrix *actual = LA_range(6, 2, 3);
 
-    LA_apply_inline(actual, square);
+    LA_apply_inplace(actual, square);
 
     double d[6] = {0, 1, 4, 9, 16, 25};
     t_matrix *expected = LA_matrixd(d, 2, 3);
@@ -650,6 +650,7 @@ DEFINE_TEST(all_tests)
     test_run(slice_rows_test);
     test_run(slice_cols_test);
     test_run(apply_test);
+    test_run(apply_inplace_test);
     test_run(identity_test);
     test_run(sum_rows_test);
     test_run(sum_cols_test);
