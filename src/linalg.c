@@ -699,7 +699,7 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
 {
     t_NN_layer *layer = malloc(sizeof(t_NN_layer));
 
-    t_matrix *w_temp = LA_randf(ninputs, nunits);
+    t_matrix *w_temp = LA_randf(nunits, ninputs);
     t_matrix *b_temp = LA_randf(nunits, 1);
 
     layer->W = LA_mulf(w_temp, 0.01);
@@ -763,9 +763,11 @@ t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
                 fnc = fn_relu;
         }
 
-        // Z = W'X + b
-        t_matrix *Ztemp = LA_dot_atb(model->layers[i]->W, X);
+        // Z = WX + b
+        t_matrix *Ztemp = LA_dot(model->layers[i]->W, X);
+        LA_free(model->layers[i]->Z);
         model->layers[i]->Z = LA_sum(Ztemp, model->layers[i]->b);
+        LA_free(model->layers[i]->A);
         model->layers[i]->A = LA_apply(model->layers[i]->Z, fnc);
         X = model->layers[i]->A;
 
@@ -785,6 +787,7 @@ void NN_free_model(t_NN_model *model)
             for(int i = 0; i < model->nlayers; i++)
                 NN_free_layer(model->layers[i]); 
         }
+        free(model->layers);
         free(model);
     }
 
@@ -797,6 +800,9 @@ void NN_free_layer(t_NN_layer *layer)
         LA_free(layer->b);
         LA_free(layer->dW);
         LA_free(layer->db);
+        LA_free(layer->A);
+        LA_free(layer->Z);
+
         free(layer);
     }
 }
