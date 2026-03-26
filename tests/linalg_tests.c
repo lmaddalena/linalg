@@ -615,6 +615,26 @@ DEFINE_TEST(sub_test)
 
 }
 
+DEFINE_TEST(mul_test)
+{
+    logger_log_info("executing nul test");
+
+    t_matrix *m1 = LA_range(6, 2, 3);
+    t_matrix *m2 = LA_range(6, 2, 3);
+    
+    t_matrix *actual = LA_mul(m1, m2);
+
+    double d[6] = { 0, 1, 4, 9, 16, 25 };
+    t_matrix *expected = LA_matrixd(d, 2, 3);
+
+    test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
+
+    LA_nfree(4, m1, m2, actual, expected);
+
+    return NULL;
+
+}
+
 DEFINE_TEST(NN_create_model_test)
 {
     logger_log_info("executing NN_create_model test");
@@ -662,6 +682,7 @@ DEFINE_TEST(all_tests)
     test_run(divf_test);
     test_run(fsub_test);
     test_run(sum_test);
+    test_run(mul_test);
     test_run(sum_broadcasting_y_test);
     test_run(sum_broadcasting_x_test);
     test_run(sub_test);
