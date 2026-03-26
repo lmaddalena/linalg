@@ -454,6 +454,16 @@ void LA_setval(t_matrix *m, int y, int x, double val);
 */        
 double LA_getval(t_matrix *m, int y, int x);
 
+/** LA_Clone
+ * 
+ * Copy the input matrix in a new matrix
+ * 
+ * @param m input matrix
+ * @return copy of input matrix
+ * 
+ */
+t_matrix *LA_clone(t_matrix *m);
+
 /** LA_print
 * 
 * Print the matrix

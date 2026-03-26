@@ -473,6 +473,31 @@ t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
     return res;    
 }
 
+t_matrix *LA_clone(t_matrix *m)
+{
+
+    t_matrix *res = malloc(sizeof(t_matrix));
+    if (m == NULL) {
+        ASSERT(0, "out of memory for matrix struct");
+        return NULL;
+    }
+
+    res->shape.x = m->shape.x;
+    res->shape.y = m->shape.y;
+    res->size = m->shape.x * m->shape.y;
+    res->data = malloc(sizeof(double) * m->size);
+
+    if (res->data == NULL) {
+        free(res);
+        ASSERT(0, "out of memory for matrix data");
+        return NULL;
+    }
+
+    memcpy(res->data, m->data, m->size * sizeof(double));
+
+    return res;
+}
+
 double fn_sigmoid(double x)
 {
     double s = 1 / (1 + exp(-x));
@@ -745,7 +770,7 @@ t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[
 
 t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 {
-    t_matrix *X = input;
+    t_matrix *X = LA_clone(input);
 
     for(int i = 0; i < model->nlayers; i++)
     {
@@ -775,7 +800,7 @@ t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
     }
 
     t_matrix *Y = model->layers[model->nlayers - 1]->A;
-
+    LA_free(X);
     return Y;
     
 }
