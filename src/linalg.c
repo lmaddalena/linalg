@@ -770,7 +770,7 @@ t_NN_model *NN_create_model(int ninputs, int nlayers, struct NN_layer_spec spec[
 
 t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 {
-    t_matrix *X = LA_clone(input);
+    t_matrix *X = input;
 
     for(int i = 0; i < model->nlayers; i++)
     {
@@ -800,7 +800,7 @@ t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
     }
 
     t_matrix *Y = model->layers[model->nlayers - 1]->A;
-    LA_free(X);
+
     return Y;
     
 }
