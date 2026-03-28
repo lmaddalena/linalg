@@ -6,6 +6,7 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* ========================== MACROS ============================ */
 #define ASSERT(exp, msg) \
@@ -282,8 +283,9 @@ t_matrix* LA_dot(t_matrix *m1, t_matrix *m2)
     */
 
     /* versione ottimizzata */
-    //#pragma omp parallel for // (compilare con -fopenmp)
-    for (int i = 0; i < m1->shape.y; i++) {
+    int i;
+    #pragma omp parallel for private(i) // (compilare con -fopenmp)
+    for (i = 0; i < m1->shape.y; i++) {
         int i_m1 = i * m1->shape.x;
         int i_res = i * res->shape.x;
 
@@ -318,7 +320,9 @@ t_matrix* LA_dot_atb(t_matrix *A, t_matrix *B){
     // i: scorre le colonne di A (che sono le righe di AT)
     // k: scorre le righe di A (che sono le colonne di AT e le righe di B)
     // j: scorre le colonne di B
-    for (int i = 0; i < A->shape.x; i++) {
+    int i;
+    #pragma omp parallel for private(i) // (compilare con -fopenmp)
+    for (i = 0; i < A->shape.x; i++) {
         int row_C = i * C->shape.x;
 
         for (int k = 0; k < A->shape.y; k++) {
