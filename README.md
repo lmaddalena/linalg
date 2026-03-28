@@ -389,6 +389,18 @@ t_matrix* LA_randf(int sizey, int sizex)
 
 - matrix of (sizey, sizex)
 
+## 🔹 t_matrix* LA_randn(int sizey, int sizex)
+
+
+generates a matrix of shape (sizey, sizec), filled with random floats sampled from a
+univariate “normal” (Gaussian) distribution of mean 0 and variance 1
+
+
+```cpp
+t_matrix* LA_randn(int sizey, int sizex)
+```
+
+
 ## 🔹 t_matrix* LA_sum_rows(t_matrix *m)
 
 

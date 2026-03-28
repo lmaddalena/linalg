@@ -19,10 +19,16 @@
         } while (0)
 
 
-/* ========================== PROTOTYPES ============================ */
+/* ========================== COSTANTS ============================ */
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
+
+/* ========================== PROTOTYPES =========================== */
 
 static void assert_index(t_matrix *m, int y, int x);
 static void LA_print_row(t_matrix *m, int y, char *fmt);
+static float randn();
 
 /* ========================== FUNCTIONS ============================ */
 
@@ -48,6 +54,42 @@ t_matrix* LA_randf(int sizey, int sizex)
         m->data[i] =  (float)rand() / (float)RAND_MAX;
 
     return m;    
+}
+
+t_matrix* LA_randn(int sizey, int sizex)
+{
+    t_matrix *m = LA_matrix(sizey, sizex);
+
+    srand(time(NULL));
+
+    for(int i = 0; i < m->size; i++)
+        m->data[i] =  randn();
+
+    return m;    
+}
+
+float randn() {
+
+    static float z1;
+    static int generate = 0;
+    
+    // L'algoritmo genera due numeri. Se ne abbiamo uno pronto, lo restituiamo.
+    generate = !generate;
+    if (!generate) {
+        return z1;
+    }
+
+    float u1, u2;
+    do {
+        u1 = rand() * (1.0 / RAND_MAX);
+        u2 = rand() * (1.0 / RAND_MAX);
+    } while (u1 <= 1e-7); // Evitiamo log(0)
+
+    float mag = sqrt(-2.0 * log(u1));
+    float z0 = mag * cos(2.0 * M_PI * u2);
+    z1 = mag * sin(2.0 * M_PI * u2);
+
+    return z0;
 }
 
 t_matrix* LA_ones(int sizey, int sizex)
@@ -728,8 +770,8 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
 {
     t_NN_layer *layer = malloc(sizeof(t_NN_layer));
 
-    t_matrix *w_temp = LA_randf(nunits, ninputs);
-    t_matrix *b_temp = LA_randf(nunits, 1);
+    t_matrix *w_temp = LA_randn(nunits, ninputs);
+    t_matrix *b_temp = LA_randn(nunits, 1);
 
     layer->W = LA_mulf(w_temp, 0.01);
     layer->b = LA_mulf(b_temp, 0.01);

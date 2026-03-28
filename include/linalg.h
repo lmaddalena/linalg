@@ -271,6 +271,14 @@ t_matrix* LA_rand(int sizey, int sizex, int lower, int upper);
 */        
 t_matrix* LA_randf(int sizey, int sizex);
 
+/** LA_randn
+ * 
+ * generates a matrix of shape (sizey, sizex), filled with random floats sampled from a 
+ * univariate “normal” (Gaussian) distribution of mean 0 and variance 1
+ * 
+ */
+t_matrix* LA_randn(int sizey, int sizex);
+
 /** LA_sum_rows
 * 
 * Sum matrix rows
