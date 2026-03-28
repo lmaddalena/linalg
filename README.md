@@ -68,7 +68,7 @@ struct matrix
 
 - `size` - size of the matrix
 - `shape` - shape of the matrix
-- `data` - pointer of *double to the matrix data
+- `data` - pointer of *float to the matrix data
 
 
 ## 🔧 typedef struct matrix t_matrix
@@ -174,14 +174,14 @@ t_matrix* LA_matrix(int sizey, int sizex)
 
 - matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
+## 🔹 t_matrix* LA_matrixd(const float *data, int sizey, int sizex)
 
 
 Create a matrix of (y, x) dimensions.
 
 
 ```cpp
-t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
+t_matrix* LA_matrixd(const float *data, int sizey, int sizex)
 ```
 
 **Params:**
@@ -465,14 +465,14 @@ t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
 
 - new matrix of (sizey, sizex) dimensions
 
-## 🔹 t_matrix* LA_sumf(t_matrix *m, double f)
+## 🔹 t_matrix* LA_sumf(t_matrix *m, float f)
 
 
 sum float to the matrix
 
 
 ```cpp
-t_matrix* LA_sumf(t_matrix *m, double f)
+t_matrix* LA_sumf(t_matrix *m, float f)
 ```
 
 **Params:**
@@ -484,14 +484,14 @@ t_matrix* LA_sumf(t_matrix *m, double f)
 
 - new matrix
 
-## 🔹 t_matrix* LA_subf(t_matrix *m, double f)
+## 🔹 t_matrix* LA_subf(t_matrix *m, float f)
 
 
 subtract float to the matrix
 
 
 ```cpp
-t_matrix* LA_subf(t_matrix *m, double f)
+t_matrix* LA_subf(t_matrix *m, float f)
 ```
 
 **Params:**
@@ -503,14 +503,14 @@ t_matrix* LA_subf(t_matrix *m, double f)
 
 - new matrix
 
-## 🔹 t_matrix* LA_mulf(t_matrix *m, double f)
+## 🔹 t_matrix* LA_mulf(t_matrix *m, float f)
 
 
 multiply the matrix m by scalar f
 
 
 ```cpp
-t_matrix* LA_mulf(t_matrix *m, double f)
+t_matrix* LA_mulf(t_matrix *m, float f)
 ```
 
 **Params:**
@@ -522,14 +522,14 @@ t_matrix* LA_mulf(t_matrix *m, double f)
 
 - new matrix
 
-## 🔹 t_matrix* LA_divf(t_matrix *m, double f)
+## 🔹 t_matrix* LA_divf(t_matrix *m, float f)
 
 
 dvide the matrix m by scalar f
 
 
 ```cpp
-t_matrix* LA_divf(t_matrix *m, double f)
+t_matrix* LA_divf(t_matrix *m, float f)
 ```
 
 **Params:**
@@ -541,14 +541,14 @@ t_matrix* LA_divf(t_matrix *m, double f)
 
 - new matrix
 
-## 🔹 t_matrix* LA_fsub(double f, t_matrix *m)
+## 🔹 t_matrix* LA_fsub(float f, t_matrix *m)
 
 
 subtract float f to matrix m
 
 
 ```cpp
-t_matrix* LA_fsub(double f, t_matrix *m)
+t_matrix* LA_fsub(float f, t_matrix *m)
 ```
 
 **Params:**
@@ -655,14 +655,14 @@ int LA_equals(t_matrix *m1, t_matrix *m2)
 
 - return 1 if m1 equals to m2, 0 otherwise
 
-## 🔹 t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
+## 🔹 t_matrix* LA_apply(t_matrix *m, float (*fnc)(float d))
 
 
 Apply the function to each cell
 
 
 ```cpp
-t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
+t_matrix* LA_apply(t_matrix *m, float (*fnc)(float d))
 ```
 
 **Params:**
@@ -674,14 +674,14 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 - new matrix
 
-## 🔹 void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
+## 🔹 void LA_apply_inplace(t_matrix *m, float (*fnc)(float d))
 
 
 Apply the function to each cell
 
 
 ```cpp
-void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
+void LA_apply_inplace(t_matrix *m, float (*fnc)(float d))
 ```
 
 **Params:**
@@ -693,14 +693,14 @@ void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
 
 - nothing
 
-## 🔹 void LA_setval(t_matrix *m, int y, int x, double val)
+## 🔹 void LA_setval(t_matrix *m, int y, int x, float val)
 
 
 Set the value at x,y position
 
 
 ```cpp
-void LA_setval(t_matrix *m, int y, int x, double val)
+void LA_setval(t_matrix *m, int y, int x, float val)
 ```
 
 **Params:**
@@ -714,14 +714,14 @@ void LA_setval(t_matrix *m, int y, int x, double val)
 
 - nothing
 
-## 🔹 double LA_getval(t_matrix *m, int y, int x)
+## 🔹 float LA_getval(t_matrix *m, int y, int x)
 
 
 Get the value at x,y position
 
 
 ```cpp
-double LA_getval(t_matrix *m, int y, int x)
+float LA_getval(t_matrix *m, int y, int x)
 ```
 
 **Params:**
@@ -733,6 +733,25 @@ double LA_getval(t_matrix *m, int y, int x)
 **Returns:**
 
 - cell value
+
+## 🔹 t_matrix *LA_clone(t_matrix *m)
+
+
+Copy the input matrix in a new matrix
+
+
+
+```cpp
+t_matrix *LA_clone(t_matrix *m)
+```
+
+**Params:**
+
+- `m` - input matrix
+
+**Returns:**
+
+- copy of input matrix
 
 ## 🔹 void LA_print(t_matrix *m)
 
@@ -808,14 +827,14 @@ void LA_free(t_matrix *m)
 
 - nothing
 
-## 🔹 double fn_sigmoid(double x)
+## 🔹 float fn_sigmoid(float x)
 
 
 sigmoid function
 
 
 ```cpp
-double fn_sigmoid(double x)
+float fn_sigmoid(float x)
 ```
 
 **Params:**
@@ -826,14 +845,14 @@ double fn_sigmoid(double x)
 
 - sigmoid of x
 
-## 🔹 double fn_dsigmoid(double x)
+## 🔹 float fn_dsigmoid(float x)
 
 
 sigmoid derivative function
 
 
 ```cpp
-double fn_dsigmoid(double x)
+float fn_dsigmoid(float x)
 ```
 
 **Params:**
@@ -844,14 +863,14 @@ double fn_dsigmoid(double x)
 
 - sigmoid derivative of x
 
-## 🔹 double fn_negative(double x)
+## 🔹 float fn_negative(float x)
 
 
 negative function
 
 
 ```cpp
-double fn_negative(double x)
+float fn_negative(float x)
 ```
 
 **Params:**
@@ -862,14 +881,14 @@ double fn_negative(double x)
 
 - -x
 
-## 🔹 double fn_relu(double x)
+## 🔹 float fn_relu(float x)
 
 
 ReLU function
 
 
 ```cpp
-double fn_relu(double x)
+float fn_relu(float x)
 ```
 
 **Params:**
@@ -880,7 +899,7 @@ double fn_relu(double x)
 
 - max(x, 0)
 
-## 🔹 double fn_drelu(double x)
+## 🔹 float fn_drelu(float x)
 
 
 the ReLU derivative function
@@ -888,7 +907,7 @@ the ReLU derivative function
 
 
 ```cpp
-double fn_drelu(double x)
+float fn_drelu(float x)
 ```
 
 **Params:**
@@ -899,14 +918,14 @@ double fn_drelu(double x)
 
 - ReLU derivative
 
-## 🔹 double fn_log(double x)
+## 🔹 float fn_log(float x)
 
 
 natural logarithm
 
 
 ```cpp
-double fn_log(double x)
+float fn_log(float x)
 ```
 
 **Params:**

@@ -55,7 +55,7 @@ DEFINE_TEST(matrixd_test)
 {
     logger_log_info("executing matrixd test");
 
-    double data[6] = {1, 2, 3, 4, 5, 6};
+    float data[6] = {1, 2, 3, 4, 5, 6};
     t_matrix *m = LA_matrixd(data, 3, 2);
     
     test_assert(m->data != NULL, "matrix creation faild");
@@ -102,7 +102,7 @@ DEFINE_TEST(equals_test)
 {
     logger_log_info("executing equals test");
 
-    double data[6] = {1, 2, 3, 4, 5, 6};
+    float data[6] = {1, 2, 3, 4, 5, 6};
     t_matrix *m = LA_matrixd(data, 3, 2);
     
     test_assert(LA_equals(m, m), "matrices are not equal");
@@ -116,15 +116,15 @@ DEFINE_TEST(dot_test)
 {
     logger_log_info("executing dot test");
    
-    double d1[4] = {1, 2, 3, 4};
+    float d1[4] = {1, 2, 3, 4};
     t_matrix *m1 = LA_matrixd(d1, 2, 2);
 
-    double d2[6] = {1, 2, 3, 4, 5, 6};
+    float d2[6] = {1, 2, 3, 4, 5, 6};
     t_matrix *m2 = LA_matrixd(d2, 2, 3);
 
     t_matrix *actual = LA_dot(m1, m2);
 
-    double d3[6] = {9, 12, 15, 19, 26, 33};
+    float d3[6] = {9, 12, 15, 19, 26, 33};
     t_matrix *expected = LA_matrixd(d3, 2, 3);
 
     test_assert(LA_equals(actual, expected), "dot prodoct is not what was expected");
@@ -144,13 +144,13 @@ DEFINE_TEST(dot2_test)
         m->data[i] = i/1000;
 
     clock_t start, end;
-    double elapsed;
+    float elapsed;
 
     start = clock();
 
     t_matrix *m2 = LA_dot(m, m);
     end = clock();
-    elapsed = (double)(end - start) / (double)CLOCKS_PER_SEC;
+    elapsed = (float)(end - start) / (float)CLOCKS_PER_SEC;
     
     logger_log_info("dot matrix (%d,%d)x(%d,%d) ends in %.4f mils", m->shape.x, m->shape.y, m->shape.x, m->shape.y, elapsed * 1000);    
 
@@ -163,10 +163,10 @@ DEFINE_TEST(dot_atb_test)
 {
     logger_log_info("executing dot_atb test");
    
-    double d1[6] = {1, 5, 4, 9, 3, 8};
+    float d1[6] = {1, 5, 4, 9, 3, 8};
     t_matrix *A = LA_matrixd(d1, 3, 2);
 
-    double d2[6] = {6, 7, 1, 3, 5, 9};
+    float d2[6] = {6, 7, 1, 3, 5, 9};
     t_matrix *B = LA_matrixd(d2, 3, 2);
 
     t_matrix *actual = LA_dot_atb(A, B);
@@ -187,10 +187,10 @@ DEFINE_TEST(T_test)
 {
     logger_log_info("executing T test");
 
-    double d[6] = {1, 2, 3, 4, 5, 6};
+    float d[6] = {1, 2, 3, 4, 5, 6};
     t_matrix *m = LA_matrixd(d, 2, 3);
 
-    double d2[6] = {1, 4, 2, 5, 3, 6};
+    float d2[6] = {1, 4, 2, 5, 3, 6};
     t_matrix *expected = LA_matrixd(d2, 3, 2);
 
     t_matrix *actual = LA_T(m);
@@ -208,7 +208,7 @@ DEFINE_TEST(range_test)
 
     t_matrix *actual = LA_range(6, 2, 3);
 
-    double d[6] = {0, 1, 2, 3, 4, 5};
+    float d[6] = {0, 1, 2, 3, 4, 5};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -224,7 +224,7 @@ DEFINE_TEST(range2_test)
 
     t_matrix *actual = LA_range(3, 2, 3);
 
-    double d[6] = {0, 1, 2, 0, 0, 0};
+    float d[6] = {0, 1, 2, 0, 0, 0};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -240,7 +240,7 @@ DEFINE_TEST(range3_test)
 
     t_matrix *actual = LA_range(20, 2, 3);
 
-    double d[6] = {0, 1, 2, 3, 4, 5};
+    float d[6] = {0, 1, 2, 3, 4, 5};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -258,7 +258,7 @@ DEFINE_TEST(slice_rows_test)
 
     t_matrix *actual = LA_slice_rows(m, 1, 2);
 
-    double d[3] = {3, 4, 5};
+    float d[3] = {3, 4, 5};
     t_matrix *expected = LA_matrixd(d, 1, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -276,7 +276,7 @@ DEFINE_TEST(slice_cols_test)
 
     t_matrix *actual = LA_slice_cols(m, 1, 2);
 
-    double d[4] = {1, 4, 7, 10};
+    float d[4] = {1, 4, 7, 10};
     t_matrix *expected = LA_matrixd(d, 4, 1);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -294,7 +294,7 @@ DEFINE_TEST(slice_test)
 
     t_matrix *actual = LA_slice(m, 1, 3, 1, 3);
 
-    double d[4] = {5, 6, 9, 10};
+    float d[4] = {5, 6, 9, 10};
     t_matrix *expected = LA_matrixd(d, 2, 2);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -302,7 +302,7 @@ DEFINE_TEST(slice_test)
     LA_nfree(2, actual, expected);
 
     actual = LA_slice(m, 1, 4, 1, 2);
-    double d2[3] = {5, 9, 13};
+    float d2[3] = {5, 9, 13};
     expected = LA_matrixd(d2, 3, 1);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -312,7 +312,7 @@ DEFINE_TEST(slice_test)
     return NULL;
 }
 
-double square(double d)
+float square(float d)
 {
     return d*d;
 }
@@ -325,7 +325,7 @@ DEFINE_TEST(apply_test)
 
     t_matrix *actual = LA_apply(m, square);
 
-    double d[6] = {0, 1, 4, 9, 16, 25};
+    float d[6] = {0, 1, 4, 9, 16, 25};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -343,7 +343,7 @@ DEFINE_TEST(apply_inplace_test)
 
     LA_apply_inplace(actual, square);
 
-    double d[6] = {0, 1, 4, 9, 16, 25};
+    float d[6] = {0, 1, 4, 9, 16, 25};
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -358,7 +358,7 @@ DEFINE_TEST(identity_test)
 
     t_matrix *actual = LA_identity(3);
 
-    double d[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+    float d[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
     t_matrix *expected = LA_matrixd(d, 3, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -376,7 +376,7 @@ DEFINE_TEST(sum_rows_test)
 
     t_matrix *actual = LA_sum_rows(m);
     
-    double d[4] = {3, 12, 21, 30};
+    float d[4] = {3, 12, 21, 30};
     t_matrix *expected = LA_matrixd(d, 4, 1);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -394,7 +394,7 @@ DEFINE_TEST(sum_cols_test)
 
     t_matrix *actual = LA_sum_cols(m);
     
-    double d[3] = {18, 22, 26};
+    float d[3] = {18, 22, 26};
     t_matrix *expected = LA_matrixd(d, 1, 3);
 
     test_assert(LA_equals(actual, expected), "Matrix is not what was expected");
@@ -408,7 +408,7 @@ DEFINE_TEST(reshape_test)
 {
     logger_log_info("executing reshape test");
 
-    double data[6] = {1, 2, 3, 4, 5, 6};
+    float data[6] = {1, 2, 3, 4, 5, 6};
 
     t_matrix *m = LA_matrixd(data, 3, 2);
 
@@ -428,10 +428,10 @@ DEFINE_TEST(fn_sigmoid_test)
 {
     logger_log_info("executing fn_sigmoid test");
 
-    double data[2] = {0, 2};
+    float data[2] = {0, 2};
     t_matrix *m = LA_matrixd(data, 1, 2);
 
-    double data_expected[2] = {0.5, (round(0.880797 * 10000)) / 10000};
+    float data_expected[2] = {0.5, (round(0.880797 * 10000)) / 10000};
     t_matrix *expected = LA_matrixd(data_expected, 1, 2);
 
     t_matrix *actual = LA_apply(m, fn_sigmoid);
@@ -451,7 +451,7 @@ DEFINE_TEST(sumf_test)
     t_matrix *m = LA_range(10, 2, 5);
     t_matrix *actual = LA_sumf(m, 1);
 
-    double d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    float d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     t_matrix *expected = LA_matrixd(d, 2, 5);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -469,7 +469,7 @@ DEFINE_TEST(subf_test)
     t_matrix *m = LA_range(10, 2, 5);
     t_matrix *actual = LA_subf(m, 1);
 
-    double d[10] = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
+    float d[10] = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8};
     t_matrix *expected = LA_matrixd(d, 2, 5);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -487,7 +487,7 @@ DEFINE_TEST(mulf_test)
     t_matrix *m = LA_range(3, 1, 3);
     t_matrix *actual = LA_mulf(m, 2);
 
-    double d[3] = {0, 2, 4};
+    float d[3] = {0, 2, 4};
     t_matrix *expected = LA_matrixd(d, 1, 3);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -502,11 +502,11 @@ DEFINE_TEST(divf_test)
 {
     logger_log_info("executing divf test");
 
-    double da[3] = {2, 4, 6};
+    float da[3] = {2, 4, 6};
     t_matrix *m = LA_matrixd(da, 1, 3);
     t_matrix *actual = LA_divf(m, 2);
     
-    double de[3] = {1, 2, 3};
+    float de[3] = {1, 2, 3};
     t_matrix *expected = LA_matrixd(de, 1, 3);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -524,7 +524,7 @@ DEFINE_TEST(fsub_test)
     t_matrix *m = LA_range(10, 2, 5);
     t_matrix *actual = LA_fsub(1, m);
 
-    double d[10] = { 1, 0, -1, -2, -3, -4, -5, -6, -7, -8};
+    float d[10] = { 1, 0, -1, -2, -3, -4, -5, -6, -7, -8};
     t_matrix *expected = LA_matrixd(d, 2, 5);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -544,7 +544,7 @@ DEFINE_TEST(sum_test)
     
     t_matrix *actual = LA_sum(m1, m2);
 
-    double d[3] = { 0, 2, 4};
+    float d[3] = { 0, 2, 4};
     t_matrix *expected = LA_matrixd(d, 1, 3);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -564,7 +564,7 @@ DEFINE_TEST(sum_broadcasting_y_test)
     
     t_matrix *actual = LA_sum(m1, m2);
 
-    double d[4] = { 0, 2, 2, 4 };
+    float d[4] = { 0, 2, 2, 4 };
     t_matrix *expected = LA_matrixd(d, 2, 2);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -584,7 +584,7 @@ DEFINE_TEST(sum_broadcasting_x_test)
     
     t_matrix *actual = LA_sum(m1, m2);
 
-    double d[4] = { 0, 1, 3, 4 };
+    float d[4] = { 0, 1, 3, 4 };
     t_matrix *expected = LA_matrixd(d, 2, 2);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -604,7 +604,7 @@ DEFINE_TEST(sub_test)
     
     t_matrix *actual = LA_sub(m1, m2);
 
-    double d[3] = { 0, -1, -2};
+    float d[3] = { 0, -1, -2};
     t_matrix *expected = LA_matrixd(d, 1, 3);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");
@@ -624,7 +624,7 @@ DEFINE_TEST(mul_test)
     
     t_matrix *actual = LA_mul(m1, m2);
 
-    double d[6] = { 0, 1, 4, 9, 16, 25 };
+    float d[6] = { 0, 1, 4, 9, 16, 25 };
     t_matrix *expected = LA_matrixd(d, 2, 3);
 
     test_assert(LA_equals(expected, actual), "Matrix is not what was expected");

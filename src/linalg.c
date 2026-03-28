@@ -45,7 +45,7 @@ t_matrix* LA_randf(int sizey, int sizex)
     srand(time(NULL));
 
     for(int i = 0; i < m->size; i++)
-        m->data[i] =  (double)rand() / (double)RAND_MAX;
+        m->data[i] =  (float)rand() / (float)RAND_MAX;
 
     return m;    
 }
@@ -74,7 +74,7 @@ t_matrix* LA_identity(int n)
     return m;
 }
 
-t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
+t_matrix* LA_apply(t_matrix *m, float (*fnc)(float d))
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -85,7 +85,7 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d))
 
 }
 
-void LA_apply_inplace(t_matrix *m, double (*fnc)(double d))
+void LA_apply_inplace(t_matrix *m, float (*fnc)(float d))
 {
 
     for(int i = 0; i < m->size; i++)
@@ -107,7 +107,7 @@ t_matrix* LA_matrix(int sizey, int sizex)
     m->shape.x = sizex;
     m->shape.y = sizey;
     m->size = sizex * sizey;
-    m->data = calloc(m->size, sizeof(double));
+    m->data = calloc(m->size, sizeof(float));
 
     if (m->data == NULL) {
         free(m);
@@ -119,7 +119,7 @@ t_matrix* LA_matrix(int sizey, int sizex)
     return m;    
 }
 
-t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
+t_matrix* LA_matrixd(const float *data, int sizey, int sizex)
 {
     ASSERT(sizex > 0, "x must be upper than 0");
     ASSERT(sizey > 0, "y must be upper than 0");
@@ -134,7 +134,7 @@ t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
     m->shape.x = sizex;
     m->shape.y = sizey;
     m->size = sizex * sizey;
-    m->data = malloc(sizeof(double) * m->size);
+    m->data = malloc(sizeof(float) * m->size);
 
     if (m->data == NULL) {
         free(m);
@@ -142,7 +142,7 @@ t_matrix* LA_matrixd(const double *data, int sizey, int sizex)
         return NULL;
     }
 
-    memcpy(m->data, data, m->size * sizeof(double));
+    memcpy(m->data, data, m->size * sizeof(float));
 
     return m;    
 }
@@ -153,12 +153,12 @@ void assert_index(t_matrix *m, int y, int x)
     ASSERT(x >= 0 && x < m->shape.x, "x is out of bound");
 }
 
-inline void LA_setval(t_matrix *m, int y, int x, double val) 
+inline void LA_setval(t_matrix *m, int y, int x, float val) 
 {
     m->data[y * m->shape.x + x] = val;
 }
 
-inline double LA_getval(t_matrix *m, int y, int x) 
+inline float LA_getval(t_matrix *m, int y, int x) 
 {
     return m->data[y * m->shape.x + x];
 }
@@ -270,7 +270,7 @@ t_matrix* LA_dot(t_matrix *m1, t_matrix *m2)
     {
         for(int x2 = 0; x2 < m2->shape.x; x2++)
         {
-            double v = 0;
+            float v = 0;
             for(int x1 = 0; x1 < m1->shape.x; x1++)
             {
                 v += m1->data[y1 * m1->shape.x + x1] * m2->data[x1 * m2->shape.x + x2];
@@ -291,7 +291,7 @@ t_matrix* LA_dot(t_matrix *m1, t_matrix *m2)
 
         for (int k = 0; k < m1->shape.x; k++) {
             
-            double a = m1->data[i_m1 + k];
+            float a = m1->data[i_m1 + k];
             
             // Puntatore alla riga k di m2
             int k_m2 = k * m2->shape.x;
@@ -327,7 +327,7 @@ t_matrix* LA_dot_atb(t_matrix *A, t_matrix *B){
 
         for (int k = 0; k < A->shape.y; k++) {
             // Invece di A[i][k], prendiamo A[k][i] che sarebbe AT[i][k]
-            double val_AT = A->data[k * A->shape.x + i];
+            float val_AT = A->data[k * A->shape.x + i];
             int row_B = k * B->shape.x;
 
             for (int j = 0; j < B->shape.x; j++) {
@@ -356,9 +356,9 @@ t_matrix* LA_slice_rows(t_matrix *m, int start, int end)
     assert_index(m, end - 1, 0);    
 
     int n = (end - start) * m->shape.x;
-    double *d = malloc(n * sizeof(double));
+    float *d = malloc(n * sizeof(float));
 
-    memcpy(d, &m->data[start * m->shape.x], n * sizeof(double));
+    memcpy(d, &m->data[start * m->shape.x], n * sizeof(float));
 
     t_matrix *res = LA_matrixd(d, end - start, m->shape.x);
 
@@ -402,7 +402,7 @@ t_matrix* LA_sum_rows(t_matrix *m)
 
     for(int y = 0; y < m->shape.y; y++)
     {
-        double sum = 0;
+        float sum = 0;
 
         for(int x = 0; x < m->shape.x; x++)
         {
@@ -421,7 +421,7 @@ t_matrix* LA_sum_cols(t_matrix *m)
 
     for(int x = 0; x < m->shape.x; x++)
     {
-        double sum = 0;
+        float sum = 0;
 
         for(int y = 0; y < m->shape.y; y++)
         {
@@ -472,7 +472,7 @@ t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex)
 
     t_matrix *res = LA_matrix(sizey, sizex);
 
-    memcpy(res->data, m->data, m->size * sizeof(double));
+    memcpy(res->data, m->data, m->size * sizeof(float));
 
     return res;    
 }
@@ -489,7 +489,7 @@ t_matrix *LA_clone(t_matrix *m)
     res->shape.x = m->shape.x;
     res->shape.y = m->shape.y;
     res->size = m->shape.x * m->shape.y;
-    res->data = malloc(sizeof(double) * m->size);
+    res->data = malloc(sizeof(float) * m->size);
 
     if (res->data == NULL) {
         free(res);
@@ -497,28 +497,28 @@ t_matrix *LA_clone(t_matrix *m)
         return NULL;
     }
 
-    memcpy(res->data, m->data, m->size * sizeof(double));
+    memcpy(res->data, m->data, m->size * sizeof(float));
 
     return res;
 }
 
-double fn_sigmoid(double x)
+float fn_sigmoid(float x)
 {
-    double s = 1 / (1 + exp(-x));
+    float s = 1 / (1 + exp(-x));
     return s;
 }
 
-double fn_dsigmoid(double x)
+float fn_dsigmoid(float x)
 {
     return fn_sigmoid(x)* (1 - fn_sigmoid(x));
 }
 
-double fn_negative(double x)
+float fn_negative(float x)
 {
     return -x;
 }
 
-double fn_relu(double x)
+float fn_relu(float x)
 {
     if(x > 0)
         return x;
@@ -526,7 +526,7 @@ double fn_relu(double x)
         return 0;
 }
 
-double fn_drelu(double x)
+float fn_drelu(float x)
 {
     if(x < 0)
         return 0;
@@ -536,12 +536,12 @@ double fn_drelu(double x)
         return 1;
 }
 
-double fn_log(double x)
+float fn_log(float x)
 {
     return log(x);
 }
 
-t_matrix* LA_sumf(t_matrix *m, double f)
+t_matrix* LA_sumf(t_matrix *m, float f)
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -551,7 +551,7 @@ t_matrix* LA_sumf(t_matrix *m, double f)
     return res;
 }
 
-t_matrix* LA_subf(t_matrix *m, double f)
+t_matrix* LA_subf(t_matrix *m, float f)
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -562,7 +562,7 @@ t_matrix* LA_subf(t_matrix *m, double f)
 
 }
 
-t_matrix* LA_mulf(t_matrix *m, double f)
+t_matrix* LA_mulf(t_matrix *m, float f)
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -573,7 +573,7 @@ t_matrix* LA_mulf(t_matrix *m, double f)
 
 }
 
-t_matrix* LA_divf(t_matrix *m, double f)
+t_matrix* LA_divf(t_matrix *m, float f)
 {
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -584,7 +584,7 @@ t_matrix* LA_divf(t_matrix *m, double f)
 
 }
 
-t_matrix* LA_fsub(double f, t_matrix *m)
+t_matrix* LA_fsub(float f, t_matrix *m)
 {    
     t_matrix *res = LA_matrix(m->shape.y, m->shape.x);
 
@@ -778,7 +778,7 @@ t_matrix *NN_model_execute(t_matrix *input, t_NN_model *model)
 
     for(int i = 0; i < model->nlayers; i++)
     {
-        double (*fnc)(double d);
+        float (*fnc)(float d);
 
         switch (model->layers[i]->activation_fnc)
         {
@@ -863,7 +863,7 @@ void NN_print_model(t_NN_model *model)
         printf("-------------------------------\n");
 
         printf("Shape: (%d, %d)\n", layer->W->shape.y, layer->W->shape.x);
-        printf("Params: %d (%.2f KB)\n", params, (double)(params * sizeof(double) / 1024.0));
+        printf("Params: %d (%.2f KB)\n", params, (float)(params * sizeof(float) / 1024.0));
         printf("Activation function: ");
         switch (layer->activation_fnc)
         {
@@ -879,7 +879,7 @@ void NN_print_model(t_NN_model *model)
         printf("\n");
     }
 
-    printf("Total params: %d (%.2f KB)\n", totalparams, (double)(totalparams * sizeof(double) / 1024.0));
+    printf("Total params: %d (%.2f KB)\n", totalparams, (float)(totalparams * sizeof(float) / 1024.0));
 
 }
 
@@ -891,19 +891,19 @@ t_matrix *NN_cross_entropy_loss(t_matrix *A, t_matrix *Y)
     int m = A->shape.x;  // number of training example
     int n = A->shape.y;  // number of parameters
 
-    double epsilon = 1e-15; // epsilon smoothing, impedisce che si verifichi log(0)
+    float epsilon = 1e-15; // epsilon smoothing, impedisce che si verifichi log(0)
 
     t_matrix *J = LA_matrix(n, 1);
 
     
     for(int k = 0; k < n; k++)
     {
-        double j = 0;
+        float j = 0;
 
         for(int i = 0; i < m; i++)
         {
-            double yi = LA_getval(Y, 0, i);
-            double ai = LA_getval(A, 0, i);
+            float yi = LA_getval(Y, 0, i);
+            float ai = LA_getval(A, 0, i);
 
             j += -yi * log(ai + epsilon) - (1 - yi) * log(1 - ai + epsilon);
         }

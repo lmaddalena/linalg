@@ -60,13 +60,13 @@ typedef struct shape t_shape;
  * 
  * @param size size of the matrix
  * @param shape shape of the matrix
- * @param data pointer of *double to the matrix data
+ * @param data pointer of *float to the matrix data
  */
 struct matrix
 {
     int size;
     t_shape shape;      
-    double * data;        
+    float * data;        
 };
 
 /** t_matrix
@@ -164,7 +164,7 @@ t_matrix* LA_matrix(int sizey, int sizex);
 * @param sizex x dimension
 * @return matrix of (sizey, sizex) dimensions
 */        
-t_matrix* LA_matrixd(const double *data, int sizey, int sizex);
+t_matrix* LA_matrixd(const float *data, int sizey, int sizex);
 
 /** LA_dot
 *
@@ -319,7 +319,7 @@ t_matrix* LA_reshape(t_matrix *m, int sizey, int sizex);
  * @param m matrix
  * @return new matrix 
  */
-t_matrix* LA_sumf(t_matrix *m, double f);
+t_matrix* LA_sumf(t_matrix *m, float f);
 
 /** LA_subf
  * 
@@ -329,7 +329,7 @@ t_matrix* LA_sumf(t_matrix *m, double f);
  * @param f float
  * @return new matrix 
  */
-t_matrix* LA_subf(t_matrix *m, double f);
+t_matrix* LA_subf(t_matrix *m, float f);
 
 /** LA_mulf
  * 
@@ -339,7 +339,7 @@ t_matrix* LA_subf(t_matrix *m, double f);
  * @param f float
  * @return new matrix 
  */
-t_matrix* LA_mulf(t_matrix *m, double f);
+t_matrix* LA_mulf(t_matrix *m, float f);
 
 /** LA_divf
  * 
@@ -349,7 +349,7 @@ t_matrix* LA_mulf(t_matrix *m, double f);
  * @param f float
  * @return new matrix 
  */
-t_matrix* LA_divf(t_matrix *m, double f);
+t_matrix* LA_divf(t_matrix *m, float f);
 
 /** LA_fsub
  * 
@@ -359,7 +359,7 @@ t_matrix* LA_divf(t_matrix *m, double f);
  * @param m matrix
  * @return new matrix 
  */
-t_matrix* LA_fsub(double f, t_matrix *m);
+t_matrix* LA_fsub(float f, t_matrix *m);
 
 /** LA_sum
  * 
@@ -419,7 +419,7 @@ int LA_equals(t_matrix *m1, t_matrix *m2);
 * @param fnc function to be applied
 * @return new matrix
 */        
-t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d));
+t_matrix* LA_apply(t_matrix *m, float (*fnc)(float d));
 
 /** LA_apply_inline
 * 
@@ -429,7 +429,7 @@ t_matrix* LA_apply(t_matrix *m, double (*fnc)(double d));
 * @param fnc function to be applied
 * @return nothing
 */        
-void LA_apply_inplace(t_matrix *m, double (*fnc)(double d));
+void LA_apply_inplace(t_matrix *m, float (*fnc)(float d));
 
 /** LA_setval
 *
@@ -441,7 +441,7 @@ void LA_apply_inplace(t_matrix *m, double (*fnc)(double d));
 * @param val value of the cell
 * @return nothing
 */        
-void LA_setval(t_matrix *m, int y, int x, double val);
+void LA_setval(t_matrix *m, int y, int x, float val);
 
 /** LA_getval
 *
@@ -452,7 +452,7 @@ void LA_setval(t_matrix *m, int y, int x, double val);
 * @param x x coordinate
 * @return cell value
 */        
-double LA_getval(t_matrix *m, int y, int x);
+float LA_getval(t_matrix *m, int y, int x);
 
 /** LA_Clone
  * 
@@ -509,7 +509,7 @@ void LA_free(t_matrix *m);
  * @param x x value
  * @return sigmoid of x
  */
-double fn_sigmoid(double x);
+float fn_sigmoid(float x);
 
 /** fn_dsigmoid
  * 
@@ -518,7 +518,7 @@ double fn_sigmoid(double x);
  * @param x x value
  * @return sigmoid derivative of x
  */
-double fn_dsigmoid(double x);
+float fn_dsigmoid(float x);
 
 /** fn_negative
  * 
@@ -527,7 +527,7 @@ double fn_dsigmoid(double x);
  * @param x x value
  * @return -x
  */
-double fn_negative(double x);
+float fn_negative(float x);
 
 /** fn_relu
  * 
@@ -536,7 +536,7 @@ double fn_negative(double x);
  * @param x x value
  * @return max(x, 0)
  */
-double fn_relu(double x);
+float fn_relu(float x);
 
 /** fn_drelu
  * 
@@ -546,7 +546,7 @@ double fn_relu(double x);
  * @return ReLU derivative
  * 
  */
-double fn_drelu(double x);
+float fn_drelu(float x);
 
 /** fn_log
  * 
@@ -555,7 +555,7 @@ double fn_drelu(double x);
  * @param x x value
  * @return natural logarithm of x
  */
-double fn_log(double x);
+float fn_log(float x);
 
 /** LA_log
  * 
