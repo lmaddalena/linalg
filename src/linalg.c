@@ -771,17 +771,16 @@ t_NN_layer *NN_create_layer(int nunits, int ninputs, enum ACTIVATION_FNC fnc)
     t_NN_layer *layer = malloc(sizeof(t_NN_layer));
 
     t_matrix *w_temp = LA_randn(nunits, ninputs);
-    t_matrix *b_temp = LA_randn(nunits, 1);
 
     layer->W = LA_mulf(w_temp, 0.01);
-    layer->b = LA_mulf(b_temp, 0.01);
+    layer->b =  LA_matrix(nunits, 1);
     layer->dW = NULL;
     layer->db = NULL;
     layer->A = NULL;
     layer->Z = NULL;
     layer->activation_fnc = fnc;
 
-    LA_nfree(2, w_temp, b_temp);
+    LA_free(w_temp);
     
     return layer;
 }
